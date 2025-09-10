@@ -5,7 +5,7 @@ import 'package:uuid/uuid.dart';
 
 final uuid = const Uuid();
 
-List<Locker> importIchFromExcelFile(Excel excel) {
+List<Locker> importLockersFrom(Excel excel) {
   final lockers = <Locker>[];
 
   for (final floor in excel.sheets.keys.where((key) => key.contains('Etage'))) {
@@ -89,4 +89,58 @@ List<Locker> importIchFromExcelFile(Excel excel) {
 
 bool verifyExcelFile() {
   return true;
+}
+
+List<Student> importStudentsFrom(Excel excel) {
+  final students = <Student>[];
+
+  final sheet = excel[excel.sheets.keys.first];
+
+  var cell = sheet.cell(CellIndex.indexByString('A1'));
+  int row = 1;
+
+  while (cell.value != null) {
+    final results = [];
+    for (int i = 0; i < 25; i++) {
+      results.add(cell.value?.toString() ?? '');
+      cell = sheet.cell(
+        CellIndex.indexByColumnRow(columnIndex: i, rowIndex: row),
+      );
+    }
+
+    students.add(
+      Student(
+        id: uuid.v4(),
+        firstName: results[7],
+        title: results[5],
+        lastName: results[6],
+        login: results[12],
+        year: int.parse(results[19]),
+        job: results[14],
+      ),
+    );
+
+    cell = sheet.cell(
+      CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: ++row),
+    );
+  }
+
+  return students;
+}
+
+void importFile(Excel excel) {
+  bool doImportLockers = false;
+
+  for (String sheet in excel.sheets.keys) {
+    if (sheet.contains('Etage')) {
+      doImportLockers = true;
+      break;
+    }
+  }
+
+  if (doImportLockers) {
+    LockerProvider().setLockers(importLockersFrom(excel));
+  } else {
+    LockerProvider().setStudents(importStudentsFrom(excel));
+  }
 }
