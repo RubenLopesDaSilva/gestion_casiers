@@ -1,4 +1,5 @@
 import 'package:excel/excel.dart';
+import 'package:projet_excel/src/features/lockers/data/locker_repository.dart';
 import 'package:projet_excel/src/features/lockers/domain/domain.dart';
 import 'package:uuid/uuid.dart';
 
@@ -11,32 +12,17 @@ List<Locker> importIchFromExcelFile(Excel excel) {
     if (!['Etage B', 'Etage C', 'Etage D', 'Etage E'].contains(floor)) {
       continue;
     }
-
-    String place = excel[floor]
-        .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 1))
-        .value
-        .toString();
-
     int row = 1;
-
-    if (floor == 'Etage B') {
-      row = 81;
-    }
-
-    if (floor == 'Etage E') {
-      row = 44;
-    }
-
     var cell = excel[floor].cell(
       CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: row),
     );
 
     while (cell.value != null) {
-      bool isLockerEmpty =
-          excel[floor]
-              .cell(CellIndex.indexByColumnRow(columnIndex: 4, rowIndex: row))
-              .value ==
-          null;
+      // bool isLockerEmpty =
+      //     excel[floor]
+      //         .cell(CellIndex.indexByColumnRow(columnIndex: 4, rowIndex: row))
+      //         .value ==
+      //     null;
 
       final results = [];
 
@@ -56,6 +42,18 @@ List<Locker> importIchFromExcelFile(Excel excel) {
         continue;
       }
 
+      String id = '';
+
+      for (Student studentId in LockerProvider.students) {
+        Student student = LockerProvider.students.firstWhere(
+          (student) => student.id == studentId.id,
+        );
+
+        if (student.lastName == results[3] && student.firstName == results[4]) {
+          id = studentId.id;
+        }
+      }
+
       lockers.add(
         Locker(
           floor: floor.replaceAll('Etage ', ''),
@@ -64,17 +62,7 @@ List<Locker> importIchFromExcelFile(Excel excel) {
 
           responsable: results[1],
 
-          student: !isLockerEmpty
-              ? Student(
-                  job: results[2],
-
-                  firstName: results[3],
-
-                  lastName: results[4],
-
-                  id: uuid.v4(),
-                )
-              : null,
+          studentId: id == '' ? null : id,
 
           deposit: int.tryParse(results[5]) ?? 0,
 

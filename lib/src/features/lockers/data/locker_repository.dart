@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:projet_excel/src/features/lockers/domain/domain.dart';
 
 class LockerProvider with ChangeNotifier {
-  final _lockers = <Locker>[];
-  final _students = <Student>[];
+  static final _lockers = <Locker>[];
+  static final _students = <Student>[];
 
-  List<Locker> get lockers => [..._lockers];
-  List<Student> get students => [..._students];
+  static List<Locker> get lockers => [..._lockers];
+  static List<Student> get students => [..._students];
 
   final _transactions = <Transaction>[];
-
 
   //Transaction
   void saveTransactions(TransactionType type, int lockerId, Locker value) {
@@ -74,14 +73,13 @@ class LockerProvider with ChangeNotifier {
   }
 
   //Student
-  void setStudents() {
+  void setStudents(List<Student> students) {
     _students.clear();
 
-    for (Locker locker in _lockers) {
-      if (locker.student != null) {
-        _students.add(locker.student!);
-      }
+    for (Student student in students) {
+      _students.add(student);
     }
+
     notifyListeners();
   }
 

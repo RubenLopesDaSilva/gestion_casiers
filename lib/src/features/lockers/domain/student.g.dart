@@ -21,13 +21,16 @@ class StudentAdapter extends TypeAdapter<Student> {
       firstName: fields[1] as String,
       lastName: fields[2] as String,
       job: fields[3] as String,
+      login: fields[6] as String,
+      year: fields[4] as int,
+      title: fields[5] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Student obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -35,7 +38,13 @@ class StudentAdapter extends TypeAdapter<Student> {
       ..writeByte(2)
       ..write(obj.lastName)
       ..writeByte(3)
-      ..write(obj.job);
+      ..write(obj.job)
+      ..writeByte(4)
+      ..write(obj.year)
+      ..writeByte(5)
+      ..write(obj.title)
+      ..writeByte(6)
+      ..write(obj.login);
   }
 
   @override

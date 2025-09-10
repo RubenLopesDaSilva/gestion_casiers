@@ -24,7 +24,7 @@ class LockerAdapter extends TypeAdapter<Locker> {
       lockNumber: fields[4] as int,
       responsable: fields[5] as String,
       lockerCondition: fields[6] as LockerCondition,
-      student: fields[7] as Student?,
+      studentId: fields[7] as String?,
     );
   }
 
@@ -47,7 +47,7 @@ class LockerAdapter extends TypeAdapter<Locker> {
       ..writeByte(6)
       ..write(obj.lockerCondition)
       ..writeByte(7)
-      ..write(obj.student);
+      ..write(obj.studentId);
   }
 
   @override

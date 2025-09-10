@@ -21,7 +21,7 @@ class Locker {
   @HiveField(6)
   final LockerCondition lockerCondition;
   @HiveField(7)
-  final Student? student;
+  final StudentID? studentId;
 
   const Locker({
     required this.number,
@@ -31,14 +31,14 @@ class Locker {
     required this.lockNumber,
     required this.responsable,
     required this.lockerCondition,
-    this.student,
+    this.studentId,
   });
 
   Locker copyWith({
     String? floor,
     int? number,
     String? responsable,
-    Student? student,
+    StudentID? studentId,
     int? deposit,
     int? keyCount,
     int? lockNumber,
@@ -48,7 +48,7 @@ class Locker {
       floor: floor ?? this.floor,
       number: number ?? this.number,
       responsable: responsable ?? this.responsable,
-      student: student ?? this.student,
+      studentId: studentId ?? this.studentId,
       deposit: deposit ?? this.deposit,
       keyCount: keyCount ?? this.keyCount,
       lockNumber: lockNumber ?? this.lockNumber,
