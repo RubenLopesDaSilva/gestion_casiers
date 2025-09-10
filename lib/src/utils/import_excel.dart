@@ -1,19 +1,104 @@
 import 'package:excel/excel.dart';
-import 'package:projet_excel/src/features/lockers/domain/locker.dart';
+import 'package:projet_excel/src/features/lockers/domain/domain.dart';
+import 'package:uuid/uuid.dart';
 
-List<Locker> importLockersFrom(Excel excel) {
+final uuid = const Uuid();
+
+List<Locker> importIchFromExcelFile(Excel excel) {
   final lockers = <Locker>[];
-  try {
-    for (final floor in excel.sheets.keys.where(
-      (key) => key.contains('Etage'),
-    )) {
-      if (floor == 'Etage F') continue;
 
-      
+  for (final floor in excel.sheets.keys.where((key) => key.contains('Etage'))) {
+    if (!['Etage B', 'Etage C', 'Etage D', 'Etage E'].contains(floor)) {
+      continue;
     }
 
-    return lockers;
-  } catch (e) {
-    rethrow;
+    String place = excel[floor]
+        .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 1))
+        .value
+        .toString();
+
+    int row = 1;
+
+    if (floor == 'Etage B') {
+      row = 81;
+    }
+
+    if (floor == 'Etage E') {
+      row = 44;
+    }
+
+    var cell = excel[floor].cell(
+      CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: row),
+    );
+
+    while (cell.value != null) {
+      bool isLockerEmpty =
+          excel[floor]
+              .cell(CellIndex.indexByColumnRow(columnIndex: 4, rowIndex: row))
+              .value ==
+          null;
+
+      final results = [];
+
+      for (int i = 0; i < 9; i++) {
+        var cell = excel[floor].cell(
+          CellIndex.indexByColumnRow(columnIndex: 2 + i, rowIndex: row),
+        );
+
+        results.add(cell.value.toString());
+      }
+
+      if (results[3] == 'null') {
+        cell = excel[floor].cell(
+          CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: ++row),
+        );
+
+        continue;
+      }
+
+      lockers.add(
+        Locker(
+          floor: floor.replaceAll('Etage ', ''),
+
+          number: int.parse(results[0]),
+
+          responsable: results[1],
+
+          student: !isLockerEmpty
+              ? Student(
+                  job: results[2],
+
+                  firstName: results[3],
+
+                  lastName: results[4],
+
+                  id: uuid.v4(),
+                )
+              : null,
+
+          deposit: int.tryParse(results[5]) ?? 0,
+
+          keyCount: int.parse(results[6]),
+
+          lockNumber: int.parse(results[7]),
+
+          lockerCondition: LockerCondition.isGood(
+            comments: results[8] == 'null' ? null : results[8],
+          ),
+        ),
+      );
+
+      cell = excel[floor].cell(
+        CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: ++row),
+      );
+    }
   }
+
+  lockers.sort((a, b) => a.number - b.number);
+
+  return lockers;
+}
+
+bool verifyExcelFile() {
+  return true;
 }

@@ -1,7 +1,17 @@
+import 'package:hive_flutter/adapters.dart';
+
+part 'student.g.dart';
+
+@HiveType(typeId: 1)
 class Student {
+
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String firstName;
+  @HiveField(2)
   final String lastName;
+  @HiveField(3)
   final String job;
 
   Student({

@@ -1,14 +1,26 @@
+import 'package:hive_flutter/adapters.dart';
 import 'package:projet_excel/src/features/lockers/domain/locker_condition.dart';
 import 'package:projet_excel/src/features/lockers/domain/student.dart';
 
+part 'locker.g.dart';
+
+@HiveType(typeId: 0)
 class Locker {
+  @HiveField(0)
   final int number;
+  @HiveField(1)
   final String floor;
+  @HiveField(2)
   final int deposit;
+  @HiveField(3)
   final int keyCount;
+  @HiveField(4)
   final int lockNumber;
+  @HiveField(5)
   final String responsable;
+  @HiveField(6)
   final LockerCondition lockerCondition;
+  @HiveField(7)
   final Student? student;
 
   const Locker({

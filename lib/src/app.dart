@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: primaryTheme,
-      home: ExcelImportScreen(),
+      home: const ExcelImportScreen(),
     );
   }
 }
