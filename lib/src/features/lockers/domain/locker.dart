@@ -1,27 +1,46 @@
+import 'package:projet_excel/src/features/lockers/domain/locker_condition.dart';
+import 'package:projet_excel/src/features/lockers/domain/student.dart';
+
 class Locker {
-  Locker({
-    required this.id,
+  final int number;
+  final String floor;
+  final int deposit;
+  final int keyCount;
+  final int lockNumber;
+  final String responsable;
+  final LockerCondition lockerCondition;
+  final Student? student;
+
+  const Locker({
+    required this.number,
     required this.floor,
-    required this.isAvailable,
+    required this.deposit,
+    required this.keyCount,
+    required this.lockNumber,
     required this.responsable,
+    required this.lockerCondition,
+    this.student,
   });
 
-  final String id;
-  final String floor;
-  final bool isAvailable;
-  final String responsable;
-  final int? nbrCle = 0;
-  final int? noSerrure = 0;
-
-  factory Locker.fromExcel(List<String> rowData) {
-    if (rowData.length < 6) {
-      rowData.add('');
-    }
+  Locker copyWith({
+    String? floor,
+    int? number,
+    String? responsable,
+    Student? student,
+    int? deposit,
+    int? keyCount,
+    int? lockNumber,
+    LockerCondition? lockerCondition,
+  }) {
     return Locker(
-      id: rowData[1],
-      floor: rowData[0],
-      responsable: rowData[2],
-      isAvailable: rowData[3].isNotEmpty,
+      floor: floor ?? this.floor,
+      number: number ?? this.number,
+      responsable: responsable ?? this.responsable,
+      student: student ?? this.student,
+      deposit: deposit ?? this.deposit,
+      keyCount: keyCount ?? this.keyCount,
+      lockNumber: lockNumber ?? this.lockNumber,
+      lockerCondition: lockerCondition ?? this.lockerCondition,
     );
   }
 }
