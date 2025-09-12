@@ -1,15 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
-// import 'package:hive_flutter/hive_flutter.dart';
 
+class LockerRepository {
+  final List<Locker> _lockers = [];
+  final List<Student> _students = [];
+  final List<Transaction> _transactions = [];
 
-class LockerProvider with ChangeNotifier {
-  static final List<Locker> _lockers = [];
-  static final List<Student> _students = [];
-  static final List<Transaction> _transactions = [];
-
-  static List<Student> get students => [..._students];
-  static List<Locker> get lockers => [..._lockers];
+  List<Student> get students => [..._students];
+  List<Locker> get lockers => [..._lockers];
 
   //Transaction
   void saveTransactions(TransactionType type, int lockerId, Locker value) {
@@ -48,21 +46,18 @@ class LockerProvider with ChangeNotifier {
   void setLockers(List<Locker> lockers) {
     _lockers.clear();
     _lockers.addAll(lockers);
-    notifyListeners();
   }
 
   void addLocker(Locker locker) {
     _lockers.add(locker);
 
     saveTransactions(TransactionType.add, locker.number, locker);
-    notifyListeners();
   }
 
   void removeLocker(Locker locker) {
     _lockers.removeWhere((lockerValue) => lockerValue.number == locker.number);
 
     saveTransactions(TransactionType.remove, locker.number, locker);
-    notifyListeners();
   }
 
   void editLocker(int lockerNumber, Locker editLocker) {
@@ -70,7 +65,6 @@ class LockerProvider with ChangeNotifier {
         editLocker;
 
     saveTransactions(TransactionType.edit, lockerNumber, editLocker);
-    notifyListeners();
   }
 
   //Student
@@ -80,25 +74,30 @@ class LockerProvider with ChangeNotifier {
     for (Student student in students) {
       _students.add(student);
     }
-
-    notifyListeners();
   }
 
   void addStudent(Student student) {
     _students.add(student);
-    notifyListeners();
   }
 
   void removeStudent(String id) {
     final studentIndex = _students.indexWhere((student) => student.id == id);
 
     _students.removeAt(studentIndex);
-    notifyListeners();
   }
 
   void editStudent(String id, Student editedStudent) {
     final studentIndex = _students.indexWhere((student) => student.id == id);
     _students[studentIndex] = editedStudent;
-    notifyListeners();
   }
+
+  Student findStudentBy({required StudentID id}) {
+    return _students.firstWhere((student) => student.id == id);
+  }
+
+  
 }
+
+final lockersRepositoryProvider = Provider<LockerRepository>((ref) {
+    return LockerRepository();
+  });

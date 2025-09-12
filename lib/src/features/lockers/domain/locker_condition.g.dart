@@ -19,18 +19,20 @@ class LockerConditionAdapter extends TypeAdapter<LockerCondition> {
     return LockerCondition(
       fields[0] as bool,
       comments: fields[1] as String?,
-      problems: fields[2] as String?
+      problems: fields[2] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, LockerCondition obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.isGoodCondition)
       ..writeByte(1)
-      ..write(obj.comments);
+      ..write(obj.comments)
+      ..writeByte(2)
+      ..write(obj.problems);
   }
 
   @override

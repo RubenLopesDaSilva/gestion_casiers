@@ -1,7 +1,6 @@
 import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
 import 'package:hive_flutter/adapters.dart';
 
-
 part 'locker.g.dart';
 
 @HiveType(typeId: 0)
@@ -22,6 +21,8 @@ class Locker {
   final LockerCondition lockerCondition;
   @HiveField(7)
   final StudentID? studentId;
+  @HiveField(8)
+  final String place;
 
   const Locker({
     required this.number,
@@ -31,6 +32,7 @@ class Locker {
     required this.lockNumber,
     required this.responsable,
     required this.lockerCondition,
+    required this.place,
     this.studentId,
   });
 
@@ -43,6 +45,7 @@ class Locker {
     int? keyCount,
     int? lockNumber,
     LockerCondition? lockerCondition,
+    String? place,
   }) {
     return Locker(
       floor: floor ?? this.floor,
@@ -53,6 +56,7 @@ class Locker {
       keyCount: keyCount ?? this.keyCount,
       lockNumber: lockNumber ?? this.lockNumber,
       lockerCondition: lockerCondition ?? this.lockerCondition,
+      place: place ?? this.place,
     );
   }
 }
