@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:gestion_casiers/src/features/lockers/presentation/excel_import_screen.dart';
-import 'package:gestion_casiers/src/features/theme/theme.dart';
+import 'package:gestion_casiers/src/routing/app_router.dart';
+import 'package:gestion_casiers/src/theme/theme.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      theme: primaryTheme,
-      home: const ExcelImportScreen(),
+      routerConfig: goRouter,
+      themeMode: ThemeMode.light,
+      theme: lightTheme,
+      darkTheme: darkTheme,
     );
   }
 }

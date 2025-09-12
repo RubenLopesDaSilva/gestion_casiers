@@ -21,7 +21,7 @@ class Student {
   @HiveField(6)
   final String login;
 
-  Student({
+  const Student({
     required this.id,
     required this.firstName,
     required this.lastName,
