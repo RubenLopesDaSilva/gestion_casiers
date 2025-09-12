@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-//TODO enum pour small medium large
-
 class StyledText extends StatelessWidget {
   const StyledText(this.text, {super.key});
 

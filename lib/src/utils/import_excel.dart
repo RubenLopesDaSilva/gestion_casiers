@@ -44,8 +44,8 @@ List<Locker> importLockersFrom(Excel excel) {
 
       String id = '';
 
-      for (Student studentValue in LockerProvider.students) {
-        Student student = LockerProvider.students.firstWhere(
+      for (Student studentValue in LockerRepository().students) {
+        Student student = LockerRepository().students.firstWhere(
           (student) => student.id == studentValue.id,
         );
 
@@ -57,8 +57,9 @@ List<Locker> importLockersFrom(Excel excel) {
       lockers.add(
         Locker(
           floor: floor.replaceAll('Etage ', ''),
-          number: int.parse(results[0]),
-          responsable: results[1],
+          place: results[0],
+          number: int.parse(results[2]),
+          responsable: results[3],
           studentId: id == '' ? null : id,
           deposit: int.tryParse(results[5]) ?? 0,
           keyCount: int.parse(results[6]),
@@ -101,12 +102,12 @@ List<Student> importStudentsFrom(Excel excel) {
     students.add(
       Student(
         id: uuid.v4(),
-        firstName: results[7],
-        title: results[5],
-        lastName: results[6],
-        login: results[12],
-        year: int.parse(results[19]),
-        job: results[14],
+        firstName: results[6],
+        title: results[3],
+        lastName: results[5],
+        login: results[11],
+        year: int.parse(results[18]),
+        job: results[13],
       ),
     );
 
@@ -129,8 +130,8 @@ void importFile(Excel excel) {
   }
 
   if (doImportLockers) {
-    LockerProvider().setLockers(importLockersFrom(excel));
+    LockerRepository().setLockers(importLockersFrom(excel));
   } else {
-    LockerProvider().setStudents(importStudentsFrom(excel));
+    LockerRepository().setStudents(importStudentsFrom(excel));
   }
 }

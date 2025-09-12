@@ -2,7 +2,7 @@ import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
 
 final lockers = <Locker>[
   const Locker(
-    // place: 'Ancien Bâtiment',
+    place: 'Ancien Bâtiment',
     floor: 'c',
     number: 121,
     responsable: 'JHI',
