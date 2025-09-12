@@ -39,11 +39,17 @@ class _StudentSelectionScreenState extends State<StudentSelectionScreen> {
             gapH16,
             Expanded(
               child: Container(
-                margin: const EdgeInsets.only(left: 40.0, right: 40.0, bottom: 40.0),
+                margin: const EdgeInsets.only(
+                  left: 40.0,
+                  right: 40.0,
+                  bottom: 40.0,
+                ),
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: AppColors.primaryColor,
-                  borderRadius: const BorderRadius.all(Radius.elliptical(75, 50)),
+                  borderRadius: const BorderRadius.all(
+                    Radius.elliptical(75, 50),
+                  ),
                 ),
                 child: Column(
                   children: [
@@ -51,13 +57,13 @@ class _StudentSelectionScreenState extends State<StudentSelectionScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: StudentInnerItem(
                         student: Student(
-                          id: '',
+                          id: 'identification'.hardcoded,
                           firstName: 'name'.hardcoded,
                           lastName: 'surname'.hardcoded,
                           job: 'job'.hardcoded,
-                          login: '',
+                          login: 'login'.hardcoded,
                           year: 0,
-                          title: '',
+                          title: 'title'.hardcoded,
                         ),
                         onTap: () {},
                       ),

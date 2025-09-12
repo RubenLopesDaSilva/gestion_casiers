@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gestion_casiers/src/common_widgets/styled_button.dart';
 import 'package:gestion_casiers/src/common_widgets/styled_text.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
+import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile_item.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile_part.dart';
@@ -25,6 +26,20 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
   final _ownerController = TextEditingController();
   final _keysController = TextEditingController();
   final _lockController = TextEditingController();
+
+  void update(Locker locker) {
+    final number = int.tryParse(_numberController.text);
+    final keyCount = int.tryParse(_keysController.text);
+    final lock = int.tryParse(_lockController.text);
+    Locker update = locker.copyWith(
+      floor: _floorController.text,
+      number: number,
+      responsable: _responsibleController.text,
+      keyCount: keyCount,
+      lockNumber: lock,
+    );
+    LockerProvider().editLocker(update.number, update);
+  }
 
   @override
   void dispose() {
@@ -121,7 +136,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                       LockerProfilePart(
                         title: 'Owner'.hardcoded,
                         controller: _ownerController,
-                        textInputType: TextInputType.none,
+                        readOnly: true,
                         prefixIcon: Icon(
                           Icons.lock,
                           color: AppColors.titleColor,
@@ -170,7 +185,9 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
             ),
           ),
           StyledButton(
-            onPressed: () {},
+            onPressed: () {
+              update(lockerCopy);
+            },
             child: StyledHeadline('Save'.hardcoded),
           ),
           gapH24,

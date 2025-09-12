@@ -8,6 +8,7 @@ class LockerProfilePart extends StatelessWidget {
     required this.title,
     required this.description,
     required this.controller,
+    this.readOnly,
     this.textInputType,
     this.prefixIcon,
     super.key,
@@ -17,6 +18,7 @@ class LockerProfilePart extends StatelessWidget {
   final String description;
 
   final TextEditingController controller;
+  final bool? readOnly;
   final TextInputType? textInputType;
   final Icon? prefixIcon;
 
@@ -30,6 +32,7 @@ class LockerProfilePart extends StatelessWidget {
           gapH12,
           StyledTextfield(
             controller: controller,
+            readOnly: readOnly,
             textInputType: textInputType,
             prefixIcon: prefixIcon,
             child: StyledHeadline(title),
