@@ -28,7 +28,6 @@ class _StudentSelectionScreenState extends State<StudentSelectionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //TODO ajouter style au titre
       appBar: AppBar(title: Text('StudentSelectionScreen'.hardcoded)),
       body: SizedBox(
         width: double.infinity,
