@@ -1,6 +1,6 @@
+import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:projet_excel/src/features/lockers/domain/locker_condition.dart';
-import 'package:projet_excel/src/features/lockers/domain/student.dart';
+
 
 part 'locker.g.dart';
 

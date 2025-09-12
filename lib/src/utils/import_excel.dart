@@ -1,6 +1,6 @@
 import 'package:excel/excel.dart';
-import 'package:projet_excel/src/features/lockers/data/locker_repository.dart';
-import 'package:projet_excel/src/features/lockers/domain/domain.dart';
+import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
+import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
 import 'package:uuid/uuid.dart';
 
 final uuid = const Uuid();
@@ -44,46 +44,36 @@ List<Locker> importLockersFrom(Excel excel) {
 
       String id = '';
 
-      for (Student studentId in LockerProvider.students) {
+      for (Student studentValue in LockerProvider.students) {
         Student student = LockerProvider.students.firstWhere(
-          (student) => student.id == studentId.id,
+          (student) => student.id == studentValue.id,
         );
 
         if (student.lastName == results[3] && student.firstName == results[4]) {
-          id = studentId.id;
+          id = student.id;
         }
       }
 
       lockers.add(
         Locker(
           floor: floor.replaceAll('Etage ', ''),
-
           number: int.parse(results[0]),
-
           responsable: results[1],
-
           studentId: id == '' ? null : id,
-
           deposit: int.tryParse(results[5]) ?? 0,
-
           keyCount: int.parse(results[6]),
-
           lockNumber: int.parse(results[7]),
-
           lockerCondition: LockerCondition.isGood(
             comments: results[8] == 'null' ? null : results[8],
           ),
         ),
       );
-
       cell = excel[floor].cell(
         CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: ++row),
       );
     }
   }
-
   lockers.sort((a, b) => a.number - b.number);
-
   return lockers;
 }
 

@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:projet_excel/src/features/lockers/domain/domain.dart';
+import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
+// import 'package:hive_flutter/hive_flutter.dart';
+
 
 class LockerProvider with ChangeNotifier {
-  static final _lockers = <Locker>[];
-  static final _students = <Student>[];
+  static final List<Locker> _lockers = [];
+  static final List<Student> _students = [];
+  static final List<Transaction> _transactions = [];
 
-  static List<Locker> get lockers => [..._lockers];
   static List<Student> get students => [..._students];
-
-  final _transactions = <Transaction>[];
+  static List<Locker> get lockers => [..._lockers];
 
   //Transaction
   void saveTransactions(TransactionType type, int lockerId, Locker value) {
     _transactions.add(Transaction(type, lockerId, value));
 
-    if (_transactions.length > 5) {
+    if (_transactions.length > 10) {
       _transactions.removeAt(0);
     }
   }
@@ -30,7 +31,7 @@ class LockerProvider with ChangeNotifier {
 
     switch (transaction.type) {
       case TransactionType.add:
-        _lockers.remove(transaction.value);
+        _lockers.add(transaction.value);
         break;
       case TransactionType.remove:
         _lockers.add(transaction.value);

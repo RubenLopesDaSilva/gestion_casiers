@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:projet_excel/src/features/lockers/presentation/excel_import_screen.dart';
-import 'package:projet_excel/src/features/theme/theme.dart';
+import 'package:gestion_casiers/src/features/lockers/presentation/excel_import_screen.dart';
+import 'package:gestion_casiers/src/features/theme/theme.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

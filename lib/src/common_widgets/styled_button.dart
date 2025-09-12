@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:projet_excel/src/constants/app_sizes.dart';
-import 'package:projet_excel/src/features/theme/theme.dart';
+import 'package:gestion_casiers/src/constants/app_sizes.dart';
+import 'package:gestion_casiers/src/features/theme/theme.dart';
+
 
 class StyledButton extends StatelessWidget {
   const StyledButton({super.key, required this.onPressed, required this.child});
