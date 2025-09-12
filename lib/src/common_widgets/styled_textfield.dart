@@ -4,6 +4,7 @@ import 'package:gestion_casiers/src/theme/theme.dart';
 class StyledTextfield extends StatelessWidget {
   const StyledTextfield({
     required this.controller,
+    this.readOnly,
     this.textInputType,
     this.prefixIcon,
     required this.child,
@@ -11,6 +12,7 @@ class StyledTextfield extends StatelessWidget {
   });
 
   final TextEditingController controller;
+  final bool? readOnly;
   final TextInputType? textInputType;
   final Icon? prefixIcon;
   final Widget child;
@@ -19,6 +21,7 @@ class StyledTextfield extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
+      readOnly: readOnly ?? false,
       keyboardType: textInputType,
       cursorColor: AppColors.textColor,
       decoration: InputDecoration(prefixIcon: prefixIcon, label: child),
