@@ -11,7 +11,19 @@ List<Locker> importLockersFrom(Excel excel, List<Student> students) {
     if (!['Etage B', 'Etage C', 'Etage D', 'Etage E'].contains(floor)) {
       continue;
     }
+
+    String place = excel[floor]
+        .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 1))
+        .value
+        .toString();
+
     int row = 1;
+
+    if (floor == 'Etage B') {
+      row = 81;
+    } else if (floor == 'Etage E') {
+      row = 44;
+    }
     var cell = excel[floor].cell(
       CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: row),
     );
@@ -36,7 +48,10 @@ List<Locker> importLockersFrom(Excel excel, List<Student> students) {
       }
 
       String id = '';
-      for (Student student in students) {
+
+
+      for (dynamic studentId in LockerRepository().studentsBox.keys) {
+        Student student = LockerRepository().studentsBox.get(studentId)!;
         if (student.lastName == results[3] && student.firstName == results[4]) {
           id = student.id;
         }
@@ -58,9 +73,9 @@ List<Locker> importLockersFrom(Excel excel, List<Student> students) {
       lockers.add(
         Locker(
           floor: floor.replaceAll('Etage ', ''),
-          place: results[0],
           number: int.tryParse(results[2]) ?? 0,
           responsable: results[3],
+          place: place,
           studentId: id == '' ? null : id,
           deposit: int.tryParse(results[5]) ?? 0,
           keyCount: int.parse(results[6]),
@@ -103,10 +118,11 @@ List<Student> importStudentsFrom(Excel excel) {
       Student(
         id: uuid.v4(),
         firstName: results[7],
-        title: results[4],
+        title: results[5],
         lastName: results[6],
         login: results[12],
-        year: int.tryParse(results[19]) ?? 0,
+        year: int.parse(results[19]),
+
         job: results[14],
       ),
     );

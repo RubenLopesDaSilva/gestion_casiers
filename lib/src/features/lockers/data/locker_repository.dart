@@ -1,100 +1,103 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
+import 'package:hive_flutter/adapters.dart';
 
 class LockerRepository {
-  final List<Locker> _lockers = [];
-  final List<Student> _students = [];
-  final List<Transaction> _transactions = [];
-
-  List<Student> get students => [..._students];
-  List<Locker> get lockers => [..._lockers];
+  final Box<Locker> lockersBox = Hive.box('lockers');
+  final Box<Student> studentsBox = Hive.box('Students');
+  final Box<Transaction> transactionsBox = Hive.box('Transactions');
 
   //Transaction
   void saveTransactions(TransactionType type, int lockerId, Locker value) {
-    _transactions.add(Transaction(type, lockerId, value));
+    transactionsBox.add(Transaction(type, lockerId, value));
 
-    if (_transactions.length > 10) {
-      _transactions.removeAt(0);
+    if (transactionsBox.length > 10) {
+      transactionsBox.deleteAt(0);
     }
   }
 
   void restoreLastTransaction() {
-    if (_transactions.isEmpty) return;
+    if (transactionsBox.isEmpty) return;
 
-    final transaction = _transactions.last;
+    final transaction = transactionsBox.get(-1);
 
-    final locker = _lockers.firstWhere(
-      (locker) => locker.number == transaction.lockerId,
+    final locker = lockersBox.get(
+      (locker) => locker.number == transaction!.lockerId,
     );
 
-    switch (transaction.type) {
+    switch (transaction!.type) {
       case TransactionType.add:
-        _lockers.add(transaction.value);
+        lockersBox.delete(transaction.value);
         break;
       case TransactionType.remove:
-        _lockers.add(transaction.value);
+        lockersBox.put(locker!.number, transaction.value);
         break;
       case TransactionType.edit:
-        _lockers[_lockers.indexOf(locker)] = transaction.value;
+        lockersBox.put(locker!.number, transaction.value);
         break;
     }
 
-    _transactions.removeLast();
+    transactionsBox.deleteAt(-1);
   }
 
   //Locker
   void setLockers(List<Locker> lockers) {
-    _lockers.clear();
-    _lockers.addAll(lockers);
+    lockersBox.deleteAll(lockersBox.keys);
+
+    for (Locker locker in lockers) {
+      lockersBox.put(locker.number, locker);
+    }
   }
 
   void addLocker(Locker locker) {
-    _lockers.add(locker);
+    lockersBox.put(locker.number, locker);
 
     saveTransactions(TransactionType.add, locker.number, locker);
   }
 
   void removeLocker(Locker locker) {
-    _lockers.removeWhere((lockerValue) => lockerValue.number == locker.number);
+    lockersBox.deleteAt(locker.number);
 
     saveTransactions(TransactionType.remove, locker.number, locker);
   }
 
   void editLocker(int lockerNumber, Locker editLocker) {
-    _lockers[_lockers.indexWhere((locker) => locker.number == lockerNumber)] =
-        editLocker;
+    lockersBox.putAt(lockerNumber, editLocker);
 
     saveTransactions(TransactionType.edit, lockerNumber, editLocker);
   }
 
   //Student
   void setStudents(List<Student> students) {
-    _students.clear();
+    studentsBox.deleteAll(studentsBox.keys);
 
     for (Student student in students) {
-      _students.add(student);
+      studentsBox.put(student.id, student);
     }
   }
 
   void addStudent(Student student) {
-    _students.add(student);
+    studentsBox.put(student.id, student);
   }
 
   void removeStudent(String id) {
-    final studentIndex = _students.indexWhere((student) => student.id == id);
+    final studentIndex = studentsBox.keys.firstWhere(
+      (student) => student.id == id,
+    );
 
-    _students.removeAt(studentIndex);
+    studentsBox.deleteAt(studentIndex);
   }
 
   void editStudent(String id, Student editedStudent) {
-    final studentIndex = _students.indexWhere((student) => student.id == id);
-    _students[studentIndex] = editedStudent;
+    final studentIndex = studentsBox.keys.firstWhere(
+      (student) => student.id == id,
+    );
+    studentsBox.putAt(studentIndex, editedStudent);
   }
 
-  Student? findStudentBy({required StudentID? id}) {
-    return id == null
-        ? null
-        : _students.firstWhere((student) => student.id == id);
+
+  Student? findStudentBy({required StudentID id}) {
+    return (studentsBox.values.firstWhere((student) => student.id == id));
   }
 }
 
