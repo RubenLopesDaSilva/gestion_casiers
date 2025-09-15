@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/styled_button.dart';
 import 'package:gestion_casiers/src/common_widgets/styled_text.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
@@ -10,9 +11,9 @@ import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 
 class SimpleLockerProfile extends StatefulWidget {
-  const SimpleLockerProfile(this.locker, {super.key});
+  const SimpleLockerProfile(this.lock, {super.key});
 
-  final Locker locker;
+  final String? lock;
 
   @override
   State<SimpleLockerProfile> createState() => _SimpleLockerProfileState();
@@ -27,7 +28,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
   final _keysController = TextEditingController();
   final _lockController = TextEditingController();
 
-  void update(Locker locker) {
+  void update(Locker locker, LockerRepository repository) {
     final number = int.tryParse(_numberController.text);
     final keyCount = int.tryParse(_keysController.text);
     final lock = int.tryParse(_lockController.text);
@@ -38,7 +39,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
       keyCount: keyCount,
       lockNumber: lock,
     );
-    LockerProvider().editLocker(update.number, update);
+    repository.editLocker(locker.number, update);
   }
 
   @override
@@ -55,143 +56,157 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
 
   @override
   Widget build(BuildContext context) {
-    Locker lockerCopy = widget.locker.copyWith();
-
-    _placeController.text = lockerCopy.floor;
-    _floorController.text = lockerCopy.floor;
-    _numberController.text = lockerCopy.number.toString();
-    _responsibleController.text = lockerCopy.responsable;
-    // _ownerController.text = lockerCopy.student == null
-    //     ? 'None'
-    //     : '${lockerCopy.student?.name} ${lockerCopy.student?.surname}';
-    _keysController.text = lockerCopy.keyCount.toString();
-    _lockController.text = lockerCopy.lockNumber.toString();
-
     return Scaffold(
       appBar: AppBar(title: Text('LockerProfile'.hardcoded)),
-      body: Column(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsetsGeometry.all(30),
-              child: Column(
-                children: [
-                  LockerProfileItem(
+      body: Consumer(
+        builder: (context, ref, child) {
+          final repository = ref.watch(lockersRepositoryProvider);
+          final locker = repository.lockers.firstWhere(
+            (element) => widget.lock == element.lockNumber.toString(),
+          );
+          Locker lockerCopy = locker.copyWith();
+          late Student? student = repository.findStudentBy(
+            id: lockerCopy.studentId,
+          );
+          _placeController.text = lockerCopy.floor;
+          _floorController.text = lockerCopy.floor;
+          _numberController.text = lockerCopy.number.toString();
+          _responsibleController.text = lockerCopy.responsable;
+          _ownerController.text = student == null
+              ? 'None'
+              : '${student.firstName} ${student.lastName}';
+          _keysController.text = lockerCopy.keyCount.toString();
+          _lockController.text = lockerCopy.lockNumber.toString();
+
+          return Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsetsGeometry.all(30),
+                  child: Column(
                     children: [
-                      gapW32,
-                      LockerProfilePart(
-                        title: 'Place'.hardcoded,
-                        controller: _placeController,
-                        prefixIcon: Icon(
-                          Icons.place,
-                          color: AppColors.titleColor,
-                        ),
-                        description: 'Description'.hardcoded,
+                      LockerProfileItem(
+                        children: [
+                          gapW32,
+                          LockerProfilePart(
+                            title: 'Place'.hardcoded,
+                            controller: _placeController,
+                            prefixIcon: Icon(
+                              Icons.place,
+                              color: AppColors.titleColor,
+                            ),
+                            description: 'Description'.hardcoded,
+                          ),
+                          gapW32,
+                          LockerProfilePart(
+                            title: 'Floor'.hardcoded,
+                            controller: _floorController,
+                            prefixIcon: Icon(
+                              Icons.flood,
+                              color: AppColors.titleColor,
+                            ),
+                            description: 'Description'.hardcoded,
+                          ),
+                          gapW32,
+                          LockerProfilePart(
+                            title: 'Number'.hardcoded,
+                            controller: _numberController,
+                            textInputType:
+                                const TextInputType.numberWithOptions(
+                                  signed: false,
+                                  decimal: false,
+                                ),
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: AppColors.titleColor,
+                            ),
+                            description: 'Description'.hardcoded,
+                          ),
+                          gapW32,
+                        ],
                       ),
-                      gapW32,
-                      LockerProfilePart(
-                        title: 'Floor'.hardcoded,
-                        controller: _floorController,
-                        prefixIcon: Icon(
-                          Icons.flood,
-                          color: AppColors.titleColor,
-                        ),
-                        description: 'Description'.hardcoded,
+                      gapH24,
+                      LockerProfileItem(
+                        children: [
+                          gapW32,
+                          LockerProfilePart(
+                            title: 'Responsible'.hardcoded,
+                            controller: _responsibleController,
+                            textInputType:
+                                const TextInputType.numberWithOptions(
+                                  signed: false,
+                                  decimal: false,
+                                ),
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: AppColors.titleColor,
+                            ),
+                            description: 'Description'.hardcoded,
+                          ),
+                          gapW32,
+                          LockerProfilePart(
+                            title: 'Owner'.hardcoded,
+                            controller: _ownerController,
+                            readOnly: true,
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: AppColors.titleColor,
+                            ),
+                            description: 'Description'.hardcoded,
+                          ),
+                          gapW32,
+                        ],
                       ),
-                      gapW32,
-                      LockerProfilePart(
-                        title: 'Number'.hardcoded,
-                        controller: _numberController,
-                        textInputType: const TextInputType.numberWithOptions(
-                          signed: false,
-                          decimal: false,
-                        ),
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: AppColors.titleColor,
-                        ),
-                        description: 'Description'.hardcoded,
+                      gapH24,
+                      LockerProfileItem(
+                        children: [
+                          gapW32,
+                          LockerProfilePart(
+                            title: 'KeysAvaible'.hardcoded,
+                            controller: _keysController,
+                            textInputType:
+                                const TextInputType.numberWithOptions(
+                                  signed: false,
+                                  decimal: false,
+                                ),
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: AppColors.titleColor,
+                            ),
+                            description: 'Description'.hardcoded,
+                          ),
+                          gapW32,
+                          LockerProfilePart(
+                            title: 'LockNumber'.hardcoded,
+                            controller: _lockController,
+                            textInputType:
+                                const TextInputType.numberWithOptions(
+                                  signed: false,
+                                  decimal: false,
+                                ),
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: AppColors.titleColor,
+                            ),
+                            description: 'Description'.hardcoded,
+                          ),
+                          gapW32,
+                        ],
                       ),
-                      gapW32,
                     ],
                   ),
-                  gapH24,
-                  LockerProfileItem(
-                    children: [
-                      gapW32,
-                      LockerProfilePart(
-                        title: 'Responsible'.hardcoded,
-                        controller: _responsibleController,
-                        textInputType: const TextInputType.numberWithOptions(
-                          signed: false,
-                          decimal: false,
-                        ),
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: AppColors.titleColor,
-                        ),
-                        description: 'Description'.hardcoded,
-                      ),
-                      gapW32,
-                      LockerProfilePart(
-                        title: 'Owner'.hardcoded,
-                        controller: _ownerController,
-                        readOnly: true,
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: AppColors.titleColor,
-                        ),
-                        description: 'Description'.hardcoded,
-                      ),
-                      gapW32,
-                    ],
-                  ),
-                  gapH24,
-                  LockerProfileItem(
-                    children: [
-                      gapW32,
-                      LockerProfilePart(
-                        title: 'KeysAvaible'.hardcoded,
-                        controller: _keysController,
-                        textInputType: const TextInputType.numberWithOptions(
-                          signed: false,
-                          decimal: false,
-                        ),
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: AppColors.titleColor,
-                        ),
-                        description: 'Description'.hardcoded,
-                      ),
-                      gapW32,
-                      LockerProfilePart(
-                        title: 'LockNumber'.hardcoded,
-                        controller: _lockController,
-                        textInputType: const TextInputType.numberWithOptions(
-                          signed: false,
-                          decimal: false,
-                        ),
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          color: AppColors.titleColor,
-                        ),
-                        description: 'Description'.hardcoded,
-                      ),
-                      gapW32,
-                    ],
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
-          StyledButton(
-            onPressed: () {
-              update(lockerCopy);
-            },
-            child: StyledHeadline('Save'.hardcoded),
-          ),
-          gapH24,
-        ],
+              StyledButton(
+                onPressed: () {
+                  update(lockerCopy, repository);
+                },
+                child: StyledHeadline('Save'.hardcoded),
+              ),
+              gapH24,
+            ],
+          );
+        },
       ),
     );
   }

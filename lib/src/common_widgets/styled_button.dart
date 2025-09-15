@@ -10,32 +10,34 @@ class StyledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      style: ButtonStyle(
-        overlayColor: WidgetStateProperty.resolveWith(
-          (states) => Colors.transparent,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25),
+        gradient: LinearGradient(
+          colors: [
+            AppColors.primaryAccent,
+            AppColors.primaryColor,
+            AppColors.primaryAccent,
+          ],
+          begin: AlignmentGeometry.topCenter,
+          end: AlignmentGeometry.bottomCenter,
         ),
-        splashFactory: NoSplash.splashFactory,
       ),
-      onPressed: onPressed,
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: Sizes.p12,
-          horizontal: Sizes.p20,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25),
-          gradient: LinearGradient(
-            colors: [
-              AppColors.primaryAccent,
-              AppColors.primaryColor,
-              AppColors.primaryAccent,
-            ],
-            begin: AlignmentGeometry.topCenter,
-            end: AlignmentGeometry.bottomCenter,
+      child: TextButton(
+        style: ButtonStyle(
+          overlayColor: WidgetStateProperty.resolveWith(
+            (states) => Colors.transparent,
           ),
+          splashFactory: NoSplash.splashFactory,
         ),
-        child: child,
+        onPressed: onPressed,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: Sizes.p12,
+            horizontal: Sizes.p20,
+          ),
+          child: child,
+        ),
       ),
     );
   }

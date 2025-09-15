@@ -13,7 +13,7 @@ final lockers = <Locker>[
     lockerCondition: LockerCondition(true),
   ),
   Locker(
-    // place: 'Ancien Bâtiment',
+    place: 'Ancien Bâtiment',
     floor: 'c',
     number: 122,
     responsable: 'JHI',
@@ -24,7 +24,7 @@ final lockers = <Locker>[
     lockerCondition: const LockerCondition(true),
   ),
   Locker(
-    // place: 'Ancien Bâtiment',
+    place: 'Ancien Bâtiment',
     floor: 'c',
     number: 123,
     responsable: 'JHI',
@@ -35,7 +35,7 @@ final lockers = <Locker>[
     lockerCondition: const LockerCondition(true),
   ),
   Locker(
-    // place: 'Ancien Bâtiment',
+    place: 'Ancien Bâtiment',
     floor: 'c',
     number: 124,
     responsable: 'JHI',
@@ -46,7 +46,7 @@ final lockers = <Locker>[
     lockerCondition: const LockerCondition(true),
   ),
   Locker(
-    // place: 'Ancien Bâtiment',
+    place: 'Ancien Bâtiment',
     floor: 'c',
     number: 125,
     responsable: 'JHI',
@@ -57,7 +57,7 @@ final lockers = <Locker>[
     lockerCondition: const LockerCondition(true),
   ),
   const Locker(
-    // place: 'Ancien Bâtiment',
+    place: 'Ancien Bâtiment',
     floor: 'c',
     number: 126,
     responsable: 'JHI',
@@ -68,7 +68,7 @@ final lockers = <Locker>[
     lockerCondition: LockerCondition(true),
   ),
   const Locker(
-    // place: 'Ancien Bâtiment',
+    place: 'Ancien Bâtiment',
     floor: 'c',
     number: 127,
     responsable: 'JHI',
@@ -79,7 +79,7 @@ final lockers = <Locker>[
     lockerCondition: LockerCondition(true),
   ),
   Locker(
-    // place: 'Ancien Bâtiment',
+    place: 'Ancien Bâtiment',
     floor: 'c',
     number: 128,
     responsable: 'JHI',
@@ -90,7 +90,7 @@ final lockers = <Locker>[
     lockerCondition: const LockerCondition(true),
   ),
   Locker(
-    // place: 'Ancien Bâtiment',
+    place: 'Ancien Bâtiment',
     floor: 'c',
     number: 129,
     responsable: 'JHI',
@@ -101,7 +101,7 @@ final lockers = <Locker>[
     lockerCondition: const LockerCondition(true),
   ),
   Locker(
-    // place: 'Ancien Bâtiment',
+    place: 'Ancien Bâtiment',
     floor: 'c',
     number: 130,
     responsable: 'JHI',
@@ -112,7 +112,7 @@ final lockers = <Locker>[
     lockerCondition: const LockerCondition(true),
   ),
   Locker(
-    // place: 'Ancien Bâtiment',
+    place: 'Ancien Bâtiment',
     floor: 'c',
     number: 131,
     responsable: 'JHI',
@@ -123,7 +123,7 @@ final lockers = <Locker>[
     lockerCondition: const LockerCondition(true),
   ),
   Locker(
-    // place: 'Ancien Bâtiment',
+    place: 'Ancien Bâtiment',
     floor: 'c',
     number: 132,
     responsable: 'JHI',
@@ -134,7 +134,7 @@ final lockers = <Locker>[
     lockerCondition: const LockerCondition(true),
   ),
   const Locker(
-    // place: 'Ancien Bâtiment',
+    place: 'Ancien Bâtiment',
     floor: 'c',
     number: 133,
     responsable: 'JHI',
@@ -145,7 +145,7 @@ final lockers = <Locker>[
     lockerCondition: LockerCondition(true),
   ),
   Locker(
-    // place: 'Ancien Bâtiment',
+    place: 'Ancien Bâtiment',
     floor: 'c',
     number: 134,
     responsable: 'JHI',

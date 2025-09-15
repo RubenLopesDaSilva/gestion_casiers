@@ -91,13 +91,13 @@ class LockerRepository {
     _students[studentIndex] = editedStudent;
   }
 
-  Student findStudentBy({required StudentID id}) {
-    return _students.firstWhere((student) => student.id == id);
+  Student? findStudentBy({required StudentID? id}) {
+    return id == null
+        ? null
+        : _students.firstWhere((student) => student.id == id);
   }
-
-  
 }
 
 final lockersRepositoryProvider = Provider<LockerRepository>((ref) {
-    return LockerRepository();
-  });
+  return LockerRepository();
+});

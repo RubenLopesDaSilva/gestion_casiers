@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/styled_text.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
-import 'package:gestion_casiers/src/constants/test_datas.dart';
+import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/student_inner_item.dart';
 
@@ -17,8 +18,6 @@ class StudentSelectionScreen extends StatefulWidget {
 }
 
 class _StudentSelectionScreenState extends State<StudentSelectionScreen> {
-  List<Student?> data = [null, ...students];
-
   Function selectStudent(Student? student) {
     return () {
       context.pop<String?>(student?.id);
@@ -58,8 +57,8 @@ class _StudentSelectionScreenState extends State<StudentSelectionScreen> {
                       child: StudentInnerItem(
                         student: Student(
                           id: 'identification'.hardcoded,
-                          firstName: 'name'.hardcoded,
-                          lastName: 'surname'.hardcoded,
+                          firstName: 'firstName'.hardcoded,
+                          lastName: 'lastName'.hardcoded,
                           job: 'job'.hardcoded,
                           login: 'login'.hardcoded,
                           year: 0,
@@ -69,20 +68,27 @@ class _StudentSelectionScreenState extends State<StudentSelectionScreen> {
                       ),
                     ),
                     gapH24,
-                    Expanded(
-                      child: ListView.separated(
-                        padding: const EdgeInsets.all(30),
-                        itemCount: data.length,
-                        scrollDirection: Axis.vertical,
-                        separatorBuilder: (context, index) => gapH24,
-                        itemBuilder: (context, index) {
-                          Student? student = data[index];
-                          return StudentInnerItem(
-                            student: student,
-                            onTap: selectStudent(student),
-                          );
-                        },
-                      ),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final repository = ref.watch(lockersRepositoryProvider);
+                        final students = repository.students;
+                        List<Student?> data = [null, ...students];
+                        return Expanded(
+                          child: ListView.separated(
+                            padding: const EdgeInsets.all(30),
+                            itemCount: data.length,
+                            scrollDirection: Axis.vertical,
+                            separatorBuilder: (context, index) => gapH24,
+                            itemBuilder: (context, index) {
+                              Student? student = data[index];
+                              return StudentInnerItem(
+                                student: student,
+                                onTap: selectStudent(student),
+                              );
+                            },
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
