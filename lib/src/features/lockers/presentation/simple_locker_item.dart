@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_casiers/src/common_widgets/styled_text.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
+import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/student_inner_item.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 
 class SimpleLockerItem extends StatelessWidget {
   const SimpleLockerItem({
+    required this.ref,
     required this.locker,
     required this.student,
     required this.profile,
     super.key,
   });
 
+  final LockerRepository ref;
   final Locker locker;
   final Function student;
   final Function profile;
@@ -23,6 +26,7 @@ class SimpleLockerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Student? currentUser = ref.findStudentBy(id: locker.studentId);
     return Container(
       padding: const EdgeInsets.all(25.0),
       decoration: BoxDecoration(
@@ -32,7 +36,7 @@ class SimpleLockerItem extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Expanded(flex: 2, child: Center(child: StyledHeadline(locker.floor))),
+          Expanded(flex: 2, child: Center(child: StyledHeadline(locker.place))),
           gapW12,
           Expanded(child: Center(child: StyledText(locker.floor))),
           gapW12,
@@ -43,16 +47,7 @@ class SimpleLockerItem extends StatelessWidget {
           Expanded(
             flex: 10,
             child: StudentInnerItem(
-              // student: locker.student,
-              student: const Student(
-                id: '1',
-                firstName: 'firstName',
-                lastName: 'lastName',
-                job: 'job',
-                login: 'login',
-                year: 0,
-                title: 'title',
-              ),
+              student: currentUser,
               onTap: () {
                 student(locker);
               },

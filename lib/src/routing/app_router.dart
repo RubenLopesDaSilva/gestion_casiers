@@ -1,4 +1,3 @@
-import 'package:gestion_casiers/src/constants/test_datas.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_profile.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/simple_screen.dart';
 import 'package:gestion_casiers/src/features/students/presentation/student_selection_screen.dart';
@@ -28,10 +27,7 @@ final goRouter = GoRouter(
           name: AppRoute.lockerprofile.name,
           builder: (context, state) {
             final lock = state.pathParameters['lock'];
-            final locker = lockers.firstWhere(
-              (element) => lock == element.lockNumber.toString(),
-            );
-            return SimpleLockerProfile(locker);
+            return SimpleLockerProfile(lock);
           },
         ),
       ],

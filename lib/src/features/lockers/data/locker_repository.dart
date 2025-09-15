@@ -95,6 +95,7 @@ class LockerRepository {
     studentsBox.putAt(studentIndex, editedStudent);
   }
 
+
   Student? findStudentBy({required StudentID id}) {
     return (studentsBox.values.firstWhere((student) => student.id == id));
   }

@@ -1,11 +1,10 @@
 import 'package:excel/excel.dart';
-import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
 import 'package:uuid/uuid.dart';
 
 final uuid = const Uuid();
 
-List<Locker> importLockersFrom(Excel excel) {
+List<Locker> importLockersFrom(Excel excel, List<Student> students) {
   final lockers = <Locker>[];
 
   for (final floor in excel.sheets.keys.where((key) => key.contains('Etage'))) {
@@ -50,20 +49,33 @@ List<Locker> importLockersFrom(Excel excel) {
 
       String id = '';
 
+
       for (dynamic studentId in LockerRepository().studentsBox.keys) {
         Student student = LockerRepository().studentsBox.get(studentId)!;
-
         if (student.lastName == results[3] && student.firstName == results[4]) {
           id = student.id;
         }
       }
+      final locker = Locker(
+        floor: floor.replaceAll('Etage ', ''),
+        place: results[0],
+        number: int.tryParse(results[2]) ?? 0,
+        responsable: results[3],
+        studentId: id == '' ? null : id,
+        deposit: int.tryParse(results[5]) ?? 0,
+        keyCount: int.parse(results[6]),
+        lockNumber: int.parse(results[7]),
+        lockerCondition: LockerCondition.isGood(
+          comments: results[8] == 'null' ? null : results[8],
+        ),
+      );
 
       lockers.add(
         Locker(
           floor: floor.replaceAll('Etage ', ''),
+          number: int.tryParse(results[2]) ?? 0,
+          responsable: results[3],
           place: place,
-          number: int.parse(results[0]),
-          responsable: results[1],
           studentId: id == '' ? null : id,
           deposit: int.tryParse(results[5]) ?? 0,
           keyCount: int.parse(results[6]),
@@ -102,7 +114,6 @@ List<Student> importStudentsFrom(Excel excel) {
         CellIndex.indexByColumnRow(columnIndex: i, rowIndex: row),
       );
     }
-
     students.add(
       Student(
         id: uuid.v4(),
@@ -111,6 +122,7 @@ List<Student> importStudentsFrom(Excel excel) {
         lastName: results[6],
         login: results[12],
         year: int.parse(results[19]),
+
         job: results[14],
       ),
     );
