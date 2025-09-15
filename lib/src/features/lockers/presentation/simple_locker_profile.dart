@@ -38,7 +38,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
       keyCount: keyCount,
       lockNumber: lock,
     );
-    LockerProvider().editLocker(update.number, update);
+    LockerRepository().editLocker(update.number, update);
   }
 
   @override
