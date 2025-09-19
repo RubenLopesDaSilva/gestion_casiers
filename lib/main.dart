@@ -11,10 +11,11 @@ void main() async {
   Hive.registerAdapter(LockerAdapter());
   Hive.registerAdapter(LockerConditionAdapter());
   Hive.registerAdapter(StudentAdapter());
+  Hive.registerAdapter(TransactionAdapter());
 
-  await Hive.openBox<Locker>('Lockers');
-  await Hive.openBox<Student>('Students');
-  await Hive.openBox<Transaction>('Transactions');
+  await Hive.openBox<Locker>('lockers');
+  await Hive.openBox<Student>('students');
+  await Hive.openBox<Transaction>('transactions');
 
   runApp(const ProviderScope(child: MyApp()));
 }

@@ -1,10 +1,11 @@
 import 'package:excel/excel.dart';
+import 'package:gestion_casiers/src/features/lockers/data/student_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
 import 'package:uuid/uuid.dart';
 
-final uuid = const Uuid();
+const uuid = Uuid();
 
-List<Locker> importLockersFrom(Excel excel, List<Student> students) {
+List<Locker> importLockersFrom(Excel excel) {
   final lockers = <Locker>[];
 
   for (final floor in excel.sheets.keys.where((key) => key.contains('Etage'))) {
@@ -21,16 +22,17 @@ List<Locker> importLockersFrom(Excel excel, List<Student> students) {
 
     if (floor == 'Etage B') {
       row = 81;
-    } else if (floor == 'Etage E') {
+    }
+
+    if (floor == 'Etage E') {
       row = 44;
     }
+
     var cell = excel[floor].cell(
       CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: row),
     );
-
     while (cell.value != null) {
       final results = [];
-
       for (int i = 0; i < 9; i++) {
         var cell = excel[floor].cell(
           CellIndex.indexByColumnRow(columnIndex: 2 + i, rowIndex: row),
@@ -43,41 +45,28 @@ List<Locker> importLockersFrom(Excel excel, List<Student> students) {
         cell = excel[floor].cell(
           CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: ++row),
         );
-
         continue;
       }
 
       String id = '';
 
+      for (dynamic studentId in StudentRepository.studentsBox.keys) {
+        Student student = StudentRepository.studentsBox.get(studentId)!;
 
-      for (dynamic studentId in LockerRepository().studentsBox.keys) {
-        Student student = LockerRepository().studentsBox.get(studentId)!;
         if (student.lastName == results[3] && student.firstName == results[4]) {
-          id = student.id;
+          id = studentId;
+          StudentRepository.studentsBox.put(id, student);
         }
       }
-      final locker = Locker(
-        floor: floor.replaceAll('Etage ', ''),
-        place: results[0],
-        number: int.tryParse(results[2]) ?? 0,
-        responsable: results[3],
-        studentId: id == '' ? null : id,
-        deposit: int.tryParse(results[5]) ?? 0,
-        keyCount: int.parse(results[6]),
-        lockNumber: int.parse(results[7]),
-        lockerCondition: LockerCondition.isGood(
-          comments: results[8] == 'null' ? null : results[8],
-        ),
-      );
 
       lockers.add(
         Locker(
           floor: floor.replaceAll('Etage ', ''),
-          number: int.tryParse(results[2]) ?? 0,
-          responsable: results[3],
           place: place,
+          number: int.parse(results[0]),
+          responsable: results[1],
           studentId: id == '' ? null : id,
-          deposit: int.tryParse(results[5]) ?? 0,
+          deposit: 20,
           keyCount: int.parse(results[6]),
           lockNumber: int.parse(results[7]),
           lockerCondition: LockerCondition.isGood(
@@ -85,23 +74,26 @@ List<Locker> importLockersFrom(Excel excel, List<Student> students) {
           ),
         ),
       );
+
       cell = excel[floor].cell(
         CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: ++row),
       );
     }
   }
-  lockers.sort((a, b) => a.number - b.number);
-  return lockers;
-}
 
-bool verifyExcelFile() {
-  return true;
+  lockers.sort((a, b) => a.number - b.number);
+
+  return lockers;
 }
 
 List<Student> importStudentsFrom(Excel excel) {
   final students = <Student>[];
 
   final sheet = excel[excel.sheets.keys.first];
+
+  if (sheet.sheetName != 'ESMA-Export') {
+    throw Error();
+  }
 
   var cell = sheet.cell(CellIndex.indexByString('A1'));
   int row = 1;
@@ -114,6 +106,7 @@ List<Student> importStudentsFrom(Excel excel) {
         CellIndex.indexByColumnRow(columnIndex: i, rowIndex: row),
       );
     }
+
     students.add(
       Student(
         id: uuid.v4(),
@@ -122,7 +115,6 @@ List<Student> importStudentsFrom(Excel excel) {
         lastName: results[6],
         login: results[12],
         year: int.parse(results[19]),
-
         job: results[14],
       ),
     );
@@ -134,20 +126,3 @@ List<Student> importStudentsFrom(Excel excel) {
 
   return students;
 }
-
-// void importFile(Excel excel) {
-//   bool doImportLockers = false;
-
-//   for (String sheet in excel.sheets.keys) {
-//     if (sheet.contains('Etage')) {
-//       doImportLockers = true;
-//       break;
-//     }
-//   }
-
-//   if (doImportLockers) {
-//     LockerRepository().setLockers(importLockersFrom(excel));
-//   } else {
-//     LockerRepository().setStudents(importStudentsFrom(excel));
-//   }
-// }
