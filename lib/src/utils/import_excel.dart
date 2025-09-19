@@ -1,10 +1,11 @@
 import 'package:excel/excel.dart';
+import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
 import 'package:uuid/uuid.dart';
 
 final uuid = const Uuid();
 
-List<Locker> importLockersFrom(Excel excel, List<Student> students) {
+List<Locker> importLockersFrom(Excel excel) {
   final lockers = <Locker>[];
 
   for (final floor in excel.sheets.keys.where((key) => key.contains('Etage'))) {
@@ -49,31 +50,16 @@ List<Locker> importLockersFrom(Excel excel, List<Student> students) {
 
       String id = '';
 
-
       for (dynamic studentId in LockerRepository().studentsBox.keys) {
         Student student = LockerRepository().studentsBox.get(studentId)!;
         if (student.lastName == results[3] && student.firstName == results[4]) {
           id = student.id;
         }
       }
-      final locker = Locker(
-        floor: floor.replaceAll('Etage ', ''),
-        place: results[0],
-        number: int.tryParse(results[2]) ?? 0,
-        responsable: results[3],
-        studentId: id == '' ? null : id,
-        deposit: int.tryParse(results[5]) ?? 0,
-        keyCount: int.parse(results[6]),
-        lockNumber: int.parse(results[7]),
-        lockerCondition: LockerCondition.isGood(
-          comments: results[8] == 'null' ? null : results[8],
-        ),
-      );
-
       lockers.add(
         Locker(
           floor: floor.replaceAll('Etage ', ''),
-          number: int.tryParse(results[2]) ?? 0,
+          number: int.tryParse(results[0]) ?? 0,
           responsable: results[3],
           place: place,
           studentId: id == '' ? null : id,

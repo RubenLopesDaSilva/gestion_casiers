@@ -20,14 +20,14 @@ class StudentSelectionScreen extends StatefulWidget {
 class _StudentSelectionScreenState extends State<StudentSelectionScreen> {
   Function selectStudent(Student? student) {
     return () {
-      context.pop<String?>(student?.id);
+      context.pop<(bool error, String? id)?>((false, student?.id));
     };
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('StudentSelectionScreen'.hardcoded)),
+      appBar: AppBar(title: Text('Student Selection Screen'.hardcoded)),
       body: SizedBox(
         width: double.infinity,
         child: Column(
@@ -71,7 +71,7 @@ class _StudentSelectionScreenState extends State<StudentSelectionScreen> {
                     Consumer(
                       builder: (context, ref, child) {
                         final repository = ref.watch(lockersRepositoryProvider);
-                        final students = repository.students;
+                        final students = repository.studentsBox.values;
                         List<Student?> data = [null, ...students];
                         return Expanded(
                           child: ListView.separated(

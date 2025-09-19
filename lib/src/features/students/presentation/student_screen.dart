@@ -6,67 +6,43 @@ import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
-import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_item.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_item_titles.dart';
+import 'package:gestion_casiers/src/features/students/presentation/student_item.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/routing/app_router.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 import 'package:gestion_casiers/src/utils/import_excel.dart';
 import 'package:go_router/go_router.dart';
 
-class SimpleScreen extends ConsumerStatefulWidget {
-  const SimpleScreen({super.key});
+class StudentScreen extends StatefulWidget {
+  const StudentScreen({super.key});
 
   @override
-  ConsumerState<SimpleScreen> createState() => _SimpleScreenState();
+  State<StudentScreen> createState() => _StudentScreenState();
 }
 
-class _SimpleScreenState extends ConsumerState<SimpleScreen> {
-  Future<void> changeStudent(Locker locker, LockerRepository repository) async {
-    final result = await context.pushNamed<(bool error, String? id)?>(
-      AppRoute.students.name,
-    );
-
-    if (result != null) {
-      if (result.$1) {
-      } else {
-        final update = Locker(
-          studentId: result.$2,
-          number: locker.number,
-          floor: locker.floor,
-          deposit: locker.deposit,
-          keyCount: locker.keyCount,
-          lockNumber: locker.lockNumber,
-          responsable: locker.responsable,
-          lockerCondition: locker.lockerCondition,
-          place: locker.place,
-        );
-        repository.editLocker(locker.number, update);
-      }
-    }
-  }
-
-  void lockerProfile(Locker locker) {
+class _StudentScreenState extends State<StudentScreen> {
+  void studentProfile(Student student) {
     context.goNamed(
-      AppRoute.lockerprofile.name,
-      pathParameters: {'lock': locker.lockNumber.toString()},
+      AppRoute.studentprofile.name,
+      pathParameters: {'id': student.id},
     );
-  }
-
-  Future<void> studentScreen() async {
-    context.goNamed(AppRoute.student.name);
   }
 
   @override
   Widget build(BuildContext context) {
+    Future<void> lockerScreen() async {
+      context.goNamed(AppRoute.simple.name);
+    }
+
     return Scaffold(
-      appBar: AppBar(title: StyledTitle('Simple Screen'.hardcoded)),
+      appBar: AppBar(title: StyledTitle('Student Screen'.hardcoded)),
       body: SizedBox(
         width: double.infinity,
         child: Consumer(
           builder: (context, value, child) {
             final ref = value.watch(lockersRepositoryProvider);
-            final lockers = ref.lockersBox.values.toList();
+            final students = ref.studentsBox.values.toList();
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -79,8 +55,8 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
                         FilePickerResult? result = await FilePicker.platform
                             .pickFiles();
                         if (result != null) {
-                          ref.setLockers(
-                            importLockersFrom(
+                          ref.setStudents(
+                            importStudentsFrom(
                               Excel.decodeBytes(
                                 result.files.single.bytes!.toList(),
                               ),
@@ -88,12 +64,12 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
                           );
                         }
                       },
-                      child: const StyledHeadline('Import Lockers'),
+                      child: const StyledHeadline('Import Students'),
                     ),
                     gapW16,
                     StyledButton(
-                      onPressed: studentScreen,
-                      child: const StyledHeadline('Go to students'),
+                      onPressed: lockerScreen,
+                      child: const StyledHeadline('Go to lockers'),
                     ),
                   ],
                 ),
@@ -119,16 +95,16 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
                         Expanded(
                           child: ListView.separated(
                             padding: const EdgeInsets.all(30),
-                            itemCount: lockers.length,
+                            itemCount: students.length,
                             scrollDirection: Axis.vertical,
                             separatorBuilder: (context, index) => gapH24,
                             itemBuilder: (context, index) {
-                              Locker locker = lockers[index];
-                              return SimpleLockerItem(
-                                ref: ref,
-                                locker: locker,
-                                student: changeStudent,
-                                profile: lockerProfile,
+                              Student student = students[index];
+                              return StudentItem(
+                                // ref: ref,
+                                // locker: locker,
+                                student: student,
+                                profile: studentProfile,
                               );
                             },
                           ),

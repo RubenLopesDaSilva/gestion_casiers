@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gestion_casiers/src/common_widgets/styled_button.dart';
-import 'package:gestion_casiers/src/common_widgets/styled_text.dart';
+import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
@@ -11,75 +10,68 @@ import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 import 'package:go_router/go_router.dart';
 
-class SimpleLockerProfile extends StatefulWidget {
-  const SimpleLockerProfile(this.lock, {super.key});
+class StudentProfile extends ConsumerStatefulWidget {
+  const StudentProfile(this.id, {super.key});
 
-  final String? lock;
+  final String? id;
 
   @override
-  State<SimpleLockerProfile> createState() => _SimpleLockerProfileState();
+  ConsumerState<StudentProfile> createState() => _StudentProfileState();
 }
 
-class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
-  final _placeController = TextEditingController();
-  final _floorController = TextEditingController();
-  final _numberController = TextEditingController();
-  final _responsibleController = TextEditingController();
-  final _ownerController = TextEditingController();
-  final _keysController = TextEditingController();
-  final _lockController = TextEditingController();
+class _StudentProfileState extends ConsumerState<StudentProfile> {
+  final _loginController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _jobController = TextEditingController();
+  final _titleController = TextEditingController();
+  final _yearController = TextEditingController();
 
-  void update(Locker locker, LockerRepository repository) {
-    final number = int.tryParse(_numberController.text);
-    final keyCount = int.tryParse(_keysController.text);
-    final lock = int.tryParse(_lockController.text);
-    Locker update = locker.copyWith(
-      floor: _floorController.text,
-      number: number,
-      responsable: _responsibleController.text,
-      keyCount: keyCount,
-      lockNumber: lock,
+  void update(Student student, LockerRepository repository) {
+    int? year = int.tryParse(_yearController.text);
+    Student update = student.copyWith(
+      login: _loginController.text,
+      firstName: _firstNameController.text,
+      lastName: _lastNameController.text,
+      job: _jobController.text,
+      title: _titleController.text,
+      year: year,
     );
-
-    repository.editLocker(locker.number, update);
+    repository.editStudent(student.id, update);
     context.pop();
   }
 
   @override
   void dispose() {
-    _placeController.dispose();
-    _floorController.dispose();
-    _numberController.dispose();
-    _responsibleController.dispose();
-    _ownerController.dispose();
-    _keysController.dispose();
-    _lockController.dispose();
+    _loginController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _jobController.dispose();
+    _titleController.dispose();
+    _yearController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: StyledTitle('Locker Profile'.hardcoded)),
+      appBar: AppBar(title: StyledTitle('Student Profile'.hardcoded)),
       body: Consumer(
         builder: (context, ref, child) {
           final repository = ref.watch(lockersRepositoryProvider);
-          final locker = repository.lockersBox.values.firstWhere(
-            (element) => widget.lock == element.lockNumber.toString(),
+          final student = repository.studentsBox.values.firstWhere(
+            (element) => widget.id == element.id,
           );
-          Locker lockerCopy = locker.copyWith();
-          late Student? student = repository.findStudentBy(
-            id: lockerCopy.studentId,
-          );
-          _placeController.text = lockerCopy.floor;
-          _floorController.text = lockerCopy.floor;
-          _numberController.text = lockerCopy.number.toString();
-          _responsibleController.text = lockerCopy.responsable;
-          _ownerController.text = student == null
-              ? 'None'
-              : '${student.firstName} ${student.lastName}';
-          _keysController.text = lockerCopy.keyCount.toString();
-          _lockController.text = lockerCopy.lockNumber.toString();
+          Student studentCopy = student.copyWith();
+          // late Locker? locker = repository.findStudentBy(
+          //   id: studentCopy.studentId,
+          // );
+          _loginController.text = studentCopy.login;
+          _firstNameController.text = studentCopy.firstName;
+          _lastNameController.text = studentCopy.lastName;
+          _jobController.text = studentCopy.job;
+          _titleController.text = studentCopy.title;
+          _yearController.text = studentCopy.year.toString();
 
           return Column(
             children: [
@@ -92,8 +84,8 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                         children: [
                           gapW32,
                           LockerProfilePart(
-                            title: 'Place'.hardcoded,
-                            controller: _placeController,
+                            title: 'Login'.hardcoded,
+                            controller: _loginController,
                             prefixIcon: Icon(
                               Icons.place,
                               color: AppColors.titleColor,
@@ -102,8 +94,8 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                           ),
                           gapW32,
                           LockerProfilePart(
-                            title: 'Floor'.hardcoded,
-                            controller: _floorController,
+                            title: 'First Name'.hardcoded,
+                            controller: _firstNameController,
                             prefixIcon: Icon(
                               Icons.flood,
                               color: AppColors.titleColor,
@@ -112,8 +104,8 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                           ),
                           gapW32,
                           LockerProfilePart(
-                            title: 'Number'.hardcoded,
-                            controller: _numberController,
+                            title: 'Last Name'.hardcoded,
+                            controller: _lastNameController,
                             textInputType:
                                 const TextInputType.numberWithOptions(
                                   signed: false,
@@ -133,8 +125,8 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                         children: [
                           gapW32,
                           LockerProfilePart(
-                            title: 'Responsible'.hardcoded,
-                            controller: _responsibleController,
+                            title: 'Job'.hardcoded,
+                            controller: _jobController,
                             textInputType:
                                 const TextInputType.numberWithOptions(
                                   signed: false,
@@ -148,8 +140,8 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                           ),
                           gapW32,
                           LockerProfilePart(
-                            title: 'Owner'.hardcoded,
-                            controller: _ownerController,
+                            title: 'Title'.hardcoded,
+                            controller: _titleController,
                             readOnly: true,
                             prefixIcon: Icon(
                               Icons.lock,
@@ -165,8 +157,8 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                         children: [
                           gapW32,
                           LockerProfilePart(
-                            title: 'KeysAvaible'.hardcoded,
-                            controller: _keysController,
+                            title: 'Year'.hardcoded,
+                            controller: _yearController,
                             textInputType:
                                 const TextInputType.numberWithOptions(
                                   signed: false,
@@ -180,8 +172,8 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                           ),
                           gapW32,
                           LockerProfilePart(
-                            title: 'LockNumber'.hardcoded,
-                            controller: _lockController,
+                            title: 'Login'.hardcoded,
+                            controller: _loginController,
                             textInputType:
                                 const TextInputType.numberWithOptions(
                                   signed: false,
@@ -201,7 +193,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                 ),
               ),
               StyledButton(
-                onPressed: () => update(lockerCopy, repository),
+                onPressed: () => update(studentCopy, repository),
                 child: StyledHeadline('Save'.hardcoded),
               ),
               gapH24,

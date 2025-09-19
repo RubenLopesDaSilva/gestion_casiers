@@ -3,7 +3,7 @@ import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
 import 'package:hive_flutter/adapters.dart';
 
 class LockerRepository {
-  final Box<Locker> lockersBox = Hive.box('lockers');
+  final Box<Locker> lockersBox = Hive.box('Lockers');
   final Box<Student> studentsBox = Hive.box('Students');
   final Box<Transaction> transactionsBox = Hive.box('Transactions');
 
@@ -62,7 +62,7 @@ class LockerRepository {
   }
 
   void editLocker(int lockerNumber, Locker editLocker) {
-    lockersBox.putAt(lockerNumber, editLocker);
+    lockersBox.put(lockerNumber, editLocker);
 
     saveTransactions(TransactionType.edit, lockerNumber, editLocker);
   }
@@ -90,14 +90,15 @@ class LockerRepository {
 
   void editStudent(String id, Student editedStudent) {
     final studentIndex = studentsBox.keys.firstWhere(
-      (student) => student.id == id,
+      (student) => student == id,
     );
-    studentsBox.putAt(studentIndex, editedStudent);
+    studentsBox.put(studentIndex, editedStudent);
   }
 
-
-  Student? findStudentBy({required StudentID id}) {
-    return (studentsBox.values.firstWhere((student) => student.id == id));
+  Student? findStudentBy({required StudentID? id}) {
+    return id == null
+        ? null
+        : (studentsBox.values.firstWhere((student) => student.id == id));
   }
 }
 
