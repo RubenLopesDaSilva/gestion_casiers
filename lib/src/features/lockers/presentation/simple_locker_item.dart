@@ -20,10 +20,6 @@ class SimpleLockerItem extends StatelessWidget {
   final Function student;
   final Function profile;
 
-  Function tap() {
-    return student(locker);
-  }
-
   @override
   Widget build(BuildContext context) {
     Student? currentUser = ref.findStudentBy(id: locker.studentId);
@@ -49,7 +45,7 @@ class SimpleLockerItem extends StatelessWidget {
             child: StudentInnerItem(
               student: currentUser,
               onTap: () {
-                student(locker);
+                student(locker, ref);
               },
             ),
           ),
@@ -63,9 +59,7 @@ class SimpleLockerItem extends StatelessWidget {
           ),
           gapW12,
           IconButton(
-            onPressed: () {
-              profile(locker);
-            },
+            onPressed: () => profile(locker),
             icon: Icon(Icons.arrow_forward_ios, color: AppColors.primaryAccent),
           ),
         ],

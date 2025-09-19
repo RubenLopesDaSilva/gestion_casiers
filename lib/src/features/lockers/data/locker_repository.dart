@@ -49,6 +49,7 @@ class LockerRepository extends Notifier<List<Locker>> {
 
   void editLocker(int lockerNumber, Locker editLocker) {
     lockersBox.put(lockerNumber, editLocker);
+    lockersBox.put(lockerNumber, editLocker);
 
     TransactionRepository().saveTransactions(
       TransactionType.edit,
