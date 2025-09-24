@@ -3,7 +3,15 @@ import 'package:hive_flutter/adapters.dart';
 
 part 'transaction.g.dart';
 
-enum TransactionType { add, edit, remove }
+@HiveType(typeId: 4)
+enum TransactionType {
+  @HiveField(0)
+  add,
+  @HiveField(1)
+  edit,
+  @HiveField(2)
+  remove,
+}
 
 @HiveType(typeId: 3)
 class Transaction {

@@ -1,4 +1,5 @@
-import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
+import 'package:gestion_casiers/src/features/lockers/domain/locker_condition.dart';
+import 'package:gestion_casiers/src/features/students/domain/student.dart';
 import 'package:hive_flutter/adapters.dart';
 
 part 'locker.g.dart';
@@ -23,6 +24,8 @@ class Locker {
   final StudentID? studentId;
   @HiveField(8)
   final String place;
+  @HiveField(9)
+  final String id;
 
   const Locker({
     required this.number,
@@ -33,6 +36,7 @@ class Locker {
     required this.responsable,
     required this.lockerCondition,
     required this.place,
+    required this.id,
     this.studentId,
   });
 
@@ -46,6 +50,7 @@ class Locker {
     int? lockNumber,
     LockerCondition? lockerCondition,
     String? place,
+    String? id,
   }) {
     return Locker(
       floor: floor ?? this.floor,
@@ -57,6 +62,7 @@ class Locker {
       lockNumber: lockNumber ?? this.lockNumber,
       lockerCondition: lockerCondition ?? this.lockerCondition,
       place: place ?? this.place,
+      id: id ?? this.id,
     );
   }
 }

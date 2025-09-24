@@ -5,13 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
-import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
+import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_item.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_item_titles.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/routing/app_router.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
-import 'package:gestion_casiers/src/utils/import_excel.dart';
+import 'package:gestion_casiers/utils/import_excel.dart';
 import 'package:go_router/go_router.dart';
 
 class SimpleScreen extends ConsumerStatefulWidget {
@@ -40,8 +40,11 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
           responsable: locker.responsable,
           lockerCondition: locker.lockerCondition,
           place: locker.place,
+          id: locker.id,
         );
-        repository.editLocker(locker.number, update);
+        setState(() {
+          repository.editLocker(locker.number, update);
+        });
       }
     }
   }
@@ -65,8 +68,8 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
         width: double.infinity,
         child: Consumer(
           builder: (context, value, child) {
-            final ref = value.watch(lockersRepositoryProvider);
-            final lockers = ref.lockersBox.values.toList();
+            final ref = value.watch(lockersRepositoryProvider.notifier);
+            final lockers = LockerRepository.lockersBox.values.toList();
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -79,13 +82,15 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
                         FilePickerResult? result = await FilePicker.platform
                             .pickFiles();
                         if (result != null) {
-                          ref.setLockers(
-                            importLockersFrom(
-                              Excel.decodeBytes(
-                                result.files.single.bytes!.toList(),
+                          setState(() {
+                            ref.setLockers(
+                              importLockersFrom(
+                                Excel.decodeBytes(
+                                  result.files.single.bytes!.toList(),
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          });
                         }
                       },
                       child: const StyledHeadline('Import Lockers'),

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
-import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
-import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
+import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile_item.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile_part.dart';
+import 'package:gestion_casiers/src/features/students/domain/student.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 import 'package:go_router/go_router.dart';
@@ -27,7 +27,7 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
   final _titleController = TextEditingController();
   final _yearController = TextEditingController();
 
-  void update(Student student, LockerRepository repository) {
+  void update(Student student, StudentRepository repository) {
     int? year = int.tryParse(_yearController.text);
     Student update = student.copyWith(
       login: _loginController.text,
@@ -37,7 +37,9 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
       title: _titleController.text,
       year: year,
     );
-    repository.editStudent(student.id, update);
+    setState(() {
+      repository.editStudent(student.id, update);
+    });
     context.pop();
   }
 
@@ -58,8 +60,8 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
       appBar: AppBar(title: StyledTitle('Student Profile'.hardcoded)),
       body: Consumer(
         builder: (context, ref, child) {
-          final repository = ref.watch(lockersRepositoryProvider);
-          final student = repository.studentsBox.values.firstWhere(
+          final repository = ref.watch(studentsRepositoryProvider.notifier);
+          final student = StudentRepository.studentsBox.values.firstWhere(
             (element) => widget.id == element.id,
           );
           Student studentCopy = student.copyWith();
