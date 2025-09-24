@@ -62,6 +62,7 @@ class _StudentSelectionScreenState extends State<StudentSelectionScreen> {
                           job: 'job'.hardcoded,
                           login: 'login'.hardcoded,
                           year: 0,
+                          deposit: 20,
                           title: 'title'.hardcoded,
                         ),
                         onTap: () {},

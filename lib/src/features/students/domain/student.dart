@@ -20,6 +20,8 @@ class Student {
   final String title;
   @HiveField(6)
   final String login;
+  @HiveField(7)
+  final int deposit;
 
   const Student({
     required this.id,
@@ -29,6 +31,7 @@ class Student {
     required this.login,
     required this.year,
     required this.title,
+    required this.deposit,
   });
 
   Student copyWith({
@@ -39,6 +42,7 @@ class Student {
     String? title,
     String? login,
     int? year,
+    int? deposit,
   }) {
     return Student(
       id: id ?? this.id,
@@ -48,6 +52,7 @@ class Student {
       login: login ?? this.login,
       year: year ?? this.year,
       title: title ?? this.title,
+      deposit: deposit ?? this.deposit,
     );
   }
 }

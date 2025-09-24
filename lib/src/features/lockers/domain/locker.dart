@@ -11,24 +11,21 @@ class Locker {
   @HiveField(1)
   final String floor;
   @HiveField(2)
-  final int deposit;
-  @HiveField(3)
   final int keyCount;
-  @HiveField(4)
+  @HiveField(3)
   final int lockNumber;
-  @HiveField(5)
+  @HiveField(4)
   final String responsable;
-  @HiveField(6)
+  @HiveField(5)
   final LockerCondition lockerCondition;
-  @HiveField(7)
+  @HiveField(6)
   final StudentID? studentId;
-  @HiveField(8)
+  @HiveField(7)
   final String place;
 
   const Locker({
     required this.number,
     required this.floor,
-    required this.deposit,
     required this.keyCount,
     required this.lockNumber,
     required this.responsable,
@@ -42,7 +39,6 @@ class Locker {
     int? number,
     String? responsable,
     StudentID? studentId,
-    int? deposit,
     int? keyCount,
     int? lockNumber,
     LockerCondition? lockerCondition,
@@ -53,7 +49,6 @@ class Locker {
       number: number ?? this.number,
       responsable: responsable ?? this.responsable,
       studentId: studentId ?? this.studentId,
-      deposit: deposit ?? this.deposit,
       keyCount: keyCount ?? this.keyCount,
       lockNumber: lockNumber ?? this.lockNumber,
       lockerCondition: lockerCondition ?? this.lockerCondition,

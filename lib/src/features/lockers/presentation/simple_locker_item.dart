@@ -52,8 +52,6 @@ class SimpleLockerItem extends StatelessWidget {
             ),
           ),
           gapW12,
-          Expanded(child: Center(child: StyledText('${locker.deposit}'))),
-          gapW12,
           Expanded(child: Center(child: StyledText('${locker.keyCount}'))),
           gapW12,
           Expanded(

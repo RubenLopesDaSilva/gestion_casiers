@@ -34,7 +34,6 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
           studentId: result.$2,
           number: locker.number,
           floor: locker.floor,
-          deposit: locker.deposit,
           keyCount: locker.keyCount,
           lockNumber: locker.lockNumber,
           responsable: locker.responsable,

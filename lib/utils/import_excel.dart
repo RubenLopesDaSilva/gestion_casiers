@@ -68,7 +68,6 @@ List<Locker> importLockersFrom(Excel excel) {
           number: int.parse(results[0]),
           responsable: results[1],
           studentId: id == '' ? null : id,
-          deposit: 20,
           keyCount: int.parse(results[6]),
           lockNumber: int.parse(results[7]),
           lockerCondition: LockerCondition.isGood(
@@ -116,6 +115,7 @@ List<Student> importStudentsFrom(Excel excel) {
         title: results[5],
         lastName: results[6],
         login: results[12],
+        deposit: 20,
         year: int.parse(results[19]),
         job: results[14],
       ),
