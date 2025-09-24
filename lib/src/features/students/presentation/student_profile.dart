@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
-import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
+import 'package:gestion_casiers/src/features/lockers/data/student_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile_item.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile_part.dart';
@@ -27,7 +27,7 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
   final _titleController = TextEditingController();
   final _yearController = TextEditingController();
 
-  void update(Student student, LockerRepository repository) {
+  void update(Student student, StudentRepository repository) {
     int? year = int.tryParse(_yearController.text);
     Student update = student.copyWith(
       login: _loginController.text,
@@ -37,7 +37,9 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
       title: _titleController.text,
       year: year,
     );
-    repository.editStudent(student.id, update);
+    setState(() {
+      repository.editStudent(student.id, update);
+    });
     context.pop();
   }
 
@@ -58,8 +60,8 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
       appBar: AppBar(title: StyledTitle('Student Profile'.hardcoded)),
       body: Consumer(
         builder: (context, ref, child) {
-          final repository = ref.watch(lockersRepositoryProvider);
-          final student = repository.studentsBox.values.firstWhere(
+          final repository = ref.watch(studentsRepositoryProvider.notifier);
+          final student = StudentRepository.studentsBox.values.firstWhere(
             (element) => widget.id == element.id,
           );
           Student studentCopy = student.copyWith();
@@ -82,6 +84,22 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
                     children: [
                       LockerProfileItem(
                         children: [
+                          LockerProfilePart(
+                            title: 'Job'.hardcoded,
+                            controller: _jobController,
+                            textInputType:
+                                const TextInputType.numberWithOptions(
+                                  signed: false,
+                                  decimal: false,
+                                ),
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: AppColors.titleColor,
+                            ),
+                            description:
+                                'The initial of the job this student is learning'
+                                    .hardcoded,
+                          ),
                           gapW32,
                           LockerProfilePart(
                             title: 'Login'.hardcoded,
@@ -90,7 +108,40 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
                               Icons.place,
                               color: AppColors.titleColor,
                             ),
-                            description: 'Description'.hardcoded,
+                            description:
+                                'The login of the actual student'.hardcoded,
+                          ),
+                          gapW32,
+                          LockerProfilePart(
+                            title: 'Year'.hardcoded,
+                            controller: _yearController,
+                            textInputType:
+                                const TextInputType.numberWithOptions(
+                                  signed: false,
+                                  decimal: false,
+                                ),
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: AppColors.titleColor,
+                            ),
+                            description: 'The actual year'.hardcoded,
+                          ),
+                          gapW32,
+                        ],
+                      ),
+                      gapH24,
+                      LockerProfileItem(
+                        children: [
+                          gapW32,
+                          LockerProfilePart(
+                            title: 'Title'.hardcoded,
+                            controller: _titleController,
+                            readOnly: true,
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: AppColors.titleColor,
+                            ),
+                            description: 'The genre of the student'.hardcoded,
                           ),
                           gapW32,
                           LockerProfilePart(
@@ -100,7 +151,7 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
                               Icons.flood,
                               color: AppColors.titleColor,
                             ),
-                            description: 'Description'.hardcoded,
+                            description: 'His name'.hardcoded,
                           ),
                           gapW32,
                           LockerProfilePart(
@@ -115,77 +166,8 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
                               Icons.lock,
                               color: AppColors.titleColor,
                             ),
-                            description: 'Description'.hardcoded,
+                            description: 'His family name'.hardcoded,
                           ),
-                          gapW32,
-                        ],
-                      ),
-                      gapH24,
-                      LockerProfileItem(
-                        children: [
-                          gapW32,
-                          LockerProfilePart(
-                            title: 'Job'.hardcoded,
-                            controller: _jobController,
-                            textInputType:
-                                const TextInputType.numberWithOptions(
-                                  signed: false,
-                                  decimal: false,
-                                ),
-                            prefixIcon: Icon(
-                              Icons.lock,
-                              color: AppColors.titleColor,
-                            ),
-                            description: 'Description'.hardcoded,
-                          ),
-                          gapW32,
-                          LockerProfilePart(
-                            title: 'Title'.hardcoded,
-                            controller: _titleController,
-                            readOnly: true,
-                            prefixIcon: Icon(
-                              Icons.lock,
-                              color: AppColors.titleColor,
-                            ),
-                            description: 'Description'.hardcoded,
-                          ),
-                          gapW32,
-                        ],
-                      ),
-                      gapH24,
-                      LockerProfileItem(
-                        children: [
-                          gapW32,
-                          LockerProfilePart(
-                            title: 'Year'.hardcoded,
-                            controller: _yearController,
-                            textInputType:
-                                const TextInputType.numberWithOptions(
-                                  signed: false,
-                                  decimal: false,
-                                ),
-                            prefixIcon: Icon(
-                              Icons.lock,
-                              color: AppColors.titleColor,
-                            ),
-                            description: 'Description'.hardcoded,
-                          ),
-                          gapW32,
-                          LockerProfilePart(
-                            title: 'Login'.hardcoded,
-                            controller: _loginController,
-                            textInputType:
-                                const TextInputType.numberWithOptions(
-                                  signed: false,
-                                  decimal: false,
-                                ),
-                            prefixIcon: Icon(
-                              Icons.lock,
-                              color: AppColors.titleColor,
-                            ),
-                            description: 'Description'.hardcoded,
-                          ),
-                          gapW32,
                         ],
                       ),
                     ],

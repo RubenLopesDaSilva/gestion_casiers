@@ -4,6 +4,7 @@ import 'package:gestion_casiers/src/common_widgets/styled_button.dart';
 import 'package:gestion_casiers/src/common_widgets/styled_text.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
+import 'package:gestion_casiers/src/features/lockers/data/student_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile_item.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile_part.dart';
@@ -40,9 +41,10 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
       keyCount: keyCount,
       lockNumber: lock,
     );
-
-    repository.editLocker(locker.number, update);
-    context.pop();
+    setState(() {
+      repository.editLocker(locker.number, update);
+      context.pop();
+    });
   }
 
   @override
@@ -63,15 +65,18 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
       appBar: AppBar(title: StyledTitle('Locker Profile'.hardcoded)),
       body: Consumer(
         builder: (context, ref, child) {
-          final repository = ref.watch(lockersRepositoryProvider);
-          final locker = repository.lockersBox.values.firstWhere(
+          final repository = ref.watch(lockersRepositoryProvider.notifier);
+          final studentRepository = ref.watch(
+            studentsRepositoryProvider.notifier,
+          );
+          final locker = LockerRepository.lockersBox.values.firstWhere(
             (element) => widget.lock == element.lockNumber.toString(),
           );
           Locker lockerCopy = locker.copyWith();
-          late Student? student = repository.findStudentBy(
+          late Student? student = studentRepository.findStudentBy(
             id: lockerCopy.studentId,
           );
-          _placeController.text = lockerCopy.floor;
+          _placeController.text = lockerCopy.place;
           _floorController.text = lockerCopy.floor;
           _numberController.text = lockerCopy.number.toString();
           _responsibleController.text = lockerCopy.responsable;
@@ -92,13 +97,15 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                         children: [
                           gapW32,
                           LockerProfilePart(
-                            title: 'Place'.hardcoded,
+                            title: 'Location'.hardcoded,
                             controller: _placeController,
                             prefixIcon: Icon(
                               Icons.place,
                               color: AppColors.titleColor,
                             ),
-                            description: 'Description'.hardcoded,
+                            description:
+                                'In which batiment the locker is located'
+                                    .hardcoded,
                           ),
                           gapW32,
                           LockerProfilePart(
@@ -108,7 +115,8 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                               Icons.flood,
                               color: AppColors.titleColor,
                             ),
-                            description: 'Description'.hardcoded,
+                            description: 'In which floor this locker is located'
+                                .hardcoded,
                           ),
                           gapW32,
                           LockerProfilePart(
@@ -123,7 +131,8 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                               Icons.lock,
                               color: AppColors.titleColor,
                             ),
-                            description: 'Description'.hardcoded,
+                            description:
+                                'The number written on the locker'.hardcoded,
                           ),
                           gapW32,
                         ],
@@ -144,7 +153,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                               Icons.lock,
                               color: AppColors.titleColor,
                             ),
-                            description: 'Description'.hardcoded,
+                            description: 'Manager of the locker'.hardcoded,
                           ),
                           gapW32,
                           LockerProfilePart(
@@ -155,7 +164,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                               Icons.lock,
                               color: AppColors.titleColor,
                             ),
-                            description: 'Description'.hardcoded,
+                            description: 'He uses the locker'.hardcoded,
                           ),
                           gapW32,
                         ],
@@ -165,7 +174,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                         children: [
                           gapW32,
                           LockerProfilePart(
-                            title: 'KeysAvaible'.hardcoded,
+                            title: 'Keys'.hardcoded,
                             controller: _keysController,
                             textInputType:
                                 const TextInputType.numberWithOptions(
@@ -176,11 +185,13 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                               Icons.lock,
                               color: AppColors.titleColor,
                             ),
-                            description: 'Description'.hardcoded,
+                            description:
+                                'the number of keys available for this lock in storage'
+                                    .hardcoded,
                           ),
                           gapW32,
                           LockerProfilePart(
-                            title: 'LockNumber'.hardcoded,
+                            title: 'Lock'.hardcoded,
                             controller: _lockController,
                             textInputType:
                                 const TextInputType.numberWithOptions(
@@ -191,7 +202,8 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                               Icons.lock,
                               color: AppColors.titleColor,
                             ),
-                            description: 'Description'.hardcoded,
+                            description: 'the key model reference for this lock'
+                                .hardcoded,
                           ),
                           gapW32,
                         ],

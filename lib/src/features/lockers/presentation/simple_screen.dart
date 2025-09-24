@@ -5,13 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
+import 'package:gestion_casiers/src/features/lockers/data/student_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_item.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_item_titles.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/routing/app_router.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
-import 'package:gestion_casiers/src/utils/import_excel.dart';
+import 'package:gestion_casiers/utils/import_excel.dart';
 import 'package:go_router/go_router.dart';
 
 class SimpleScreen extends ConsumerStatefulWidget {
@@ -42,19 +43,22 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
           place: locker.place,
         );
         repository.editLocker(locker.number, update);
+        setState(() {});
       }
     }
   }
 
-  void lockerProfile(Locker locker) {
-    context.goNamed(
+  void lockerProfile(Locker locker) async {
+    await context.pushNamed(
       AppRoute.lockerprofile.name,
       pathParameters: {'lock': locker.lockNumber.toString()},
     );
+    setState(() {});
   }
 
   Future<void> studentScreen() async {
     context.goNamed(AppRoute.student.name);
+    setState(() {});
   }
 
   @override
@@ -65,8 +69,9 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
         width: double.infinity,
         child: Consumer(
           builder: (context, value, child) {
-            final ref = value.watch(lockersRepositoryProvider);
-            final lockers = ref.lockersBox.values.toList();
+            final lockerRef = value.watch(lockersRepositoryProvider.notifier);
+            final studentRef = value.watch(studentsRepositoryProvider.notifier);
+            final lockers = LockerRepository.lockersBox.values.toList();
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -79,13 +84,15 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
                         FilePickerResult? result = await FilePicker.platform
                             .pickFiles();
                         if (result != null) {
-                          ref.setLockers(
-                            importLockersFrom(
-                              Excel.decodeBytes(
-                                result.files.single.bytes!.toList(),
+                          setState(() {
+                            lockerRef.setLockers(
+                              importLockersFrom(
+                                Excel.decodeBytes(
+                                  result.files.single.bytes!.toList(),
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          });
                         }
                       },
                       child: const StyledHeadline('Import Lockers'),
@@ -125,7 +132,8 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
                             itemBuilder: (context, index) {
                               Locker locker = lockers[index];
                               return SimpleLockerItem(
-                                ref: ref,
+                                studentRef: studentRef,
+                                lockerRef: lockerRef,
                                 locker: locker,
                                 student: changeStudent,
                                 profile: lockerProfile,

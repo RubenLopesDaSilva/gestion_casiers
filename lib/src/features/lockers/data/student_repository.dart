@@ -41,7 +41,7 @@ class StudentRepository extends Notifier<List<Student>> {
   }
 
   Student? findStudentBy({required StudentID? id}) {
-    return id == ''
+    return id == null
         ? null
         : studentsBox.values.firstWhere((student) => student.id == id);
   }

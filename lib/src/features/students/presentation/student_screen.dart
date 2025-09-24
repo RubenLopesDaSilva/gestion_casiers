@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
-import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
+import 'package:gestion_casiers/src/features/lockers/data/student_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
-import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_item_titles.dart';
 import 'package:gestion_casiers/src/features/students/presentation/student_item.dart';
+import 'package:gestion_casiers/src/features/students/presentation/student_item_titles.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/routing/app_router.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
-import 'package:gestion_casiers/src/utils/import_excel.dart';
+import 'package:gestion_casiers/utils/import_excel.dart';
 import 'package:go_router/go_router.dart';
 
 class StudentScreen extends StatefulWidget {
@@ -22,11 +22,12 @@ class StudentScreen extends StatefulWidget {
 }
 
 class _StudentScreenState extends State<StudentScreen> {
-  void studentProfile(Student student) {
-    context.goNamed(
+  void studentProfile(Student student) async {
+    await context.pushNamed(
       AppRoute.studentprofile.name,
       pathParameters: {'id': student.id},
     );
+    setState(() {});
   }
 
   @override
@@ -41,8 +42,8 @@ class _StudentScreenState extends State<StudentScreen> {
         width: double.infinity,
         child: Consumer(
           builder: (context, value, child) {
-            final ref = value.watch(lockersRepositoryProvider);
-            final students = ref.studentsBox.values.toList();
+            final ref = value.watch(studentsRepositoryProvider.notifier);
+            final students = StudentRepository.studentsBox.values.toList();
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -55,13 +56,15 @@ class _StudentScreenState extends State<StudentScreen> {
                         FilePickerResult? result = await FilePicker.platform
                             .pickFiles();
                         if (result != null) {
-                          ref.setStudents(
-                            importStudentsFrom(
-                              Excel.decodeBytes(
-                                result.files.single.bytes!.toList(),
+                          setState(() {
+                            ref.setStudents(
+                              importStudentsFrom(
+                                Excel.decodeBytes(
+                                  result.files.single.bytes!.toList(),
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          });
                         }
                       },
                       child: const StyledHeadline('Import Students'),
@@ -90,7 +93,7 @@ class _StudentScreenState extends State<StudentScreen> {
                     ),
                     child: Column(
                       children: [
-                        const SimpleLockerItemTitles(),
+                        const StudentItemTitles(),
                         gapH24,
                         Expanded(
                           child: ListView.separated(
@@ -101,8 +104,6 @@ class _StudentScreenState extends State<StudentScreen> {
                             itemBuilder: (context, index) {
                               Student student = students[index];
                               return StudentItem(
-                                // ref: ref,
-                                // locker: locker,
                                 student: student,
                                 profile: studentProfile,
                               );
