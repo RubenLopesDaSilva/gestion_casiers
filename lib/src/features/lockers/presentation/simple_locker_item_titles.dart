@@ -19,7 +19,6 @@ class SimpleLockerItemTitles extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          //TODO mettre expanded plutôt entre les info avec des gap et l'info apart
           Expanded(child: Center(child: StyledHeadline('Place'.hardcoded))),
           gapW12,
           Expanded(child: Center(child: StyledHeadline('Floor'.hardcoded))),

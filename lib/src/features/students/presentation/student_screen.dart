@@ -53,18 +53,47 @@ class _StudentScreenState extends State<StudentScreen> {
                   children: [
                     StyledButton(
                       onPressed: () async {
-                        FilePickerResult? result = await FilePicker.platform
-                            .pickFiles();
-                        if (result != null) {
-                          setState(() {
-                            ref.setStudents(
-                              importStudentsFrom(
-                                Excel.decodeBytes(
-                                  result.files.single.bytes!.toList(),
+                        try {
+                          FilePickerResult? result = await FilePicker.platform
+                              .pickFiles(
+                                type: FileType.custom,
+                                allowMultiple: false,
+                                allowedExtensions: ['xlsx'],
+                              );
+                          if (result != null) {
+                            setState(() {
+                              ref.setStudents(
+                                importStudentsFrom(
+                                  Excel.decodeBytes(
+                                    result.files.single.bytes!.toList(),
+                                  ),
                                 ),
-                              ),
+                              );
+                            });
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Center(
+                                    child: Text(
+                                      'Attention'.hardcoded,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  content: Text(
+                                    'Mauvais fichier importé'.hardcoded,
+                                    style: const TextStyle(color: Colors.black),
+                                  ),
+                                );
+                              },
                             );
-                          });
+                          }
                         }
                       },
                       child: const StyledHeadline('Import Students'),

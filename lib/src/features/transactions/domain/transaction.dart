@@ -20,11 +20,15 @@ class Transaction {
   @HiveField(0)
   final TransactionType type;
   @HiveField(1)
-  final int lockerId;
+  final String lockerId;
   @HiveField(2)
   final Locker value;
 
-  Transaction copyWith({TransactionType? type, int? lockerId, Locker? value}) {
+  Transaction copyWith({
+    TransactionType? type,
+    String? lockerId,
+    Locker? value,
+  }) {
     return Transaction(
       type ?? this.type,
       lockerId ?? this.lockerId,

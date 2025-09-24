@@ -14,9 +14,9 @@ import 'package:gestion_casiers/src/theme/theme.dart';
 import 'package:go_router/go_router.dart';
 
 class SimpleLockerProfile extends StatefulWidget {
-  const SimpleLockerProfile(this.lock, {super.key});
+  const SimpleLockerProfile(this.id, {super.key});
 
-  final String? lock;
+  final String? id;
 
   @override
   State<SimpleLockerProfile> createState() => _SimpleLockerProfileState();
@@ -43,7 +43,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
       lockNumber: lock,
     );
     setState(() {
-      repository.editLocker(locker.number, update);
+      repository.editLocker(locker.id, update);
       context.pop();
     });
   }
@@ -71,7 +71,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
             studentsRepositoryProvider.notifier,
           );
           final locker = LockerRepository.lockersBox.values.firstWhere(
-            (element) => widget.lock == element.lockNumber.toString(),
+            (element) => widget.id == element.id,
           );
           Locker lockerCopy = locker.copyWith();
           late Student? student = studentRepository.findStudentBy(

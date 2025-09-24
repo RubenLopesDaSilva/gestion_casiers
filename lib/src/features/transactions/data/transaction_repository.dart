@@ -7,7 +7,7 @@ import 'package:hive/hive.dart';
 class TransactionRepository extends Notifier<List<Transaction>> {
   static final Box<Transaction> transactionsBox = Hive.box('transactions');
 
-  void saveTransactions(TransactionType type, int lockerId, Locker value) {
+  void saveTransactions(TransactionType type, String lockerId, Locker value) {
     transactionsBox.add(Transaction(type, lockerId, value));
 
     if (transactionsBox.length > 10) {
@@ -18,7 +18,7 @@ class TransactionRepository extends Notifier<List<Transaction>> {
   void restoreLastTransaction() {
     if (transactionsBox.isEmpty) return;
 
-    final transaction = transactionsBox.get(-1);
+    final transaction = transactionsBox.getAt(-1);
 
     final locker = LockerRepository.lockersBox.get(
       (locker) => locker.number == transaction!.lockerId,
@@ -29,10 +29,10 @@ class TransactionRepository extends Notifier<List<Transaction>> {
         LockerRepository.lockersBox.delete(transaction.value);
         break;
       case TransactionType.remove:
-        LockerRepository.lockersBox.put(locker!.number, transaction.value);
+        LockerRepository.lockersBox.put(locker!.id, transaction.value);
         break;
       case TransactionType.edit:
-        LockerRepository.lockersBox.put(locker!.number, transaction.value);
+        LockerRepository.lockersBox.put(locker!.id, transaction.value);
         break;
     }
 

@@ -18,7 +18,7 @@ class StudentRepository extends Notifier<List<Student>> {
 
     for (int i = 0; i < studentsBox.length; i++) {
       final Student? student = studentsBox.getAt(i);
-      if (student != null) students.add(student);
+      if (student != null)  students.add(student);
     }
     return students;
   }

@@ -8,6 +8,7 @@ import 'package:uuid/uuid.dart';
 const uuid = Uuid();
 
 List<Locker> importLockersFrom(Excel excel) {
+  // try {} catch(e) {}
   final lockers = <Locker>[];
 
   for (final floor in excel.sheets.keys.where((key) => key.contains('Etage'))) {
@@ -73,6 +74,7 @@ List<Locker> importLockersFrom(Excel excel) {
           lockerCondition: LockerCondition.isGood(
             comments: results[8] == 'null' ? null : results[8],
           ),
+          id: uuid.v4(),
         ),
       );
 
@@ -88,6 +90,7 @@ List<Locker> importLockersFrom(Excel excel) {
 }
 
 List<Student> importStudentsFrom(Excel excel) {
+  // try {} catch(e) {}
   final students = <Student>[];
 
   final sheet = excel[excel.sheets.keys.first];

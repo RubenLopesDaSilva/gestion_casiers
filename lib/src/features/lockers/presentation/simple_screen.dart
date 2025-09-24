@@ -9,6 +9,7 @@ import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_item.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_item_titles.dart';
 import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
+import 'package:gestion_casiers/src/features/students/domain/student.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/routing/app_router.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
@@ -40,8 +41,9 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
           responsable: locker.responsable,
           lockerCondition: locker.lockerCondition,
           place: locker.place,
+          id: locker.id,
         );
-        repository.editLocker(locker.number, update);
+        repository.editLocker(locker.id, update);
         setState(() {});
       }
     }
@@ -50,7 +52,7 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
   void lockerProfile(Locker locker) async {
     await context.pushNamed(
       AppRoute.lockerprofile.name,
-      pathParameters: {'lock': locker.lockNumber.toString()},
+      pathParameters: {'id': locker.id},
     );
     setState(() {});
   }
@@ -80,18 +82,47 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
                   children: [
                     StyledButton(
                       onPressed: () async {
-                        FilePickerResult? result = await FilePicker.platform
-                            .pickFiles();
-                        if (result != null) {
-                          setState(() {
-                            lockerRef.setLockers(
-                              importLockersFrom(
-                                Excel.decodeBytes(
-                                  result.files.single.bytes!.toList(),
+                        List<Student> students = StudentRepository()
+                            .fetchStudents();
+                        if (students.isEmpty) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Center(
+                                  child: Text(
+                                    'Attention'.hardcoded,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            );
-                          });
+                                content: Text(
+                                  'Aucun étudiant trouvé'.hardcoded,
+                                  style: const TextStyle(color: Colors.black),
+                                ),
+                                actions: [],
+                              );
+                            },
+                          );
+                        } else {
+                          FilePickerResult? result = await FilePicker.platform
+                              .pickFiles(
+                                type: FileType.custom,
+                                allowMultiple: false,
+                                allowedExtensions: ['xlsx'],
+                              );
+                          if (result != null) {
+                            setState(() {
+                              lockerRef.setLockers(
+                                importLockersFrom(
+                                  Excel.decodeBytes(
+                                    result.files.single.bytes!.toList(),
+                                  ),
+                                ),
+                              );
+                            });
+                          }
                         }
                       },
                       child: const StyledHeadline('Import Lockers'),

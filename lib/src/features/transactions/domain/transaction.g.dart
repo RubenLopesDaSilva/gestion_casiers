@@ -18,7 +18,7 @@ class TransactionAdapter extends TypeAdapter<Transaction> {
     };
     return Transaction(
       fields[0] as TransactionType,
-      fields[1] as int,
+      fields[1] as String,
       fields[2] as Locker,
     );
   }

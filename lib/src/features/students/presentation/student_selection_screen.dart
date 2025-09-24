@@ -26,7 +26,6 @@ class _StudentSelectionScreenState extends State<StudentSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO changer titre et descriptuion
     return Scaffold(
       appBar: AppBar(title: Text('Student Selection Screen'.hardcoded)),
       body: SizedBox(
