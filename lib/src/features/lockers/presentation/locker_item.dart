@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:gestion_casiers/src/common_widgets/expand_center.dart';
 import 'package:gestion_casiers/src/common_widgets/styled_text.dart';
-import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
 import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
-import 'package:gestion_casiers/src/features/lockers/presentation/student_inner_item.dart';
+import 'package:gestion_casiers/src/features/students/presentation/student_inner_item.dart';
 import 'package:gestion_casiers/src/features/students/domain/student.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 
-class SimpleLockerItem extends StatelessWidget {
-  const SimpleLockerItem({
+class LockerItem extends StatelessWidget {
+  const LockerItem({
     required this.studentRef,
     required this.lockerRef,
     required this.locker,
@@ -36,33 +36,28 @@ class SimpleLockerItem extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Expanded(flex: 2, child: Center(child: StyledHeadline(locker.place))),
-          gapW12,
-          Expanded(child: Center(child: StyledText(locker.floor))),
-          gapW12,
-          // Expanded(child: Center(child: StyledText(locker.responsable))),
-          // gapW12,
-          Expanded(child: Center(child: StyledHeadline('${locker.number}'))),
-          gapW12,
-          Expanded(
-            flex: 10,
+          ExpandCenter(flex: 2, child: StyledHeadline(locker.place)),
+          exGapW12,
+          ExpandCenter(child: StyledHeadline('${locker.number}')),
+          exGapW12,
+          ExpandCenter(
+            flex: 3,
             child: StudentInnerItem(
               student: currentUser,
               onTap: () => student(locker, lockerRef),
             ),
           ),
-          gapW12,
-          // Expanded(child: Center(child: StyledText('${locker.deposit}'))),
-          // gapW12,
-          // Expanded(child: Center(child: StyledText('${locker.keyCount}'))),
-          // gapW12,
-          Expanded(
-            child: Center(child: StyledHeadline('${locker.lockNumber}')),
-          ),
-          gapW12,
-          IconButton(
-            onPressed: () => profile(locker),
-            icon: Icon(Icons.arrow_forward_ios, color: AppColors.primaryAccent),
+          exGapW12,
+          ExpandCenter(child: StyledHeadline('${locker.lockNumber}')),
+          exGapW12,
+          ExpandCenter(
+            child: IconButton(
+              onPressed: () => profile(locker),
+              icon: Icon(
+                Icons.arrow_forward_ios,
+                color: AppColors.primaryAccent,
+              ),
+            ),
           ),
         ],
       ),

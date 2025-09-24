@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
+import 'package:gestion_casiers/src/common_widgets/expand_center.dart';
+import 'package:gestion_casiers/src/common_widgets/styled_text.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 
-class StudentItemTitles extends StatelessWidget {
-  const StudentItemTitles({super.key});
+class LockerItemTitles extends StatelessWidget {
+  const LockerItemTitles({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +19,13 @@ class StudentItemTitles extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
+          ExpandCenter(flex: 2, child: StyledHeadline('Place'.hardcoded)),
           exGapW12,
-          ExpandCenter(child: StyledHeadline('Login'.hardcoded)),
+          ExpandCenter(child: StyledHeadline('Locker'.hardcoded)),
           exGapW12,
-          ExpandCenter(child: StyledHeadline('First Name'.hardcoded)),
+          ExpandCenter(flex: 3, child: StyledHeadline('Student'.hardcoded)),
           exGapW12,
-          ExpandCenter(child: StyledHeadline('Last Name'.hardcoded)),
-          exGapW12,
-          ExpandCenter(child: StyledHeadline('Job'.hardcoded)),
+          const ExpandCenter(child: StyledHeadline('Lock')),
           exGapW12,
           ExpandCenter(
             child: IconButton(

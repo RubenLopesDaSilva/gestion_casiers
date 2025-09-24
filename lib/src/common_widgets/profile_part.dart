@@ -3,8 +3,8 @@ import 'package:gestion_casiers/src/common_widgets/styled_text.dart';
 import 'package:gestion_casiers/src/common_widgets/styled_textfield.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 
-class LockerProfilePart extends StatelessWidget {
-  const LockerProfilePart({
+class ProfilePart extends StatelessWidget {
+  const ProfilePart({
     required this.title,
     required this.description,
     required this.controller,
@@ -35,7 +35,7 @@ class LockerProfilePart extends StatelessWidget {
             readOnly: readOnly,
             textInputType: textInputType,
             prefixIcon: prefixIcon,
-            child: StyledHeadline(title),
+            // child: StyledHeadline(title),
           ),
           gapH24,
           StyledText(description),

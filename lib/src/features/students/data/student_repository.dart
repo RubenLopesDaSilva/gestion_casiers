@@ -28,12 +28,12 @@ class StudentRepository extends Notifier<List<Student>> {
   }
 
   void removeStudent(String id) {
-    final studentIndex = studentsBox.keys.firstWhere(
-      (studentId) => studentId == id,
-      orElse: () => null,
-    );
+    // final studentIndex = studentsBox.keys.firstWhere(
+    //   (studentId) => studentId == id,
+    //   orElse: () => null,
+    // );
 
-    studentsBox.deleteAt(studentIndex);
+    studentsBox.delete(id);
   }
 
   void editStudent(String id, Student editedStudent) {

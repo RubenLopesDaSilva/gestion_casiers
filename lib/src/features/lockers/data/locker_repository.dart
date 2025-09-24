@@ -39,7 +39,7 @@ class LockerRepository extends Notifier<List<Locker>> {
   }
 
   void removeLocker(Locker locker) {
-    lockersBox.deleteAt(locker.number);
+    lockersBox.delete(locker.number);
 
     TransactionRepository().saveTransactions(
       TransactionType.remove,

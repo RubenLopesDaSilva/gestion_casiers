@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
-import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/students/domain/student.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 
@@ -21,33 +20,23 @@ class StudentItem extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Expanded(child: Center(child: StyledHeadline(student.login))),
-          gapW12,
-          Expanded(child: Center(child: StyledText(student.firstName))),
-          gapW12,
-          Expanded(child: Center(child: StyledText(student.lastName))),
-          gapW12,
-          Expanded(child: Center(child: StyledHeadline(student.job))),
-          gapW12,
-          // Expanded(
-          //   flex: 10,
-          //   child: StudentInnerItem(
-          //     student: currentUser,
-          //     onTap: () {
-          //       student(locker, ref);
-          //     },
-          //   ),
-          // ),
-          // gapW12,
-          // Expanded(child: Center(child: StyledText(student.title))),
-          // gapW12,
-          // Expanded(child: Center(child: StyledText(student.id))),
-          // gapW12,
-          // Expanded(child: Center(child: StyledText('${student.year}'))),
-          // gapW12,
-          IconButton(
-            onPressed: () => profile(student),
-            icon: Icon(Icons.arrow_forward_ios, color: AppColors.primaryAccent),
+          exGapW12,
+          ExpandCenter(child: StyledHeadline(student.login)),
+          exGapW12,
+          ExpandCenter(child: StyledText(student.firstName)),
+          exGapW12,
+          ExpandCenter(child: StyledText(student.lastName)),
+          exGapW12,
+          ExpandCenter(child: StyledHeadline(student.job)),
+          exGapW12,
+          ExpandCenter(
+            child: IconButton(
+              onPressed: () => profile(student),
+              icon: Icon(
+                Icons.arrow_forward_ios,
+                color: AppColors.primaryAccent,
+              ),
+            ),
           ),
         ],
       ),

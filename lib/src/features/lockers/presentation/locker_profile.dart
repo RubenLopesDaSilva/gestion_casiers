@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gestion_casiers/src/common_widgets/styled_button.dart';
-import 'package:gestion_casiers/src/common_widgets/styled_text.dart';
+import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile_item.dart';
-import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile_part.dart';
 import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
 import 'package:gestion_casiers/src/features/students/domain/student.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 import 'package:go_router/go_router.dart';
 
-class SimpleLockerProfile extends StatefulWidget {
-  const SimpleLockerProfile(this.lock, {super.key});
+class LockerProfile extends StatefulWidget {
+  const LockerProfile(this.lock, {super.key});
 
   final String? lock;
 
   @override
-  State<SimpleLockerProfile> createState() => _SimpleLockerProfileState();
+  State<LockerProfile> createState() => _LockerProfileState();
 }
 
-class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
+class _LockerProfileState extends State<LockerProfile> {
   final _placeController = TextEditingController();
   final _floorController = TextEditingController();
   final _numberController = TextEditingController();
@@ -30,6 +28,11 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
   final _ownerController = TextEditingController();
   final _keysController = TextEditingController();
   final _lockController = TextEditingController();
+
+  void delete(Locker locker, LockerRepository repository) {
+    repository.removeLocker(locker);
+    context.pop();
+  }
 
   void update(Locker locker, LockerRepository repository) {
     final number = int.tryParse(_numberController.text);
@@ -41,6 +44,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
       responsable: _responsibleController.text,
       keyCount: keyCount,
       lockNumber: lock,
+      place: _placeController.text,
     );
     setState(() {
       repository.editLocker(locker.number, update);
@@ -86,7 +90,6 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
               : '${student.firstName} ${student.lastName}';
           _keysController.text = lockerCopy.keyCount.toString();
           _lockController.text = lockerCopy.lockNumber.toString();
-
           return Column(
             children: [
               Expanded(
@@ -97,11 +100,13 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                       LockerProfileItem(
                         children: [
                           gapW32,
-                          LockerProfilePart(
+                          ProfilePart(
                             title: 'Location'.hardcoded,
                             controller: _placeController,
                             prefixIcon: Icon(
-                              Icons.place,
+                              // Icons.place,
+                              // Icons.location_city,
+                              Icons.apartment,
                               color: AppColors.titleColor,
                             ),
                             description:
@@ -109,18 +114,19 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                                     .hardcoded,
                           ),
                           gapW32,
-                          LockerProfilePart(
+                          ProfilePart(
                             title: 'Floor'.hardcoded,
                             controller: _floorController,
                             prefixIcon: Icon(
-                              Icons.flood,
+                              // Icons.layers,
+                              Icons.stairs,
                               color: AppColors.titleColor,
                             ),
                             description: 'In which floor this locker is located'
                                 .hardcoded,
                           ),
                           gapW32,
-                          LockerProfilePart(
+                          ProfilePart(
                             title: 'Number'.hardcoded,
                             controller: _numberController,
                             textInputType:
@@ -129,7 +135,9 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                                   decimal: false,
                                 ),
                             prefixIcon: Icon(
-                              Icons.lock,
+                              // Icons.inventory,
+                              // Icons.inventory_2,
+                              Icons.dns,
                               color: AppColors.titleColor,
                             ),
                             description:
@@ -142,7 +150,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                       LockerProfileItem(
                         children: [
                           gapW32,
-                          LockerProfilePart(
+                          ProfilePart(
                             title: 'Responsible'.hardcoded,
                             controller: _responsibleController,
                             textInputType:
@@ -151,18 +159,22 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                                   decimal: false,
                                 ),
                             prefixIcon: Icon(
-                              Icons.lock,
+                              // Icons.person,
+                              // Icons.person_2,
+                              // Icons.person_3,
+                              // Icons.person_4,
+                              Icons.badge,
                               color: AppColors.titleColor,
                             ),
                             description: 'Manager of the locker'.hardcoded,
                           ),
                           gapW32,
-                          LockerProfilePart(
+                          ProfilePart(
                             title: 'Owner'.hardcoded,
                             controller: _ownerController,
                             readOnly: true,
                             prefixIcon: Icon(
-                              Icons.lock,
+                              Icons.person,
                               color: AppColors.titleColor,
                             ),
                             description: 'He uses the locker'.hardcoded,
@@ -174,7 +186,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                       LockerProfileItem(
                         children: [
                           gapW32,
-                          LockerProfilePart(
+                          ProfilePart(
                             title: 'Keys'.hardcoded,
                             controller: _keysController,
                             textInputType:
@@ -183,7 +195,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                                   decimal: false,
                                 ),
                             prefixIcon: Icon(
-                              Icons.lock,
+                              Icons.key,
                               color: AppColors.titleColor,
                             ),
                             description:
@@ -191,7 +203,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                                     .hardcoded,
                           ),
                           gapW32,
-                          LockerProfilePart(
+                          ProfilePart(
                             title: 'Lock'.hardcoded,
                             controller: _lockController,
                             textInputType:
@@ -200,6 +212,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                                   decimal: false,
                                 ),
                             prefixIcon: Icon(
+                              // Icons.lock_open,
                               Icons.lock,
                               color: AppColors.titleColor,
                             ),
@@ -213,9 +226,25 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                   ),
                 ),
               ),
-              StyledButton(
-                onPressed: () => update(lockerCopy, repository),
-                child: StyledHeadline('Save'.hardcoded),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  gapW12,
+                  ExpandCenter(
+                    child: StyledButton(
+                      onPressed: () => delete(lockerCopy, repository),
+                      child: StyledHeadline('Delete'.hardcoded),
+                    ),
+                  ),
+                  gapW12,
+                  ExpandCenter(
+                    child: StyledButton(
+                      onPressed: () => update(lockerCopy, repository),
+                      child: StyledHeadline('Save'.hardcoded),
+                    ),
+                  ),
+                  gapW12,
+                ],
               ),
               gapH24,
             ],

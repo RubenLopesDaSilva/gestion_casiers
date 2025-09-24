@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile_item.dart';
-import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile_part.dart';
 import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
 import 'package:gestion_casiers/src/features/students/domain/student.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
@@ -26,6 +25,11 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
   final _jobController = TextEditingController();
   final _titleController = TextEditingController();
   final _yearController = TextEditingController();
+
+  void delete(Student student, StudentRepository repository) {
+    repository.removeStudent(student.id);
+    context.pop();
+  }
 
   void update(Student student, StudentRepository repository) {
     int? year = int.tryParse(_yearController.text);
@@ -74,7 +78,6 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
           _jobController.text = studentCopy.job;
           _titleController.text = studentCopy.title;
           _yearController.text = studentCopy.year.toString();
-
           return Column(
             children: [
               Expanded(
@@ -84,7 +87,7 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
                     children: [
                       LockerProfileItem(
                         children: [
-                          LockerProfilePart(
+                          ProfilePart(
                             title: 'Job'.hardcoded,
                             controller: _jobController,
                             textInputType:
@@ -93,7 +96,8 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
                                   decimal: false,
                                 ),
                             prefixIcon: Icon(
-                              Icons.lock,
+                              // Icons.badge,
+                              Icons.work,
                               color: AppColors.titleColor,
                             ),
                             description:
@@ -101,18 +105,20 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
                                     .hardcoded,
                           ),
                           gapW32,
-                          LockerProfilePart(
+                          ProfilePart(
                             title: 'Login'.hardcoded,
                             controller: _loginController,
                             prefixIcon: Icon(
-                              Icons.place,
+                              // Icons.person,
+                              // Icons.logout,
+                              Icons.login,
                               color: AppColors.titleColor,
                             ),
                             description:
                                 'The login of the actual student'.hardcoded,
                           ),
                           gapW32,
-                          LockerProfilePart(
+                          ProfilePart(
                             title: 'Year'.hardcoded,
                             controller: _yearController,
                             textInputType:
@@ -121,7 +127,11 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
                                   decimal: false,
                                 ),
                             prefixIcon: Icon(
-                              Icons.lock,
+                              // Icons.hourglass_bottom,
+                              // Icons.hourglass_disabled,
+                              Icons.hourglass_empty,
+                              // Icons.hourglass_full,
+                              // Icons.hourglass_top,
                               color: AppColors.titleColor,
                             ),
                             description: 'The actual year'.hardcoded,
@@ -133,28 +143,30 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
                       LockerProfileItem(
                         children: [
                           gapW32,
-                          LockerProfilePart(
+                          ProfilePart(
                             title: 'Title'.hardcoded,
                             controller: _titleController,
                             readOnly: true,
                             prefixIcon: Icon(
-                              Icons.lock,
+                              // Icons.person,
+                              Icons.badge,
                               color: AppColors.titleColor,
                             ),
                             description: 'The genre of the student'.hardcoded,
                           ),
                           gapW32,
-                          LockerProfilePart(
+                          ProfilePart(
                             title: 'First Name'.hardcoded,
                             controller: _firstNameController,
                             prefixIcon: Icon(
-                              Icons.flood,
+                              // Icons.face,
+                              Icons.person,
                               color: AppColors.titleColor,
                             ),
                             description: 'His name'.hardcoded,
                           ),
                           gapW32,
-                          LockerProfilePart(
+                          ProfilePart(
                             title: 'Last Name'.hardcoded,
                             controller: _lastNameController,
                             textInputType:
@@ -163,7 +175,8 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
                                   decimal: false,
                                 ),
                             prefixIcon: Icon(
-                              Icons.lock,
+                              // Icons.person_off,
+                              Icons.account_box,
                               color: AppColors.titleColor,
                             ),
                             description: 'His family name'.hardcoded,
@@ -174,9 +187,25 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
                   ),
                 ),
               ),
-              StyledButton(
-                onPressed: () => update(studentCopy, repository),
-                child: StyledHeadline('Save'.hardcoded),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  gapW12,
+                  ExpandCenter(
+                    child: StyledButton(
+                      onPressed: () => delete(studentCopy, repository),
+                      child: StyledHeadline('Delete'.hardcoded),
+                    ),
+                  ),
+                  gapW12,
+                  ExpandCenter(
+                    child: StyledButton(
+                      onPressed: () => update(studentCopy, repository),
+                      child: StyledHeadline('Save'.hardcoded),
+                    ),
+                  ),
+                  gapW12,
+                ],
               ),
               gapH24,
             ],

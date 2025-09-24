@@ -6,8 +6,8 @@ import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
-import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_item.dart';
-import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_item_titles.dart';
+import 'package:gestion_casiers/src/features/lockers/presentation/locker_item.dart';
+import 'package:gestion_casiers/src/features/lockers/presentation/locker_item_titles.dart';
 import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/routing/app_router.dart';
@@ -15,14 +15,14 @@ import 'package:gestion_casiers/src/theme/theme.dart';
 import 'package:gestion_casiers/utils/import_excel.dart';
 import 'package:go_router/go_router.dart';
 
-class SimpleScreen extends ConsumerStatefulWidget {
-  const SimpleScreen({super.key});
+class LockerScreen extends ConsumerStatefulWidget {
+  const LockerScreen({super.key});
 
   @override
-  ConsumerState<SimpleScreen> createState() => _SimpleScreenState();
+  ConsumerState<LockerScreen> createState() => _LockerScreenState();
 }
 
-class _SimpleScreenState extends ConsumerState<SimpleScreen> {
+class _LockerScreenState extends ConsumerState<LockerScreen> {
   Future<void> changeStudent(Locker locker, LockerRepository repository) async {
     final result = await context.pushNamed<(bool error, String? id)?>(
       AppRoute.students.name,
@@ -63,7 +63,7 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: StyledTitle('Simple Screen'.hardcoded)),
+      appBar: AppBar(title: StyledTitle('Lockers'.hardcoded)),
       body: SizedBox(
         width: double.infinity,
         child: Consumer(
@@ -120,7 +120,7 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
                     ),
                     child: Column(
                       children: [
-                        const SimpleLockerItemTitles(),
+                        const LockerItemTitles(),
                         gapH24,
                         Expanded(
                           child: ListView.separated(
@@ -130,7 +130,7 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
                             separatorBuilder: (context, index) => gapH24,
                             itemBuilder: (context, index) {
                               Locker locker = lockers[index];
-                              return SimpleLockerItem(
+                              return LockerItem(
                                 studentRef: studentRef,
                                 lockerRef: lockerRef,
                                 locker: locker,

@@ -1,5 +1,5 @@
-import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_profile.dart';
-import 'package:gestion_casiers/src/features/lockers/presentation/simple_screen.dart';
+import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile.dart';
+import 'package:gestion_casiers/src/features/lockers/presentation/locker_screen.dart';
 import 'package:gestion_casiers/src/features/students/presentation/student_profile.dart';
 import 'package:gestion_casiers/src/features/students/presentation/student_screen.dart';
 import 'package:gestion_casiers/src/features/students/presentation/student_selection_screen.dart';
@@ -14,15 +14,15 @@ final goRouter = GoRouter(
       path: '/locker',
       name: AppRoute.simple.name,
       builder: (context, state) {
-        return const SimpleScreen();
+        return const LockerScreen();
       },
       routes: [
         GoRoute(
-          path: '/profile/:id',
+          path: '/profile/:lock',
           name: AppRoute.lockerprofile.name,
           builder: (context, state) {
-            final id = state.pathParameters['id'];
-            return SimpleLockerProfile(id);
+            final lock = state.pathParameters['lock'];
+            return LockerProfile(lock);
           },
         ),
         GoRoute(

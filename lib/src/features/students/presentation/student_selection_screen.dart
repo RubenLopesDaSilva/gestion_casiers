@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/styled_text.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
-import 'package:gestion_casiers/src/features/lockers/presentation/student_inner_item.dart';
+import 'package:gestion_casiers/src/features/students/presentation/student_inner_item.dart';
 import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
 import 'package:gestion_casiers/src/features/students/domain/student.dart';
 
@@ -26,16 +26,15 @@ class _StudentSelectionScreenState extends State<StudentSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO changer titre et descriptuion
     return Scaffold(
-      appBar: AppBar(title: Text('Student Selection Screen'.hardcoded)),
+      appBar: AppBar(title: StyledTitle('Students'.hardcoded)),
       body: SizedBox(
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            gapH12,
-            StyledHeadline('Students'.hardcoded),
+            gapH16,
+            StyledText('Select a Student for this Locker'.hardcoded),
             gapH16,
             Expanded(
               child: Container(
@@ -72,9 +71,6 @@ class _StudentSelectionScreenState extends State<StudentSelectionScreen> {
                     gapH24,
                     Consumer(
                       builder: (context, ref, child) {
-                        // final repository = ref.watch(
-                        //   lockersRepositoryProvider.notifier,
-                        // );
                         final students = StudentRepository.studentsBox.values;
                         List<Student?> data = [null, ...students];
                         return Expanded(

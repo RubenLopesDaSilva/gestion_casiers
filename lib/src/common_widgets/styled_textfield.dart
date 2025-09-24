@@ -7,7 +7,7 @@ class StyledTextfield extends StatelessWidget {
     this.readOnly,
     this.textInputType,
     this.prefixIcon,
-    required this.child,
+    this.child,
     super.key,
   });
 
@@ -15,11 +15,10 @@ class StyledTextfield extends StatelessWidget {
   final bool? readOnly;
   final TextInputType? textInputType;
   final Icon? prefixIcon;
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
-    //TODO placeholder et commonj_widgets
     return TextField(
       controller: controller,
       readOnly: readOnly ?? false,
