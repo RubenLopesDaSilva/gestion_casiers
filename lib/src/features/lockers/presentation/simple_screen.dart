@@ -40,6 +40,7 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
           responsable: locker.responsable,
           lockerCondition: locker.lockerCondition,
           place: locker.place,
+          id: locker.id,
         );
         setState(() {
           repository.editLocker(locker.number, update);

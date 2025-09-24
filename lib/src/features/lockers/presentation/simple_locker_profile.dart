@@ -67,7 +67,9 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
         builder: (context, ref, child) {
           final repository = ref.watch(studentsRepositoryProvider.notifier);
           final locker = LockerRepository.lockersBox.values.firstWhere(
+
             (element) => widget.lock == element.lockNumber.toString(),
+
           );
           Locker lockerCopy = locker.copyWith();
           late Student? student = repository.findStudentBy(
