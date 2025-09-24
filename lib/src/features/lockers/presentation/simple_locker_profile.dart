@@ -4,17 +4,19 @@ import 'package:gestion_casiers/src/common_widgets/styled_button.dart';
 import 'package:gestion_casiers/src/common_widgets/styled_text.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
-import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
+import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
+import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile_item.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile_part.dart';
+import 'package:gestion_casiers/src/features/students/domain/student.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 import 'package:go_router/go_router.dart';
 
 class SimpleLockerProfile extends StatefulWidget {
-  const SimpleLockerProfile(this.lock, {super.key});
+  const SimpleLockerProfile(this.id, {super.key});
 
-  final String? lock;
+  final String? id;
 
   @override
   State<SimpleLockerProfile> createState() => _SimpleLockerProfileState();
@@ -29,7 +31,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
   final _keysController = TextEditingController();
   final _lockController = TextEditingController();
 
-  void update(Locker locker, LockerRepository repository) {
+  void update(Locker locker) {
     final number = int.tryParse(_numberController.text);
     final keyCount = int.tryParse(_keysController.text);
     final lock = int.tryParse(_lockController.text);
@@ -41,7 +43,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
       lockNumber: lock,
     );
 
-    repository.editLocker(locker.number, update);
+    LockerRepository().editLocker(locker.number, update);
     context.pop();
   }
 
@@ -63,9 +65,9 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
       appBar: AppBar(title: StyledTitle('Locker Profile'.hardcoded)),
       body: Consumer(
         builder: (context, ref, child) {
-          final repository = ref.watch(lockersRepositoryProvider);
-          final locker = repository.lockersBox.values.firstWhere(
-            (element) => widget.lock == element.lockNumber.toString(),
+          final repository = ref.watch(studentsRepositoryProvider.notifier);
+          final locker = LockerRepository.lockersBox.values.firstWhere(
+            (element) => widget.id == element.id,
           );
           Locker lockerCopy = locker.copyWith();
           late Student? student = repository.findStudentBy(
@@ -201,7 +203,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                 ),
               ),
               StyledButton(
-                onPressed: () => update(lockerCopy, repository),
+                onPressed: () => update(lockerCopy),
                 child: StyledHeadline('Save'.hardcoded),
               ),
               gapH24,

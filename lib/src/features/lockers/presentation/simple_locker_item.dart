@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gestion_casiers/src/common_widgets/styled_text.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
-import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
+import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
+import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/student_inner_item.dart';
+import 'package:gestion_casiers/src/features/students/domain/student.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 
 class SimpleLockerItem extends StatelessWidget {
@@ -22,7 +24,7 @@ class SimpleLockerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Student? currentUser = ref.findStudentBy(id: locker.studentId);
+    Student? currentUser = StudentRepository().findStudentBy(id: locker.studentId);
     return Container(
       padding: const EdgeInsets.all(25.0),
       decoration: BoxDecoration(

@@ -1,6 +1,8 @@
 import 'package:excel/excel.dart';
-import 'package:gestion_casiers/src/features/lockers/data/student_repository.dart';
-import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
+import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
+import 'package:gestion_casiers/src/features/lockers/domain/locker_condition.dart';
+import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
+import 'package:gestion_casiers/src/features/students/domain/student.dart';
 import 'package:uuid/uuid.dart';
 
 const uuid = Uuid();
@@ -72,6 +74,7 @@ List<Locker> importLockersFrom(Excel excel) {
           lockerCondition: LockerCondition.isGood(
             comments: results[8] == 'null' ? null : results[8],
           ),
+          id: uuid.v4(),
         ),
       );
 

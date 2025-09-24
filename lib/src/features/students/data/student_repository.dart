@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
+import 'package:gestion_casiers/src/features/students/domain/student.dart';
 import 'package:hive/hive.dart';
 
 class StudentRepository extends Notifier<List<Student>> {
@@ -16,6 +16,10 @@ class StudentRepository extends Notifier<List<Student>> {
   List<Student> fetchStudents() {
     final students = <Student>[];
 
+    for (int i = 0; i < studentsBox.length; i++) {
+      final Student? student = studentsBox.getAt(i);
+      if (student != null) students.add(student);
+    }
     return students;
   }
 
@@ -41,7 +45,7 @@ class StudentRepository extends Notifier<List<Student>> {
   }
 
   Student? findStudentBy({required StudentID? id}) {
-    return id == ''
+    return id == null
         ? null
         : studentsBox.values.firstWhere((student) => student.id == id);
   }

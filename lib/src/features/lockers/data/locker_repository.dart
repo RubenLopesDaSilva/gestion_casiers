@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gestion_casiers/src/features/lockers/data/transaction_repository.dart';
-import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
+import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
+import 'package:gestion_casiers/src/features/transactions/data/transaction_repository.dart';
+import 'package:gestion_casiers/src/features/transactions/domain/transaction.dart';
 import 'package:hive_flutter/adapters.dart';
 
 class LockerRepository extends Notifier<List<Locker>> {

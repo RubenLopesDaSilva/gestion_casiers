@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
-import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
+import 'package:gestion_casiers/src/features/students/domain/student.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 
 class StudentItem extends StatelessWidget {
@@ -41,8 +41,8 @@ class StudentItem extends StatelessWidget {
           // gapW12,
           Expanded(child: Center(child: StyledText(student.title))),
           gapW12,
-          Expanded(child: Center(child: StyledText(student.id))),
-          gapW12,
+          // Expanded(child: Center(child: StyledText(student.id))),
+          // gapW12,
           Expanded(child: Center(child: StyledHeadline('${student.year}'))),
           gapW12,
           IconButton(

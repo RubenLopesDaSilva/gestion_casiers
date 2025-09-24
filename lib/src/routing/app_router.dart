@@ -18,11 +18,11 @@ final goRouter = GoRouter(
       },
       routes: [
         GoRoute(
-          path: '/profile/:lock',
+          path: '/profile/:id',
           name: AppRoute.lockerprofile.name,
           builder: (context, state) {
-            final lock = state.pathParameters['lock'];
-            return SimpleLockerProfile(lock);
+            final id = state.pathParameters['id'];
+            return SimpleLockerProfile(id);
           },
         ),
         GoRoute(

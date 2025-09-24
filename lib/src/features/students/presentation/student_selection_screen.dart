@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/styled_text.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
-import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
-import 'package:gestion_casiers/src/features/lockers/domain/domain.dart';
+import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/student_inner_item.dart';
+import 'package:gestion_casiers/src/features/students/domain/student.dart';
 
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
@@ -70,8 +70,7 @@ class _StudentSelectionScreenState extends State<StudentSelectionScreen> {
                     gapH24,
                     Consumer(
                       builder: (context, ref, child) {
-                        final repository = ref.watch(lockersRepositoryProvider);
-                        final students = repository.studentsBox.values;
+                        final students = StudentRepository.studentsBox.values;
                         List<Student?> data = [null, ...students];
                         return Expanded(
                           child: ListView.separated(
