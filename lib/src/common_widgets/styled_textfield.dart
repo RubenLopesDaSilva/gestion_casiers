@@ -19,6 +19,7 @@ class StyledTextfield extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //TODO placeholder et commonj_widgets
     return TextField(
       controller: controller,
       readOnly: readOnly ?? false,

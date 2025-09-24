@@ -29,7 +29,7 @@ class LockerProfilePart extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           StyledHeadline(title),
-          gapH12,
+          gapH24,
           StyledTextfield(
             controller: controller,
             readOnly: readOnly,
@@ -37,7 +37,7 @@ class LockerProfilePart extends StatelessWidget {
             prefixIcon: prefixIcon,
             child: StyledHeadline(title),
           ),
-          gapH12,
+          gapH24,
           StyledText(description),
         ],
       ),

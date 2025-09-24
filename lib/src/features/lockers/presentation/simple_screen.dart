@@ -8,6 +8,7 @@ import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart
 import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_item.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_item_titles.dart';
+import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/routing/app_router.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
@@ -40,22 +41,23 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
           lockerCondition: locker.lockerCondition,
           place: locker.place,
         );
-        setState(() {
-          repository.editLocker(locker.number, update);
-        });
+        repository.editLocker(locker.number, update);
+        setState(() {});
       }
     }
   }
 
-  void lockerProfile(Locker locker) {
-    context.goNamed(
+  void lockerProfile(Locker locker) async {
+    await context.pushNamed(
       AppRoute.lockerprofile.name,
       pathParameters: {'lock': locker.lockNumber.toString()},
     );
+    setState(() {});
   }
 
   Future<void> studentScreen() async {
     context.goNamed(AppRoute.student.name);
+    setState(() {});
   }
 
   @override
@@ -66,7 +68,8 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
         width: double.infinity,
         child: Consumer(
           builder: (context, value, child) {
-            final ref = value.watch(lockersRepositoryProvider.notifier);
+            final lockerRef = value.watch(lockersRepositoryProvider.notifier);
+            final studentRef = value.watch(studentsRepositoryProvider.notifier);
             final lockers = LockerRepository.lockersBox.values.toList();
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -81,7 +84,7 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
                             .pickFiles();
                         if (result != null) {
                           setState(() {
-                            ref.setLockers(
+                            lockerRef.setLockers(
                               importLockersFrom(
                                 Excel.decodeBytes(
                                   result.files.single.bytes!.toList(),
@@ -128,7 +131,8 @@ class _SimpleScreenState extends ConsumerState<SimpleScreen> {
                             itemBuilder: (context, index) {
                               Locker locker = lockers[index];
                               return SimpleLockerItem(
-                                ref: ref,
+                                studentRef: studentRef,
+                                lockerRef: lockerRef,
                                 locker: locker,
                                 student: changeStudent,
                                 profile: lockerProfile,
