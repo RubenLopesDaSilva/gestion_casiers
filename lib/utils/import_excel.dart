@@ -74,7 +74,6 @@ List<Locker> importLockersFrom(Excel excel) {
           lockerCondition: LockerCondition.isGood(
             comments: results[8] == 'null' ? null : results[8],
           ),
-          id: uuid.v4(),
         ),
       );
 
