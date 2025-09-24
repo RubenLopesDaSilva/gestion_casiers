@@ -5,9 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
-import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_item_titles.dart';
 import 'package:gestion_casiers/src/features/students/domain/student.dart';
 import 'package:gestion_casiers/src/features/students/presentation/student_item.dart';
+import 'package:gestion_casiers/src/features/students/presentation/student_item_titles.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/routing/app_router.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
@@ -22,11 +22,12 @@ class StudentScreen extends StatefulWidget {
 }
 
 class _StudentScreenState extends State<StudentScreen> {
-  void studentProfile(Student student) {
-    context.goNamed(
+  void studentProfile(Student student) async {
+    await context.pushNamed(
       AppRoute.studentprofile.name,
       pathParameters: {'id': student.id},
     );
+    setState(() {});
   }
 
   @override
@@ -92,7 +93,7 @@ class _StudentScreenState extends State<StudentScreen> {
                     ),
                     child: Column(
                       children: [
-                        const SimpleLockerItemTitles(),
+                        const StudentItemTitles(),
                         gapH24,
                         Expanded(
                           child: ListView.separated(
@@ -103,8 +104,6 @@ class _StudentScreenState extends State<StudentScreen> {
                             itemBuilder: (context, index) {
                               Student student = students[index];
                               return StudentItem(
-                                // ref: ref,
-                                // locker: locker,
                                 student: student,
                                 profile: studentProfile,
                               );
