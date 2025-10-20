@@ -4,7 +4,9 @@ import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 
 class StudentItemTitles extends StatelessWidget {
-  const StudentItemTitles({super.key});
+  const StudentItemTitles({required this.onPressed, super.key});
+
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class StudentItemTitles extends StatelessWidget {
           exGapW12,
           ExpandCenter(
             child: IconButton(
-              onPressed: () {},
+              onPressed: onPressed,
               icon: Icon(Icons.add, color: AppColors.primaryAccent),
             ),
           ),

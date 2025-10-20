@@ -26,7 +26,12 @@ class LockerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Student? currentUser = studentRef.findStudentBy(id: locker.studentId);
+    late Student? currentUser;
+    try {
+      currentUser = studentRef.findStudentBy(id: locker.studentId);
+    } catch (e) {
+      currentUser = null;
+    }
     return Container(
       padding: const EdgeInsets.all(25.0),
       decoration: BoxDecoration(

@@ -5,7 +5,9 @@ import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 
 class LockerItemTitles extends StatelessWidget {
-  const LockerItemTitles({super.key});
+  const LockerItemTitles({required this.onPressed, super.key});
+
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class LockerItemTitles extends StatelessWidget {
           exGapW12,
           ExpandCenter(
             child: IconButton(
-              onPressed: () {},
+              onPressed: onPressed,
               icon: Icon(Icons.add, color: AppColors.primaryAccent),
             ),
           ),

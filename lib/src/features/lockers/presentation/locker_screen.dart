@@ -23,6 +23,11 @@ class LockerScreen extends ConsumerStatefulWidget {
 }
 
 class _LockerScreenState extends ConsumerState<LockerScreen> {
+  Future<void> studentScreen() async {
+    context.goNamed(AppRoute.student.name);
+    setState(() {});
+  }
+
   Future<void> changeStudent(Locker locker, LockerRepository repository) async {
     final result = await context.pushNamed<(bool error, String? id)?>(
       AppRoute.students.name,
@@ -55,8 +60,8 @@ class _LockerScreenState extends ConsumerState<LockerScreen> {
     setState(() {});
   }
 
-  Future<void> studentScreen() async {
-    context.goNamed(AppRoute.student.name);
+  void addLocker() async {
+    await context.pushNamed(AppRoute.lockerAdd.name);
     setState(() {});
   }
 
@@ -120,7 +125,7 @@ class _LockerScreenState extends ConsumerState<LockerScreen> {
                     ),
                     child: Column(
                       children: [
-                        const LockerItemTitles(),
+                        LockerItemTitles(onPressed: addLocker),
                         gapH24,
                         Expanded(
                           child: ListView.separated(

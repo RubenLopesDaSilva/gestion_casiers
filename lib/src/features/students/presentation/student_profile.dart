@@ -10,9 +10,9 @@ import 'package:gestion_casiers/src/theme/theme.dart';
 import 'package:go_router/go_router.dart';
 
 class StudentProfile extends ConsumerStatefulWidget {
-  const StudentProfile(this.id, {super.key});
+  const StudentProfile(this.studentId, {super.key});
 
-  final String? id;
+  final String? studentId;
 
   @override
   ConsumerState<StudentProfile> createState() => _StudentProfileState();
@@ -25,6 +25,23 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
   final _jobController = TextEditingController();
   final _titleController = TextEditingController();
   final _yearController = TextEditingController();
+
+  void add(StudentRepository repository) {
+    int? year = int.tryParse(_yearController.text);
+    repository.addStudent(
+      Student(
+        id: 'id',
+        firstName: _firstNameController.text,
+        lastName: _lastNameController.text,
+        job: _jobController.text,
+        login: _loginController.text,
+        year: year!,
+        title: _titleController.text,
+        deposit: 0,
+      ),
+    );
+    context.pop();
+  }
 
   void delete(Student student, StudentRepository repository) {
     repository.removeStudent(student.id);
@@ -65,19 +82,31 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
       body: Consumer(
         builder: (context, ref, child) {
           final repository = ref.watch(studentsRepositoryProvider.notifier);
-          final student = StudentRepository.studentsBox.values.firstWhere(
-            (element) => widget.id == element.id,
-          );
-          Student studentCopy = student.copyWith();
-          // late Locker? locker = repository.findStudentBy(
-          //   id: studentCopy.studentId,
-          // );
-          _loginController.text = studentCopy.login;
-          _firstNameController.text = studentCopy.firstName;
-          _lastNameController.text = studentCopy.lastName;
-          _jobController.text = studentCopy.job;
-          _titleController.text = studentCopy.title;
-          _yearController.text = studentCopy.year.toString();
+          final Student? student = widget.studentId == null
+              ? null
+              : StudentRepository.studentsBox.values.firstWhere(
+                  (element) => widget.studentId == element.id,
+                );
+          Student? studentCopy = student?.copyWith();
+          if (studentCopy == null) {
+            _loginController.text = 'THe login of the student'.hardcoded;
+            _firstNameController.text = 'He\' first name'.hardcoded;
+            _lastNameController.text = 'He\'s family name'.hardcoded;
+            _jobController.text = 'What learns the student'.hardcoded;
+            _titleController.text = 'Write the title for the student'.hardcoded;
+            _yearController.text =
+                'How manny years has the student already studied'.hardcoded;
+          } else {
+            // late Locker? locker = repository.findStudentBy(
+            //   id: studentCopy.studentId,
+            // );
+            _loginController.text = studentCopy.login;
+            _firstNameController.text = studentCopy.firstName;
+            _lastNameController.text = studentCopy.lastName;
+            _jobController.text = studentCopy.job;
+            _titleController.text = studentCopy.title;
+            _yearController.text = studentCopy.year.toString();
+          }
           return Column(
             children: [
               Expanded(
@@ -189,23 +218,32 @@ class _StudentProfileState extends ConsumerState<StudentProfile> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  gapW12,
-                  ExpandCenter(
-                    child: StyledButton(
-                      onPressed: () => delete(studentCopy, repository),
-                      child: StyledHeadline('Delete'.hardcoded),
-                    ),
-                  ),
-                  gapW12,
-                  ExpandCenter(
-                    child: StyledButton(
-                      onPressed: () => update(studentCopy, repository),
-                      child: StyledHeadline('Save'.hardcoded),
-                    ),
-                  ),
-                  gapW12,
-                ],
+                children: studentCopy == null
+                    ? [
+                        ExpandCenter(
+                          child: StyledButton(
+                            onPressed: () => add(repository),
+                            child: StyledHeadline('Add'.hardcoded),
+                          ),
+                        ),
+                      ]
+                    : [
+                        gapW12,
+                        ExpandCenter(
+                          child: StyledButton(
+                            onPressed: () => delete(studentCopy, repository),
+                            child: StyledHeadline('Delete'.hardcoded),
+                          ),
+                        ),
+                        gapW12,
+                        ExpandCenter(
+                          child: StyledButton(
+                            onPressed: () => update(studentCopy, repository),
+                            child: StyledHeadline('Save'.hardcoded),
+                          ),
+                        ),
+                        gapW12,
+                      ],
               ),
               gapH24,
             ],

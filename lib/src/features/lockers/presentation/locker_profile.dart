@@ -4,6 +4,7 @@ import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
+import 'package:gestion_casiers/src/features/lockers/domain/locker_condition.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile_item.dart';
 import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
 import 'package:gestion_casiers/src/features/students/domain/student.dart';
@@ -28,6 +29,27 @@ class _LockerProfileState extends State<LockerProfile> {
   final _ownerController = TextEditingController();
   final _keysController = TextEditingController();
   final _lockController = TextEditingController();
+
+  void add(LockerRepository repository) {
+    final number = int.tryParse(_numberController.text);
+    final keyCount = int.tryParse(_keysController.text);
+    final lock = int.tryParse(_lockController.text);
+
+    setState(() {
+      repository.addLocker(
+        Locker(
+          number: number!,
+          floor: _floorController.text,
+          keyCount: keyCount!,
+          lockNumber: lock!,
+          responsable: _responsibleController.text,
+          lockerCondition: LockerCondition.isGood(),
+          place: _placeController.text,
+        ),
+      );
+      context.pop();
+    });
+  }
 
   void delete(Locker locker, LockerRepository repository) {
     repository.removeLocker(locker);
@@ -74,22 +96,35 @@ class _LockerProfileState extends State<LockerProfile> {
           final studentRepository = ref.watch(
             studentsRepositoryProvider.notifier,
           );
-          final locker = LockerRepository.lockersBox.values.firstWhere(
-            (element) => widget.lock == element.lockNumber.toString(),
-          );
-          Locker lockerCopy = locker.copyWith();
-          late Student? student = studentRepository.findStudentBy(
-            id: lockerCopy.studentId,
-          );
-          _placeController.text = lockerCopy.place;
-          _floorController.text = lockerCopy.floor;
-          _numberController.text = lockerCopy.number.toString();
-          _responsibleController.text = lockerCopy.responsable;
-          _ownerController.text = student == null
-              ? 'None'
-              : '${student.firstName} ${student.lastName}';
-          _keysController.text = lockerCopy.keyCount.toString();
-          _lockController.text = lockerCopy.lockNumber.toString();
+          final Locker? locker = widget.lock == null
+              ? null
+              : LockerRepository.lockersBox.values.firstWhere(
+                  (element) => widget.lock == element.lockNumber.toString(),
+                );
+          Locker? lockerCopy = locker?.copyWith();
+          if (lockerCopy == null) {
+            _placeController.text = 'Write the location'.hardcoded;
+            _floorController.text = 'Write the floor'.hardcoded;
+            _numberController.text = 'Write the number'.hardcoded;
+            _responsibleController.text =
+                'Write the Responsible\'s initial'.hardcoded;
+            _ownerController.text = 'None'.hardcoded;
+            _keysController.text = 'How many keys are available'.hardcoded;
+            _lockController.text = 'References for the key format'.hardcoded;
+          } else {
+            late Student? student = studentRepository.findStudentBy(
+              id: lockerCopy.studentId,
+            );
+            _placeController.text = lockerCopy.place;
+            _floorController.text = lockerCopy.floor;
+            _numberController.text = lockerCopy.number.toString();
+            _responsibleController.text = lockerCopy.responsable;
+            _ownerController.text = student == null
+                ? 'None'
+                : '${student.firstName} ${student.lastName}';
+            _keysController.text = lockerCopy.keyCount.toString();
+            _lockController.text = lockerCopy.lockNumber.toString();
+          }
           return Column(
             children: [
               Expanded(
@@ -228,23 +263,32 @@ class _LockerProfileState extends State<LockerProfile> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  gapW12,
-                  ExpandCenter(
-                    child: StyledButton(
-                      onPressed: () => delete(lockerCopy, repository),
-                      child: StyledHeadline('Delete'.hardcoded),
-                    ),
-                  ),
-                  gapW12,
-                  ExpandCenter(
-                    child: StyledButton(
-                      onPressed: () => update(lockerCopy, repository),
-                      child: StyledHeadline('Save'.hardcoded),
-                    ),
-                  ),
-                  gapW12,
-                ],
+                children: lockerCopy == null
+                    ? [
+                        ExpandCenter(
+                          child: StyledButton(
+                            onPressed: () => add(repository),
+                            child: StyledHeadline('Add'.hardcoded),
+                          ),
+                        ),
+                      ]
+                    : [
+                        gapW12,
+                        ExpandCenter(
+                          child: StyledButton(
+                            onPressed: () => delete(lockerCopy, repository),
+                            child: StyledHeadline('Delete'.hardcoded),
+                          ),
+                        ),
+                        gapW12,
+                        ExpandCenter(
+                          child: StyledButton(
+                            onPressed: () => update(lockerCopy, repository),
+                            child: StyledHeadline('Save'.hardcoded),
+                          ),
+                        ),
+                        gapW12,
+                      ],
               ),
               gapH24,
             ],

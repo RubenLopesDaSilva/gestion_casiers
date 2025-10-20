@@ -5,14 +5,23 @@ import 'package:gestion_casiers/src/features/students/presentation/student_scree
 import 'package:gestion_casiers/src/features/students/presentation/student_selection_screen.dart';
 import 'package:go_router/go_router.dart';
 
-enum AppRoute { home, simple, student, students, lockerprofile, studentprofile }
+enum AppRoute {
+  home,
+  locker,
+  lockerprofile,
+  lockerAdd,
+  student,
+  students,
+  studentprofile,
+  studentAdd,
+}
 
 final goRouter = GoRouter(
   initialLocation: '/locker',
   routes: [
     GoRoute(
       path: '/locker',
-      name: AppRoute.simple.name,
+      name: AppRoute.locker.name,
       builder: (context, state) {
         return const LockerScreen();
       },
@@ -23,6 +32,13 @@ final goRouter = GoRouter(
           builder: (context, state) {
             final lock = state.pathParameters['lock'];
             return LockerProfile(lock);
+          },
+        ),
+        GoRoute(
+          path: '/profile',
+          name: AppRoute.lockerAdd.name,
+          builder: (context, state) {
+            return const LockerProfile(null);
           },
         ),
         GoRoute(
@@ -47,6 +63,13 @@ final goRouter = GoRouter(
           builder: (context, state) {
             final studentId = state.pathParameters['id'];
             return StudentProfile(studentId);
+          },
+        ),
+        GoRoute(
+          path: '/student/profile',
+          name: AppRoute.studentAdd.name,
+          builder: (context, state) {
+            return const StudentProfile(null);
           },
         ),
       ],

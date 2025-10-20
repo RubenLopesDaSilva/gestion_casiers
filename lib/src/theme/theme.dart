@@ -46,6 +46,9 @@ ThemeData lightTheme = ThemeData(
       letterSpacing: Sizes.p8,
     ),
   ),
+  scrollbarTheme: ScrollbarThemeData(
+    thumbColor: WidgetStatePropertyAll(AppColors.primaryColor),
+  ),
 );
 
 ThemeData darkTheme = ThemeData(
@@ -76,5 +79,8 @@ ThemeData darkTheme = ThemeData(
       fontWeight: FontWeight.bold,
       letterSpacing: Sizes.p8,
     ),
+  ),
+  scrollbarTheme: ScrollbarThemeData(
+    thumbColor: WidgetStatePropertyAll(AppColors.primaryColor),
   ),
 );

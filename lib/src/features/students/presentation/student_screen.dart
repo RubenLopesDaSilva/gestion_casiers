@@ -30,10 +30,15 @@ class _StudentScreenState extends State<StudentScreen> {
     setState(() {});
   }
 
+  void addStudent() async {
+    await context.pushNamed(AppRoute.studentAdd.name);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     Future<void> lockerScreen() async {
-      context.goNamed(AppRoute.simple.name);
+      context.goNamed(AppRoute.locker.name);
     }
 
     return Scaffold(
@@ -93,7 +98,7 @@ class _StudentScreenState extends State<StudentScreen> {
                     ),
                     child: Column(
                       children: [
-                        const StudentItemTitles(),
+                        StudentItemTitles(onPressed: addStudent),
                         gapH24,
                         Expanded(
                           child: ListView.separated(
