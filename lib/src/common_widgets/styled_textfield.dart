@@ -23,7 +23,7 @@ class StyledTextfield extends StatelessWidget {
       controller: controller,
       readOnly: readOnly ?? false,
       keyboardType: textInputType,
-      cursorColor: AppColors.textColor,
+      cursorColor: AppColors.secondaryColor,
       decoration: InputDecoration(prefixIcon: prefixIcon, label: child),
       style: Theme.of(context).textTheme.bodyMedium,
     );

@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/routing/app_router.dart';
 
-class LockerScreen extends StatefulWidget {
-  const LockerScreen({super.key});
+class AssignmentScreen extends StatefulWidget {
+  const AssignmentScreen({super.key});
 
   @override
-  State<LockerScreen> createState() => _LockerScreenState();
+  State<AssignmentScreen> createState() => _AssignmentScreenState();
 }
 
-class _LockerScreenState extends State<LockerScreen> {
+class _AssignmentScreenState extends State<AssignmentScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       body: CommonBody(
-        location: AppRoute.lockers,
+        location: AppRoute.assignment,
         body: Placeholder(),
         panel: Column(),
       ),
