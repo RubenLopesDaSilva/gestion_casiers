@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
-import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/routing/app_router.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 
@@ -22,9 +21,7 @@ class CommonBody extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: [
         Navbar(location),
-        Expanded(
-          child: Padding(padding: const EdgeInsets.all(Sizes.p12), child: body),
-        ),
+        Expanded(child: body),
         Container(width: 400, color: AppColors.secondaryColor, child: panel),
       ],
     );

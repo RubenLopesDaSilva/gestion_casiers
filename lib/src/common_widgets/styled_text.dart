@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class StyledText extends StatelessWidget {
   const StyledText(
@@ -14,7 +15,9 @@ class StyledText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: Theme.of(context).textTheme.bodyMedium,
+      style: GoogleFonts.lato(
+        textStyle: Theme.of(context).textTheme.bodyMedium,
+      ),
       overflow: overflow,
     );
   }
@@ -34,7 +37,9 @@ class StyledHeadline extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: Theme.of(context).textTheme.headlineMedium,
+      style: GoogleFonts.lato(
+        textStyle: Theme.of(context).textTheme.headlineMedium,
+      ),
       overflow: overflow,
     );
   }
@@ -54,7 +59,9 @@ class StyledTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: Theme.of(context).textTheme.titleMedium,
+      style: GoogleFonts.lato(
+        textStyle: Theme.of(context).textTheme.titleMedium,
+      ),
       overflow: overflow,
     );
   }

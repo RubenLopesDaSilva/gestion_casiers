@@ -17,14 +17,9 @@ class Navbar extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 200,
-            padding: const EdgeInsets.all(24.0),
-            decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(color: Colors.black)),
-            ),
-            child: const Placeholder(),
-          ),
+          const Placeholder(fallbackHeight: 200),
+          gapH8,
+          const Divider(),
           gapH8,
           NavbarButton(
             onTap: () {
@@ -59,7 +54,7 @@ class Navbar extends StatelessWidget {
             text: 'Attributions',
           ),
           const Expanded(child: SizedBox()),
-          const Text('ceff - 2023', style: TextStyle(color: Colors.blue)),
+          const Text('Ceff - 2025', style: TextStyle(color: Colors.blue)),
         ],
       ),
     );

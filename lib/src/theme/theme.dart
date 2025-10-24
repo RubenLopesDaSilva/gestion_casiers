@@ -18,9 +18,9 @@ import 'package:gestion_casiers/src/constants/app_sizes.dart';
 // }
 
 class AppColors {
-  static Color primaryColor = const Color.fromARGB(255, 245, 245, 245);
+  static Color primaryColor = const Color.fromARGB(255, 225, 225, 225);
   static Color primaryAccent = const Color.fromARGB(255, 255, 255, 255);
-  static Color secondaryColor = const Color.fromARGB(255, 220, 220, 220);
+  static Color secondaryColor = const Color.fromARGB(255, 150, 150, 150);
   static Color secondaryAccent = const Color.fromARGB(255, 73, 80, 87);
   static Color alertColor = const Color.fromARGB(255, 244, 67, 54);
   static Color titleColor = const Color.fromARGB(255, 0, 0, 0);
@@ -37,22 +37,16 @@ ThemeData lightTheme = ThemeData(
     centerTitle: true,
   ),
   textTheme: TextTheme(
-    bodyMedium: TextStyle(
-      color: AppColors.secondaryColor,
-      fontSize: Sizes.p16,
-      letterSpacing: Sizes.p4,
-    ),
+    bodyMedium: TextStyle(color: AppColors.secondaryColor, fontSize: Sizes.p16),
     headlineMedium: TextStyle(
       color: AppColors.titleColor,
       fontSize: Sizes.p16,
       fontWeight: FontWeight.bold,
-      letterSpacing: Sizes.p4,
     ),
     titleMedium: TextStyle(
       color: AppColors.titleColor,
       fontSize: Sizes.p20,
       fontWeight: FontWeight.bold,
-      letterSpacing: Sizes.p8,
     ),
   ),
   scrollbarTheme: ScrollbarThemeData(
