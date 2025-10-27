@@ -20,12 +20,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return const Scaffold(
       body: CommonBody(
         location: AppRoute.dashboard,
-        body: Column(
-          children: [
-            Row(children: [DashboardOverview(), gapW24, InfoCard()]),
-            gapH24,
-            Row(children: [Barchart(), gapW24, PiechartCaution()]),
-          ],
+        body: Padding(
+          padding: EdgeInsets.all(24.0),
+          child: Column(
+            children: [
+              Row(children: [DashboardOverview(), gapW24, InfoCard()]),
+              gapH24,
+              Row(children: [Barchart(), gapW24, PiechartCaution()]),
+            ],
+          ),
         ),
         panel: Column(),
       ),

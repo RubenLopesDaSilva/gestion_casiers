@@ -7,6 +7,7 @@ class StyledTextfield extends StatelessWidget {
     this.readOnly,
     this.textInputType,
     this.prefixIcon,
+    this.color,
     this.child,
     super.key,
   });
@@ -15,6 +16,7 @@ class StyledTextfield extends StatelessWidget {
   final bool? readOnly;
   final TextInputType? textInputType;
   final Icon? prefixIcon;
+  final Color? color;
   final Widget? child;
 
   @override
@@ -25,7 +27,7 @@ class StyledTextfield extends StatelessWidget {
       keyboardType: textInputType,
       cursorColor: AppColors.secondaryColor,
       decoration: InputDecoration(prefixIcon: prefixIcon, label: child),
-      style: Theme.of(context).textTheme.bodyMedium,
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: color),
     );
   }
 }

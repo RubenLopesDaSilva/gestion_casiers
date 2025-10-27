@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 
 class StyledButton extends StatelessWidget {
-  const StyledButton({super.key, required this.onPressed, required this.child});
+  const StyledButton({
+    super.key,
+    this.width,
+    this.height,
+    required this.onPressed,
+    required this.child,
+  });
 
+  final double? width;
+  final double? height;
   final VoidCallback onPressed;
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
-        gradient: LinearGradient(
-          colors: [
-            AppColors.primaryAccent,
-            AppColors.primaryColor,
-            AppColors.primaryAccent,
-          ],
-          begin: AlignmentGeometry.topCenter,
-          end: AlignmentGeometry.bottomCenter,
-        ),
-      ),
+      width: width ?? 320,
+      height: height ?? 44,
+      color: AppColors.primaryAccent,
       child: TextButton(
         style: ButtonStyle(
           overlayColor: WidgetStateProperty.resolveWith(
@@ -31,13 +29,7 @@ class StyledButton extends StatelessWidget {
           splashFactory: NoSplash.splashFactory,
         ),
         onPressed: onPressed,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: Sizes.p12,
-            horizontal: Sizes.p20,
-          ),
-          child: child,
-        ),
+        child: child,
       ),
     );
   }
