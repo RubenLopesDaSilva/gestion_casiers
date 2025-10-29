@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
 import 'package:gestion_casiers/src/features/transactions/data/transaction_repository.dart';
@@ -6,6 +8,8 @@ import 'package:hive_flutter/adapters.dart';
 
 class LockerRepository extends Notifier<List<Locker>> {
   static final Box<Locker> lockersBox = Hive.box('lockers');
+  List<Locker> lockers = [];
+
   void setLockers(List<Locker> lockers) {
     lockersBox.deleteAll(lockersBox.keys);
 
@@ -15,17 +19,29 @@ class LockerRepository extends Notifier<List<Locker>> {
   }
 
   List<Locker> fetchLockersList() {
-    final lockers = <Locker>[];
+    if (lockers.length < lockersBox.length) {
+      for (int i = 0; i < lockersBox.length; i++) {
+        final Locker? locker = lockersBox.getAt(i);
 
-    for (int i = 0; i > lockersBox.length; i++) {
-      final Locker? locker = lockersBox.getAt(i);
-
-      if (locker != null) {
-        lockers.add(locker);
+        if (locker != null) {
+          lockers.add(locker);
+        }
       }
     }
 
-    return lockers;
+    return List.from(lockers);
+  }
+
+  List<Locker> getLockerFrom(String floor) {
+    return fetchLockersList()
+        .where((locker) => locker.floor.toUpperCase() == floor.toUpperCase())
+        .toList();
+  }
+
+  List<Locker> searchLockers(String number) {
+    return fetchLockersList()
+        .where((locker) => locker.number.toString() == number)
+        .toList();
   }
 
   void addLocker(Locker locker) {

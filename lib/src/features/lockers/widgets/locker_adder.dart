@@ -131,12 +131,8 @@ class _LockerAdderState extends State<LockerAdder> {
         jobController.text != '' ||
         cautionController.text != '') {
       if (!(added ?? true)) {
-        print('are you sure');
-      } else {
-        print('already saved');
+        //TODO : Ask if want add
       }
-    } else {
-      print('no modifications');
     }
 
     lockerController.dispose();
@@ -153,6 +149,6 @@ class _LockerAdderState extends State<LockerAdder> {
 
   void add() {
     added = true;
-    print('add');
+    //TODO : add
   }
 }

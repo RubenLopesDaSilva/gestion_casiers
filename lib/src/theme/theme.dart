@@ -50,7 +50,7 @@ ThemeData lightTheme = ThemeData(
     ),
   ),
   scrollbarTheme: ScrollbarThemeData(
-    thumbColor: WidgetStatePropertyAll(AppColors.primaryColor),
+    thumbColor: WidgetStatePropertyAll(AppColors.primaryAccent),
   ),
 );
 

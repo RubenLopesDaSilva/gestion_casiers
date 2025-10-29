@@ -164,12 +164,8 @@ class _LockerUpdateState extends State<LockerUpdate> {
         jobController.text != widget.locker.responsable.toString() ||
         cautionController.text != widget.locker.studentId.toString()) {
       if (!(saved ?? true)) {
-        print('are you sure');
-      } else {
-        print('already saved');
+        //TODO : Ask if want save modification
       }
-    } else {
-      print('no modifications');
     }
 
     lockerController.dispose();
@@ -185,11 +181,11 @@ class _LockerUpdateState extends State<LockerUpdate> {
   }
 
   void annulate() async {
-    print('annulate');
+    //TODO stop modification
   }
 
   void save() {
     saved = true;
-    print('save');
+    //TODO save modification
   }
 }
