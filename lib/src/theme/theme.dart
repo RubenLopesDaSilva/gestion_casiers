@@ -18,8 +18,8 @@ import 'package:gestion_casiers/src/constants/app_sizes.dart';
 // }
 
 class AppColors {
-  static Color primaryColor = const Color.fromARGB(255, 225, 225, 225);
-  static Color primaryAccent = const Color.fromARGB(255, 255, 255, 255);
+  static Color primaryColor = const Color.fromARGB(255, 255, 255, 255);
+  static Color primaryAccent = const Color.fromARGB(255, 225, 225, 225);
   static Color secondaryColor = const Color.fromARGB(255, 150, 150, 150);
   static Color secondaryAccent = const Color.fromARGB(255, 73, 80, 87);
   static Color alertColor = const Color.fromARGB(255, 244, 67, 54);

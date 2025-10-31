@@ -27,7 +27,14 @@ class _CommonSearchBarState extends State<CommonSearchBar> {
     searchController.addListener(() {
       widget.research(searchController.text);
     });
+    
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -45,11 +52,5 @@ class _CommonSearchBarState extends State<CommonSearchBar> {
         ),
       ],
     );
-  }
-
-  @override
-  void dispose() {
-    searchController.dispose();
-    super.dispose();
   }
 }

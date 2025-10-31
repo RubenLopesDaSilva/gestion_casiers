@@ -21,7 +21,7 @@ class CommonBody extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: [
         Expanded(child: body),
-        Container(width: 400, color: AppColors.secondaryColor, child: panel),
+        Container(width: 400, color: AppColors.primaryAccent, child: panel),
       ],
     );
   }

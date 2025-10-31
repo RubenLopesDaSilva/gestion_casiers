@@ -18,6 +18,7 @@ class LockerScreen extends StatefulWidget {
 }
 
 class _LockerScreenState extends State<LockerScreen> {
+  String? searchText;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,17 +29,17 @@ class _LockerScreenState extends State<LockerScreen> {
           child: Consumer(
             builder: (context, ref, child) {
               final lockerRef = ref.watch(lockersRepositoryProvider.notifier);
+              final searchResult = lockerRef.searchLockers(searchText);
               return ListView(
                 padding: const EdgeInsets.all(16.0),
                 children: [
-                  LockerSection(
-                    title: '${'Résultats de recherche'.hardcoded} (0)',
-                    lockers: lockerRef.getLockerFrom('a'),
-                  ),
-                  LockerSection(
-                    title: '${'Tous les casiers de l\'étage '.hardcoded}A',
-                    lockers: lockerRef.getLockerFrom('a'),
-                  ),
+                  searchResult.isNotEmpty
+                      ? LockerSection(
+                          title:
+                              '${'Résultats de recherche'.hardcoded} (${searchResult.length})',
+                          lockers: searchResult,
+                        )
+                      : const SizedBox(),
                   LockerSection(
                     title: '${'Tous les casiers de l\'étage '.hardcoded}B',
                     lockers: lockerRef.getLockerFrom('b'),
@@ -55,10 +56,6 @@ class _LockerScreenState extends State<LockerScreen> {
                     title: '${'Tous les casiers de l\'étage '.hardcoded}E',
                     lockers: lockerRef.getLockerFrom('e'),
                   ),
-                  LockerSection(
-                    title: '${'Tous les casiers de l\'étage '.hardcoded}F',
-                    lockers: lockerRef.getLockerFrom('f'),
-                  ),
                 ],
               );
             },
@@ -71,6 +68,9 @@ class _LockerScreenState extends State<LockerScreen> {
               CommonSearchBar(
                 title: 'Rechercher un casier'.hardcoded,
                 research: (text) {
+                  setState(() {
+                    searchText = text;
+                  });
                   //TODO : Research
                 },
               ),

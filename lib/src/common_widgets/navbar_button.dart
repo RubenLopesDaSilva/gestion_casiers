@@ -27,8 +27,11 @@ class NavbarButton extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         decoration: actif
             ? BoxDecoration(
-                color: AppColors.secondaryColor,
-                borderRadius: BorderRadius.circular(8.0),
+                color: AppColors.primaryColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8.0),
+                  bottomLeft: Radius.circular(8.0),
+                ),
               )
             : null,
         child: Row(

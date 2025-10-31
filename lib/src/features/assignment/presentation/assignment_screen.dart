@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
+import 'package:gestion_casiers/src/theme/theme.dart';
 
 class AssignmentScreen extends StatefulWidget {
   const AssignmentScreen({super.key});
@@ -11,8 +12,25 @@ class AssignmentScreen extends StatefulWidget {
 class _AssignmentScreenState extends State<AssignmentScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: CommonBody(body: Placeholder(), panel: Column()),
+    return Scaffold(
+      body: CommonBody(
+        body: Container(
+          padding: const EdgeInsets.all(8.0),
+          color: AppColors.primaryColor,
+          child: Column(
+            children: [
+              const Row(
+                children: [
+                  // Checkbox(value: false, onChanged: (able) {}),
+                  Text('Selectionner tout'),
+                ],
+              ),
+              ListView(children: []),
+            ],
+          ),
+        ),
+        panel: const Column(),
+      ),
     );
   }
 }

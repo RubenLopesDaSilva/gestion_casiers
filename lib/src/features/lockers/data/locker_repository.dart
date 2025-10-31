@@ -38,10 +38,12 @@ class LockerRepository extends Notifier<List<Locker>> {
         .toList();
   }
 
-  List<Locker> searchLockers(String number) {
-    return fetchLockersList()
-        .where((locker) => locker.number.toString() == number)
-        .toList();
+  List<Locker> searchLockers(String? number) {
+    return number == null || number == ''
+        ? []
+        : fetchLockersList()
+              .where((locker) => locker.number.toString().contains(number))
+              .toList();
   }
 
   void addLocker(Locker locker) {

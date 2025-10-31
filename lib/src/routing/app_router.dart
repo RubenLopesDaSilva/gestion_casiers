@@ -28,7 +28,10 @@ final goRouter = GoRouter(
   routes: [
     ShellRoute(
       builder: (context, state, child) {
-        return CommonScreen(navBar: const Navbar(), body: child);
+        return CommonScreen(
+          navBar: Navbar(getLocation(GoRouter.of(context).state.name)),
+          body: child,
+        );
       },
       routes: [
         GoRoute(
