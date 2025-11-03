@@ -27,7 +27,7 @@ class _CommonSearchBarState extends State<CommonSearchBar> {
     searchController.addListener(() {
       widget.research(searchController.text);
     });
-    
+
     super.initState();
   }
 
@@ -46,7 +46,7 @@ class _CommonSearchBarState extends State<CommonSearchBar> {
         gapH8,
         StyledTextfield(
           controller: searchController,
-          color: AppColors.primaryAccent,
+          color: AppColors.titleColor,
           prefixIcon: const Icon(Icons.search),
           child: StyledHeadline('Rechercher...'.hardcoded),
         ),

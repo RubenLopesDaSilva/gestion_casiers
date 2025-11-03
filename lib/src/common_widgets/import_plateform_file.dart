@@ -5,16 +5,16 @@ import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 
-class CsvImport extends StatefulWidget {
-  const CsvImport(this.import, {super.key});
+class ImportPlatformFile extends StatefulWidget {
+  const ImportPlatformFile(this.import, {super.key});
 
   final Function(PlatformFile?) import;
 
   @override
-  State<CsvImport> createState() => _CsvImportState();
+  State<ImportPlatformFile> createState() => _ImportPlatformFileState();
 }
 
-class _CsvImportState extends State<CsvImport> {
+class _ImportPlatformFileState extends State<ImportPlatformFile> {
   PlatformFile? platformFile;
 
   @override
@@ -24,7 +24,7 @@ class _CsvImportState extends State<CsvImport> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          StyledHeadline('Importer un fichier CSV'.hardcoded),
+          StyledHeadline('Importer un fichier'.hardcoded),
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -61,7 +61,7 @@ class _CsvImportState extends State<CsvImport> {
               StyledButton(
                 width: 120,
                 onPressed: () => widget.import(platformFile),
-                child: StyledText('Importer'.hardcoded),
+                child: StyledHeadline('Importer'.hardcoded),
               ),
             ],
           ),

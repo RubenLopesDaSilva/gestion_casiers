@@ -4,6 +4,8 @@ import 'package:hive_flutter/adapters.dart';
 
 part 'locker.g.dart';
 
+//TODO : Modifier l'entité, et remplacer lockercondition par comment et probleme de type string?
+
 @HiveType(typeId: 0)
 class Locker {
   @HiveField(0)

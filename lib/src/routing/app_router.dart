@@ -16,9 +16,9 @@ enum AppRoute {
   const AppRoute(this.path);
 }
 
-AppRoute getLocation(String? name) {
+AppRoute getLocation(String? path) {
   return AppRoute.values.firstWhere(
-    (route) => route.name == name,
+    (route) => route.name == path,
     orElse: () => AppRoute.dashboard,
   );
 }

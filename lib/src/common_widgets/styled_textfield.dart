@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gestion_casiers/src/theme/theme.dart';
 
 class StyledTextfield extends StatelessWidget {
   const StyledTextfield({
@@ -25,7 +24,7 @@ class StyledTextfield extends StatelessWidget {
       controller: controller,
       readOnly: readOnly ?? false,
       keyboardType: textInputType,
-      cursorColor: AppColors.secondaryColor,
+      cursorColor: color,
       decoration: InputDecoration(prefixIcon: prefixIcon, label: child),
       style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: color),
     );

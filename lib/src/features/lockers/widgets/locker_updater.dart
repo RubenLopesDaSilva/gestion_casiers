@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
+import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
+import 'package:gestion_casiers/src/features/lockers/widgets/floor_input.dart';
 import 'package:gestion_casiers/src/features/students/domain/student.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 
-class LockerUpdate extends StatefulWidget {
+class LockerUpdate extends ConsumerStatefulWidget {
   const LockerUpdate(this.locker, {this.student, super.key});
 
   final Locker locker;
   final Student? student;
 
   @override
-  State<LockerUpdate> createState() => _LockerUpdateState();
+  ConsumerState<LockerUpdate> createState() => _LockerUpdateState();
 }
 
-class _LockerUpdateState extends State<LockerUpdate> {
+class _LockerUpdateState extends ConsumerState<LockerUpdate> {
   final TextEditingController lockerController = TextEditingController();
   final TextEditingController lockController = TextEditingController();
-  final MenuController floorController = MenuController();
+  final TextEditingController floorController = TextEditingController();
   final TextEditingController keysController = TextEditingController();
   final TextEditingController jobController = TextEditingController();
   final TextEditingController detailController = TextEditingController();
@@ -26,18 +29,62 @@ class _LockerUpdateState extends State<LockerUpdate> {
   final TextEditingController studentnameController = TextEditingController();
   final TextEditingController studentjobController = TextEditingController();
   final TextEditingController cautionController = TextEditingController();
-  bool? saved;
+  String floor = '';
 
   @override
   void initState() {
     super.initState();
-    saved = false;
+    setControllers();
+    cautionController.text = widget.student?.deposit.toString() ?? '';
+  }
+
+  @override
+  void dispose() {
+    lockerController.dispose();
+    lockController.dispose();
+    keysController.dispose();
+    jobController.dispose();
+    detailController.dispose();
+
+    studentnameController.dispose();
+    studentjobController.dispose();
+    cautionController.dispose();
+    super.dispose();
+  }
+
+  void annulate() async {
+    setControllers();
+    setState(() {});
+  }
+
+  void save() {
+    final lockerRef = ref.watch(lockersRepositoryProvider.notifier);
+
+    final int? number = int.tryParse(lockerController.text);
+    final int? keyCount = int.tryParse(keysController.text);
+    final int? lock = int.tryParse(lockController.text);
+
+    Locker update = widget.locker.copyWith(
+      number: number,
+      responsable: jobController.text,
+      keyCount: keyCount,
+      lockNumber: lock,
+      lockerCondition: widget.locker.lockerCondition.copyWith(
+        comments: detailController.text,
+      ),
+      floor: floor,
+    );
+
+    lockerRef.editLocker(widget.locker.number, update);
+  }
+
+  void setControllers() {
     lockerController.text = widget.locker.number.toString();
     lockController.text = widget.locker.lockNumber.toString();
-    // floorController.text = widget.locker.lockNumber.toString();
     keysController.text = widget.locker.keyCount.toString();
     jobController.text = widget.locker.responsable.toString();
-    cautionController.text = widget.locker.studentId.toString();
+    detailController.text = widget.locker.lockerCondition.comments ?? '';
+    floor = widget.locker.floor;
   }
 
   @override
@@ -75,11 +122,13 @@ class _LockerUpdateState extends State<LockerUpdate> {
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
-                controller: TextEditingController(),
-                textInputType: const TextInputType.numberWithOptions(),
-                prefixIcon: const Icon(Icons.abc),
-                child: null,
+              child: FloorInput(
+                floor: getFloor(floor),
+                onChanged: (value) {
+                  setState(() {
+                    floor = value?.value ?? floor;
+                  });
+                },
               ),
             ),
           ],
@@ -153,39 +202,5 @@ class _LockerUpdateState extends State<LockerUpdate> {
         ),
       ],
     );
-  }
-
-  @override
-  void dispose() {
-    if (lockerController.text != widget.locker.number.toString() ||
-        lockController.text != widget.locker.lockNumber.toString() ||
-        // floorController.text != widget.locker.lockNumber.toString() ||
-        keysController.text != widget.locker.keyCount.toString() ||
-        jobController.text != widget.locker.responsable.toString() ||
-        cautionController.text != widget.locker.studentId.toString()) {
-      if (!(saved ?? true)) {
-        //TODO : Ask if want save modification
-      }
-    }
-
-    lockerController.dispose();
-    lockController.dispose();
-    keysController.dispose();
-    jobController.dispose();
-    detailController.dispose();
-
-    studentnameController.dispose();
-    studentjobController.dispose();
-    cautionController.dispose();
-    super.dispose();
-  }
-
-  void annulate() async {
-    //TODO stop modification
-  }
-
-  void save() {
-    saved = true;
-    //TODO save modification
   }
 }

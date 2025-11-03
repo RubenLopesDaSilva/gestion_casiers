@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
+import 'package:gestion_casiers/src/features/lockers/widgets/floor_input.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 
-class LockerAdder extends StatefulWidget {
+class LockerAdder extends ConsumerStatefulWidget {
   const LockerAdder({super.key});
 
   @override
-  State<LockerAdder> createState() => _LockerAdderState();
+  ConsumerState<LockerAdder> createState() => _LockerAdderState();
 }
 
-class _LockerAdderState extends State<LockerAdder> {
+class _LockerAdderState extends ConsumerState<LockerAdder> {
   final TextEditingController lockerController = TextEditingController();
   final TextEditingController lockController = TextEditingController();
   final MenuController floorController = MenuController();
@@ -22,12 +24,33 @@ class _LockerAdderState extends State<LockerAdder> {
   final TextEditingController studentnameController = TextEditingController();
   final TextEditingController studentjobController = TextEditingController();
   final TextEditingController cautionController = TextEditingController();
-  bool? added;
+
+  String floor = '';
 
   @override
-  void initState() {
-    super.initState();
-    added = false;
+  void dispose() {
+    lockerController.dispose();
+    lockController.dispose();
+    keysController.dispose();
+    jobController.dispose();
+    detailController.dispose();
+
+    studentnameController.dispose();
+    studentjobController.dispose();
+    cautionController.dispose();
+    super.dispose();
+  }
+
+  void add() {
+    //TODO : add
+    // final lockerRef = ref.watch(lockersRepositoryProvider.notifier);
+
+    // final int? number = int.tryParse(lockerController.text);
+    // final int? keyCount = int.tryParse(keysController.text);
+    // final int? lock = int.tryParse(lockController.text);
+
+    // final locker = Locker(number: number, floor: floor, keyCount: keyCount, lockNumber: lock, responsable: jobController.text, lockerCondition: LockerCondition(), place: place)
+    // lockerRef.addLocker(locker);
   }
 
   @override
@@ -45,7 +68,7 @@ class _LockerAdderState extends State<LockerAdder> {
               height: commonH,
               child: StyledTextfield(
                 controller: lockerController,
-                color: AppColors.primaryAccent,
+                color: AppColors.titleColor,
                 prefixIcon: const Icon(Icons.lock_outlined),
                 child: StyledHeadline('No de Casier'.hardcoded),
               ),
@@ -55,8 +78,8 @@ class _LockerAdderState extends State<LockerAdder> {
               width: commonW,
               height: commonH,
               child: StyledTextfield(
-                controller: lockController,
-                color: AppColors.primaryAccent,
+                controller: keysController,
+                color: AppColors.titleColor,
                 prefixIcon: const Icon(Icons.key),
                 child: StyledHeadline('Nombre de clé'.hardcoded),
               ),
@@ -70,8 +93,8 @@ class _LockerAdderState extends State<LockerAdder> {
               width: commonW,
               height: commonH,
               child: StyledTextfield(
-                controller: TextEditingController(),
-                color: AppColors.primaryAccent,
+                controller: lockController,
+                color: AppColors.titleColor,
                 prefixIcon: const Icon(Icons.tag),
                 child: StyledHeadline('No de serrure'.hardcoded),
               ),
@@ -81,8 +104,8 @@ class _LockerAdderState extends State<LockerAdder> {
               width: commonW,
               height: commonH,
               child: StyledTextfield(
-                controller: keysController,
-                color: AppColors.primaryAccent,
+                controller: jobController,
+                color: AppColors.titleColor,
                 prefixIcon: const Icon(Icons.luggage_outlined),
                 child: StyledHeadline('Metier'.hardcoded),
               ),
@@ -95,11 +118,13 @@ class _LockerAdderState extends State<LockerAdder> {
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
-                controller: jobController,
-                color: AppColors.primaryAccent,
-                prefixIcon: const Icon(Icons.calendar_today_outlined),
-                child: StyledHeadline('Étage...'.hardcoded),
+              child: FloorInput(
+                floor: getFloor(floor),
+                onChanged: (value) {
+                  setState(() {
+                    floor = value?.value ?? floor;
+                  });
+                },
               ),
             ),
             gapW24,
@@ -108,7 +133,7 @@ class _LockerAdderState extends State<LockerAdder> {
               height: commonH,
               child: StyledTextfield(
                 controller: detailController,
-                color: AppColors.primaryAccent,
+                color: AppColors.titleColor,
                 prefixIcon: const Icon(Icons.layers_sharp),
                 child: StyledHeadline('Remarque (facultatif)'.hardcoded),
               ),
@@ -120,35 +145,5 @@ class _LockerAdderState extends State<LockerAdder> {
         gapH24,
       ],
     );
-  }
-
-  @override
-  void dispose() {
-    if (lockerController.text != '' ||
-        lockController.text != '' ||
-        // floorController.text != '' ||
-        keysController.text != '' ||
-        jobController.text != '' ||
-        cautionController.text != '') {
-      if (!(added ?? true)) {
-        //TODO : Ask if want add
-      }
-    }
-
-    lockerController.dispose();
-    lockController.dispose();
-    keysController.dispose();
-    jobController.dispose();
-    detailController.dispose();
-
-    studentnameController.dispose();
-    studentjobController.dispose();
-    cautionController.dispose();
-    super.dispose();
-  }
-
-  void add() {
-    added = true;
-    //TODO : add
   }
 }
