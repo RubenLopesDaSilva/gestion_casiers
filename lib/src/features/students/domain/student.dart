@@ -1,30 +1,17 @@
-import 'package:hive_flutter/adapters.dart';
-
-part 'student.g.dart';
-
 typedef StudentID = String;
 
-@HiveType(typeId: 1)
 class Student {
-  @HiveField(0)
-  final StudentID id;
-  @HiveField(1)
+  final StudentID? id;
   final String firstName;
-  @HiveField(2)
   final String lastName;
-  @HiveField(3)
   final String job;
-  @HiveField(4)
   final int year;
-  @HiveField(5)
   final String title;
-  @HiveField(6)
   final String login;
-  @HiveField(7)
   final int deposit;
 
   const Student({
-    required this.id,
+    this.id,
     required this.firstName,
     required this.lastName,
     required this.job,
@@ -33,6 +20,35 @@ class Student {
     required this.title,
     required this.deposit,
   });
+
+  factory Student.fromJson(Map<String, dynamic> json) {
+    return Student(
+      id: json['_id'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      job: json['job'],
+      login: json['login'],
+      year: json['year'],
+      title: json['title'],
+      deposit: json['deposit'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    if (id != null) '_id': id,
+    'firstName': firstName,
+    'lastName': lastName,
+    'job': job,
+    'login': login,
+    'year': year,
+    'title': title,
+    'deposit': deposit,
+  };
+
+  @override
+  String toString() {
+    return 'Student{id: $id, firstName: $firstName, lastName: $lastName, job: $job, login: $login, year: $year, title: $title, deposit: $deposit}';
+  }
 
   Student copyWith({
     String? id,

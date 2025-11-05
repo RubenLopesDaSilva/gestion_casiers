@@ -28,6 +28,17 @@ class LockerRepository extends Notifier<List<Locker>> {
     return lockers;
   }
 
+  List<Locker> fetchFreeLockerList() {
+    final lockers = <Locker>[];
+    for (int i = 0; i < lockersBox.length; i++) {
+      Locker? locker = lockersBox.getAt(i);
+      if (locker != null && locker.studentId == null) {
+        lockers.add(locker);
+      }
+    }
+    return lockers;
+  }
+
   void addLocker(Locker locker) {
     lockersBox.put(locker.number, locker);
 
@@ -48,8 +59,14 @@ class LockerRepository extends Notifier<List<Locker>> {
     );
   }
 
+  Locker getLockerBy(int id) {
+    final Locker locker = lockersBox.values.firstWhere(
+      (locker) => locker.number == id,
+    );
+    return locker;
+  }
+
   void editLocker(int lockerNumber, Locker editLocker) {
-    lockersBox.put(lockerNumber, editLocker);
     lockersBox.put(lockerNumber, editLocker);
 
     TransactionRepository().saveTransactions(

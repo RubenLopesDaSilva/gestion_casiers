@@ -1,29 +1,19 @@
 import 'package:gestion_casiers/src/features/lockers/domain/locker_condition.dart';
 import 'package:gestion_casiers/src/features/students/domain/student.dart';
-import 'package:hive_flutter/adapters.dart';
 
-part 'locker.g.dart';
-
-@HiveType(typeId: 0)
 class Locker {
-  @HiveField(0)
+  final String id;
   final int number;
-  @HiveField(1)
   final String floor;
-  @HiveField(2)
   final int keyCount;
-  @HiveField(3)
   final int lockNumber;
-  @HiveField(4)
   final String responsable;
-  @HiveField(5)
   final LockerCondition lockerCondition;
-  @HiveField(6)
   final StudentID? studentId;
-  @HiveField(7)
   final String place;
 
   const Locker({
+    required this.id,
     required this.number,
     required this.floor,
     required this.keyCount,
@@ -34,7 +24,39 @@ class Locker {
     this.studentId,
   });
 
+  factory Locker.fromJson(Map<String, dynamic> json) {
+    return Locker(
+      id: json['_id'],
+      number: json['number'],
+      floor: json['floor'],
+      keyCount: json['keyCount'],
+      lockNumber: json['lockNumber'],
+      studentId: json['studentId'],
+      responsable: json['responsable'],
+      lockerCondition: LockerCondition.fromJson(json['lockerCondition']),
+      place: json['place'],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    '_id': id,
+    'number': number,
+    'floor': floor,
+    'place': place,
+    'responsable': responsable,
+    'studentId': studentId,
+    'keyCount': keyCount,
+    'lockNumber': lockNumber,
+    'lockerCondition': lockerCondition.toJson(),
+  };
+
+  @override
+  String toString() {
+    return 'Locker{id: $id, number:$number, floor:$floor, place:$place, responsable: $responsable, studentId: $studentId, keyCount:$keyCount, lockNumber:$lockNumber, lockerCondition: ${lockerCondition.toString()}';
+  }
+
   Locker copyWith({
+    String? id,
     String? floor,
     int? number,
     String? responsable,
@@ -45,6 +67,7 @@ class Locker {
     String? place,
   }) {
     return Locker(
+      id: id ?? this.id,
       floor: floor ?? this.floor,
       number: number ?? this.number,
       responsable: responsable ?? this.responsable,

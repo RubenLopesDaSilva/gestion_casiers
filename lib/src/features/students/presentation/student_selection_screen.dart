@@ -3,9 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/styled_text.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/presentation/student_inner_item.dart';
-import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
+import 'package:gestion_casiers/src/features/students/data/student_service.dart';
 import 'package:gestion_casiers/src/features/students/domain/student.dart';
-
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 import 'package:go_router/go_router.dart';
@@ -26,7 +25,6 @@ class _StudentSelectionScreenState extends State<StudentSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO changer titre et descriptuion
     return Scaffold(
       appBar: AppBar(title: Text('Student Selection Screen'.hardcoded)),
       body: SizedBox(
@@ -72,25 +70,39 @@ class _StudentSelectionScreenState extends State<StudentSelectionScreen> {
                     gapH24,
                     Consumer(
                       builder: (context, ref, child) {
-                        // final repository = ref.watch(
-                        //   lockersRepositoryProvider.notifier,
-                        // );
-                        final students = StudentRepository.studentsBox.values;
-                        List<Student?> data = [null, ...students];
-                        return Expanded(
-                          child: ListView.separated(
-                            padding: const EdgeInsets.all(30),
-                            itemCount: data.length,
-                            scrollDirection: Axis.vertical,
-                            separatorBuilder: (context, index) => gapH24,
-                            itemBuilder: (context, index) {
-                              Student? student = data[index];
-                              return StudentInnerItem(
-                                student: student,
-                                onTap: selectStudent(student),
+                        final service = ref.watch(studentService.notifier);
+                        return FutureBuilder<List<Student>>(
+                          future: service.fetchStudents(),
+                          builder: (context, asyncSnapshot) {
+                            if (asyncSnapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
                               );
-                            },
-                          ),
+                            }
+                            if (asyncSnapshot.hasError) {
+                              return Center(
+                                child: Text('Erreur: ${asyncSnapshot.error}'),
+                              );
+                            }
+                            final students = asyncSnapshot.data ?? [];
+                            List<Student?> data = [null, ...students];
+                            return Expanded(
+                              child: ListView.separated(
+                                padding: const EdgeInsets.all(30),
+                                itemCount: data.length,
+                                scrollDirection: Axis.vertical,
+                                separatorBuilder: (context, index) => gapH24,
+                                itemBuilder: (context, index) {
+                                  Student? student = data[index];
+                                  return StudentInnerItem(
+                                    student: student,
+                                    onTap: selectStudent(student),
+                                  );
+                                },
+                              ),
+                            );
+                          },
                         );
                       },
                     ),

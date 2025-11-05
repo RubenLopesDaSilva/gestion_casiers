@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gestion_casiers/src/common_widgets/styled_button.dart';
-import 'package:gestion_casiers/src/common_widgets/styled_text.dart';
+import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
-import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
+import 'package:gestion_casiers/src/features/lockers/data/locker_details_provider.dart';
+import 'package:gestion_casiers/src/features/lockers/data/locker_service.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
-import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile_item.dart';
-import 'package:gestion_casiers/src/features/lockers/presentation/locker_profile_part.dart';
-import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
-import 'package:gestion_casiers/src/features/students/domain/student.dart';
+import 'package:gestion_casiers/src/features/lockers/presentation/locker_presentation.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 import 'package:go_router/go_router.dart';
 
-class SimpleLockerProfile extends StatefulWidget {
-  const SimpleLockerProfile(this.lock, {super.key});
+class SimpleLockerProfile extends ConsumerStatefulWidget {
+  const SimpleLockerProfile(this.id, {super.key});
 
-  final String? lock;
+  final String? id;
 
   @override
-  State<SimpleLockerProfile> createState() => _SimpleLockerProfileState();
+  ConsumerState<SimpleLockerProfile> createState() =>
+      _SimpleLockerProfileState();
 }
 
-class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
+class _SimpleLockerProfileState extends ConsumerState<SimpleLockerProfile> {
   final _placeController = TextEditingController();
   final _floorController = TextEditingController();
   final _numberController = TextEditingController();
@@ -31,11 +29,12 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
   final _keysController = TextEditingController();
   final _lockController = TextEditingController();
 
-  void update(Locker locker, LockerRepository repository) {
+  void update(Locker locker, LockerService repository) {
     final number = int.tryParse(_numberController.text);
     final keyCount = int.tryParse(_keysController.text);
     final lock = int.tryParse(_lockController.text);
     Locker update = locker.copyWith(
+      id: locker.id,
       floor: _floorController.text,
       number: number,
       responsable: _responsibleController.text,
@@ -43,7 +42,7 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
       lockNumber: lock,
     );
     setState(() {
-      repository.editLocker(locker.number, update);
+      repository.patchLocker(update);
       context.pop();
     });
   }
@@ -62,32 +61,27 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: StyledTitle('Locker Profile'.hardcoded)),
-      body: Consumer(
-        builder: (context, ref, child) {
-          final repository = ref.watch(lockersRepositoryProvider.notifier);
-          final studentRepository = ref.watch(
-            studentsRepositoryProvider.notifier,
-          );
-          final locker = LockerRepository.lockersBox.values.firstWhere(
-            (element) => widget.lock == element.lockNumber.toString(),
-          );
-          Locker lockerCopy = locker.copyWith();
-          late Student? student = studentRepository.findStudentBy(
-            id: lockerCopy.studentId,
-          );
-          _placeController.text = lockerCopy.place;
-          _floorController.text = lockerCopy.floor;
-          _numberController.text = lockerCopy.number.toString();
-          _responsibleController.text = lockerCopy.responsable;
-          _ownerController.text = student == null
-              ? 'None'
-              : '${student.firstName} ${student.lastName}';
-          _keysController.text = lockerCopy.keyCount.toString();
-          _lockController.text = lockerCopy.lockNumber.toString();
-
-          return Column(
+    final asyncData = ref.watch(lockerDetailsProvider(widget.id!));
+    final service = ref.watch(lockerService.notifier);
+    return asyncData.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stackTrace) => Center(child: Text('Erreur : $error')),
+      data: (data) {
+        final locker = data['locker'];
+        final student = data['student'];
+        Locker lockerCopy = locker.copyWith();
+        _placeController.text = lockerCopy.place;
+        _floorController.text = lockerCopy.floor;
+        _numberController.text = lockerCopy.number.toString();
+        _responsibleController.text = lockerCopy.responsable;
+        _ownerController.text = student == null
+            ? 'None'
+            : '${student.firstName} ${student.lastName}';
+        _keysController.text = lockerCopy.keyCount.toString();
+        _lockController.text = lockerCopy.lockNumber.toString();
+        return Scaffold(
+          appBar: AppBar(title: StyledTitle('Locker Profile'.hardcoded)),
+          body: Column(
             children: [
               Expanded(
                 child: Padding(
@@ -214,14 +208,14 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                 ),
               ),
               StyledButton(
-                onPressed: () => update(lockerCopy, repository),
+                onPressed: () => update(lockerCopy, service),
                 child: StyledHeadline('Save'.hardcoded),
               ),
               gapH24,
             ],
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

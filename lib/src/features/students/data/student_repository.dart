@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
+import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
 import 'package:gestion_casiers/src/features/students/domain/student.dart';
 import 'package:hive/hive.dart';
 
@@ -19,6 +21,20 @@ class StudentRepository extends Notifier<List<Student>> {
     for (int i = 0; i < studentsBox.length; i++) {
       final Student? student = studentsBox.getAt(i);
       if (student != null) students.add(student);
+    }
+    return students;
+  }
+
+  List<Student> fetchStudentNoLockers() {
+    final students = <Student>[];
+
+    for (int i = 0; i < studentsBox.length; i++) {
+      Student? student = studentsBox.getAt(i);
+      if (student != null) {
+        if (getLockerBy(student.id!) == null) {
+          students.add(student);
+        }
+      }
     }
     return students;
   }
@@ -53,6 +69,25 @@ class StudentRepository extends Notifier<List<Student>> {
   @override
   build() {
     return [];
+  }
+
+  Locker? getLockerBy(StudentID id) {
+    for (int lockerNumber in LockerRepository.lockersBox.keys) {
+      final Locker locker = LockerRepository.lockersBox.get(lockerNumber)!;
+
+      if (locker.studentId == id) {
+        return locker;
+      }
+    }
+
+    return null;
+  }
+
+  Student getStudentBy(String id) {
+    final Student student = studentsBox.values.firstWhere(
+      (student) => student.id == id,
+    );
+    return student;
   }
 }
 

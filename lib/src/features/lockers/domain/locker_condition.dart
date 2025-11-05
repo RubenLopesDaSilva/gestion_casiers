@@ -1,20 +1,22 @@
-import 'package:hive_flutter/adapters.dart';
-
-part 'locker_condition.g.dart';
-
-@HiveType(typeId: 2)
 class LockerCondition {
   const LockerCondition(this.isGoodCondition, {this.comments, this.problems});
 
-  @HiveField(0)
   final bool isGoodCondition;
-  @HiveField(1)
   final String? comments;
-  @HiveField(2)
   final String? problems;
 
   factory LockerCondition.isGood({String? comments}) {
     return LockerCondition(true, comments: comments);
+  }
+
+  Map<String, dynamic> toJson() => {
+    'isGood': isGoodCondition,
+    'comments': comments,
+    'problems': problems,
+  };
+
+  factory LockerCondition.fromJson(Map<String, dynamic> json) {
+    return LockerCondition(json['isGood']);
   }
 
   LockerCondition copyWith({

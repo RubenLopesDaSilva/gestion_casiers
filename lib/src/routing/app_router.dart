@@ -18,7 +18,7 @@ final goRouter = GoRouter(
       },
       routes: [
         GoRoute(
-          path: '/profile/:id',
+          path: '/:id',
           name: AppRoute.lockerprofile.name,
           builder: (context, state) {
             final id = state.pathParameters['id'];
@@ -26,7 +26,7 @@ final goRouter = GoRouter(
           },
         ),
         GoRoute(
-          path: '/students',
+          path: '/student/select',
           name: AppRoute.students.name,
           builder: (context, state) {
             return const StudentSelectionScreen();
@@ -42,7 +42,7 @@ final goRouter = GoRouter(
       },
       routes: [
         GoRoute(
-          path: '/profile/:id',
+          path: '/:id',
           name: AppRoute.studentprofile.name,
           builder: (context, state) {
             final studentId = state.pathParameters['id'];
