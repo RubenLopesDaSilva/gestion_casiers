@@ -7,6 +7,8 @@ class AppColors {
   static Color secondaryColor = const Color.fromARGB(255, 150, 150, 150);
   static Color secondaryAccent = const Color.fromARGB(255, 73, 80, 87);
   static Color alertColor = const Color.fromARGB(255, 244, 67, 54);
+  static Color validColor = const Color.fromARGB(255, 76, 175, 80);
+  static Color securColor = const Color.fromARGB(255, 33, 150, 243);
   static Color titleColor = const Color.fromARGB(255, 0, 0, 0);
 }
 

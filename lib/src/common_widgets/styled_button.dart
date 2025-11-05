@@ -6,12 +6,14 @@ class StyledButton extends StatelessWidget {
     super.key,
     this.width,
     this.height,
+    this.color,
     required this.onPressed,
     required this.child,
   });
 
   final double? width;
   final double? height;
+  final Color? color;
   final VoidCallback onPressed;
   final Widget child;
 
@@ -20,7 +22,7 @@ class StyledButton extends StatelessWidget {
     return Container(
       width: width ?? 320,
       height: height ?? 44,
-      color: AppColors.primaryAccent,
+      color: color ?? AppColors.primaryAccent,
       child: TextButton(
         style: ButtonStyle(
           overlayColor: WidgetStateProperty.resolveWith(

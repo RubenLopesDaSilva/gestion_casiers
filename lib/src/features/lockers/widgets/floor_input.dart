@@ -3,14 +3,16 @@ import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 
-enum Floor { b, c, d, e }
+enum Floor { B, C, D, E }
 
 Floor? getFloor(String? floor) {
   for (var value in Floor.values) {
-    if (value.name == floor?.toLowerCase()) return value;
+    if (value.name == floor?.toUpperCase()) return value;
   }
   return null;
 }
+
+//TODO : généraliser ce widget
 
 class FloorInput extends StatelessWidget {
   const FloorInput({this.floor, required this.onChanged, super.key});
