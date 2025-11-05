@@ -12,7 +12,7 @@ import 'package:gestion_casiers/src/features/lockers/widgets/locker_adder.dart';
 import 'package:gestion_casiers/src/features/lockers/widgets/locker_section.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
-import 'package:gestion_casiers/utils/import_excel.dart';
+import 'package:gestion_casiers/src/utils/import_excel.dart';
 
 class LockerScreen extends ConsumerStatefulWidget {
   const LockerScreen({super.key});

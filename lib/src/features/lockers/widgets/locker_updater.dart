@@ -29,7 +29,7 @@ class _LockerUpdateState extends ConsumerState<LockerUpdate> {
   final TextEditingController studentnameController = TextEditingController();
   final TextEditingController studentjobController = TextEditingController();
   final TextEditingController cautionController = TextEditingController();
-  String floor = '';
+  String? floor;
 
   @override
   void initState() {
@@ -126,7 +126,7 @@ class _LockerUpdateState extends ConsumerState<LockerUpdate> {
                 floor: getFloor(floor),
                 onChanged: (value) {
                   setState(() {
-                    floor = value?.value ?? floor;
+                    floor = value?.name;
                   });
                 },
               ),

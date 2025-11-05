@@ -1,50 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
+import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
+import 'package:gestion_casiers/src/theme/theme.dart';
 
-// TODO : voire si possibilité d'étage null
+enum Floor { b, c, d, e }
 
-enum Floor {
-  none(''),
-  b('b'),
-  c('c'),
-  d('d'),
-  e('e');
-
-  const Floor(this.value);
-  final String value;
-}
-
-Floor getFloor(String? floor) {
-  return Floor.values.toList().firstWhere(
-    (value) => value.name == floor,
-    orElse: () => Floor.none,
-  );
+Floor? getFloor(String? floor) {
+  for (var value in Floor.values) {
+    if (value.name == floor?.toLowerCase()) return value;
+  }
+  return null;
 }
 
 class FloorInput extends StatelessWidget {
-  const FloorInput({required this.floor, required this.onChanged, super.key});
+  const FloorInput({this.floor, required this.onChanged, super.key});
 
-  final Floor floor;
+  final Floor? floor;
   final Function(Floor?) onChanged;
 
   @override
   Widget build(BuildContext context) {
-    final items = [
-      DropdownMenuItem(
-        value: floor,
-        child: StyledHeadline('Étage ${floor.name}'),
-      ),
-    ];
+    final items = floor == null
+        ? <DropdownMenuItem<Floor>>[]
+        : [
+            DropdownMenuItem(
+              value: floor,
+              alignment: AlignmentGeometry.center,
+              child: StyledHeadline('${'Étage'.hardcoded} ${floor?.name}'),
+            ),
+          ];
     for (final value in Floor.values) {
       if (value != floor) {
         items.add(
           DropdownMenuItem<Floor>(
             value: value,
-            child: StyledHeadline('Étage ${value.name}'),
+            alignment: AlignmentGeometry.center,
+            child: StyledHeadline(' ${value.name}'),
           ),
         );
       }
     }
-    return DropdownButton(items: items, onChanged: onChanged, value: floor);
+    return Column(
+      children: [
+        DropdownButtonHideUnderline(
+          child: DropdownButton(
+            items: items,
+            onChanged: onChanged,
+            value: floor,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: AppColors.primaryColor),
+            isExpanded: true,
+            dropdownColor: AppColors.primaryColor,
+            hint: StyledHeadline(
+              'Selectionner un étage pour votre casier'.hardcoded,
+              color: AppColors.alertColor,
+            ),
+            disabledHint: floor == null
+                ? StyledHeadline(
+                    'Vous ne pouvez pas modifier'.hardcoded,
+                    color: AppColors.alertColor,
+                  )
+                : DropdownMenuItem(
+                    value: floor,
+                    alignment: AlignmentGeometry.center,
+                    child: StyledHeadline(
+                      '${'Étage'.hardcoded} ${floor?.name}',
+                    ),
+                  ),
+          ),
+        ),
+        Divider(color: AppColors.titleColor),
+      ],
+    );
   }
 }

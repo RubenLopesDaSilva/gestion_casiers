@@ -4,11 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 class StyledText extends StatelessWidget {
   const StyledText(
     this.text, {
+    this.color,
     this.overflow = TextOverflow.ellipsis,
     super.key,
   });
 
   final String text;
+  final Color? color;
   final TextOverflow? overflow;
 
   @override
@@ -16,7 +18,9 @@ class StyledText extends StatelessWidget {
     return Text(
       text,
       style: GoogleFonts.lato(
-        textStyle: Theme.of(context).textTheme.bodyMedium,
+        textStyle: Theme.of(
+          context,
+        ).textTheme.bodyMedium?.copyWith(color: color),
       ),
       overflow: overflow,
     );
@@ -26,11 +30,13 @@ class StyledText extends StatelessWidget {
 class StyledHeadline extends StatelessWidget {
   const StyledHeadline(
     this.text, {
+    this.color,
     this.overflow = TextOverflow.ellipsis,
     super.key,
   });
 
   final String text;
+  final Color? color;
   final TextOverflow? overflow;
 
   @override
@@ -38,7 +44,9 @@ class StyledHeadline extends StatelessWidget {
     return Text(
       text,
       style: GoogleFonts.lato(
-        textStyle: Theme.of(context).textTheme.headlineMedium,
+        textStyle: Theme.of(
+          context,
+        ).textTheme.headlineMedium?.copyWith(color: color),
       ),
       overflow: overflow,
     );
@@ -48,11 +56,13 @@ class StyledHeadline extends StatelessWidget {
 class StyledTitle extends StatelessWidget {
   const StyledTitle(
     this.text, {
+    this.color,
     this.overflow = TextOverflow.ellipsis,
     super.key,
   });
 
   final String text;
+  final Color? color;
   final TextOverflow? overflow;
 
   @override
@@ -60,7 +70,9 @@ class StyledTitle extends StatelessWidget {
     return Text(
       text,
       style: GoogleFonts.lato(
-        textStyle: Theme.of(context).textTheme.titleMedium,
+        textStyle: Theme.of(
+          context,
+        ).textTheme.titleMedium?.copyWith(color: color),
       ),
       overflow: overflow,
     );

@@ -25,7 +25,7 @@ class _LockerAdderState extends ConsumerState<LockerAdder> {
   final TextEditingController studentjobController = TextEditingController();
   final TextEditingController cautionController = TextEditingController();
 
-  String floor = '';
+  String? floor;
 
   @override
   void dispose() {
@@ -56,7 +56,7 @@ class _LockerAdderState extends ConsumerState<LockerAdder> {
   @override
   Widget build(BuildContext context) {
     final double commonW = 160;
-    final double commonH = 40;
+    final double commonH = 64;
     return Column(
       children: [
         StyledHeadline('Ajouter un casier'.hardcoded),
@@ -117,12 +117,12 @@ class _LockerAdderState extends ConsumerState<LockerAdder> {
           children: [
             SizedBox(
               width: commonW,
-              height: commonH,
+              height: commonH + 20,
               child: FloorInput(
                 floor: getFloor(floor),
                 onChanged: (value) {
                   setState(() {
-                    floor = value?.value ?? floor;
+                    floor = value?.name;
                   });
                 },
               ),
