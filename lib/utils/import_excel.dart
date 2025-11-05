@@ -8,8 +8,8 @@ import 'package:uuid/uuid.dart';
 
 const uuid = Uuid();
 final logger = Logger();
-
 Future<List<Locker>> importLockersFrom(Excel excel) async {
+  // try {} catch(e) {}
   final lockers = <Locker>[];
   final service = StudentService();
   try {
@@ -92,6 +92,7 @@ Future<List<Locker>> importLockersFrom(Excel excel) async {
 }
 
 List<Student> importStudentsFrom(Excel excel) {
+  // try {} catch(e) {}
   final students = <Student>[];
 
   final sheet = excel[excel.sheets.keys.first];

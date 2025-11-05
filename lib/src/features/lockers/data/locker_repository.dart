@@ -10,7 +10,7 @@ class LockerRepository extends Notifier<List<Locker>> {
     lockersBox.deleteAll(lockersBox.keys);
 
     for (Locker locker in lockers) {
-      lockersBox.put(locker.number, locker);
+      lockersBox.put(locker.id, locker);
     }
   }
 
@@ -40,38 +40,38 @@ class LockerRepository extends Notifier<List<Locker>> {
   }
 
   void addLocker(Locker locker) {
-    lockersBox.put(locker.number, locker);
+    lockersBox.put(locker.id, locker);
 
     TransactionRepository().saveTransactions(
       TransactionType.add,
-      locker.number,
+      locker.id,
       locker,
     );
   }
 
   void removeLocker(Locker locker) {
-    lockersBox.deleteAt(locker.number);
+    lockersBox.delete(locker.id);
 
     TransactionRepository().saveTransactions(
       TransactionType.remove,
-      locker.number,
+      locker.id,
       locker,
     );
   }
 
-  Locker getLockerBy(int id) {
+  Locker getLockerBy(String id) {
     final Locker locker = lockersBox.values.firstWhere(
-      (locker) => locker.number == id,
+      (locker) => locker.id == id,
     );
     return locker;
   }
 
-  void editLocker(int lockerNumber, Locker editLocker) {
-    lockersBox.put(lockerNumber, editLocker);
+  void editLocker(String id, Locker editLocker) {
+    lockersBox.put(id, editLocker);
 
     TransactionRepository().saveTransactions(
       TransactionType.edit,
-      lockerNumber,
+      id,
       editLocker,
     );
   }

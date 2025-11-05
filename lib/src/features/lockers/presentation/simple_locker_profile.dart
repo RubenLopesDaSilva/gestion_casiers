@@ -29,7 +29,7 @@ class _SimpleLockerProfileState extends ConsumerState<SimpleLockerProfile> {
   final _keysController = TextEditingController();
   final _lockController = TextEditingController();
 
-  void update(Locker locker, LockerService repository) {
+  void update(Locker locker, LockerService repository) async {
     final number = int.tryParse(_numberController.text);
     final keyCount = int.tryParse(_keysController.text);
     final lock = int.tryParse(_lockController.text);
@@ -41,8 +41,8 @@ class _SimpleLockerProfileState extends ConsumerState<SimpleLockerProfile> {
       keyCount: keyCount,
       lockNumber: lock,
     );
+    await repository.patchLocker(update);
     setState(() {
-      repository.patchLocker(update);
       context.pop();
     });
   }

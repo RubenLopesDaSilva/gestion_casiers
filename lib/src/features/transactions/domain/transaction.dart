@@ -10,10 +10,15 @@ class Transaction {
   const Transaction(this.type, this.lockerId, this.value);
 
   final TransactionType type;
-  final int lockerId;
+
+  final String lockerId;
   final Locker value;
 
-  Transaction copyWith({TransactionType? type, int? lockerId, Locker? value}) {
+  Transaction copyWith({
+    TransactionType? type,
+    String? lockerId,
+    Locker? value,
+  }) {
     return Transaction(
       type ?? this.type,
       lockerId ?? this.lockerId,
