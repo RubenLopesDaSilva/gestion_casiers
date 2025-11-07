@@ -67,6 +67,8 @@ class LockerService extends Notifier<List<Locker>> {
   }
 }
 
-final lockerService = NotifierProvider<LockerService, List<Locker>>(() {
-  return LockerService();
-});
+final lockerService = NotifierProvider.autoDispose<LockerService, List<Locker>>(
+  () {
+    return LockerService();
+  },
+);

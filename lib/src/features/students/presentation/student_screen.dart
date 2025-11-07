@@ -13,14 +13,14 @@ import 'package:gestion_casiers/src/theme/theme.dart';
 import 'package:gestion_casiers/utils/import_excel.dart';
 import 'package:go_router/go_router.dart';
 
-class StudentScreen extends StatefulWidget {
+class StudentScreen extends ConsumerStatefulWidget {
   const StudentScreen({super.key});
 
   @override
-  State<StudentScreen> createState() => _StudentScreenState();
+  ConsumerState<StudentScreen> createState() => _StudentScreenState();
 }
 
-class _StudentScreenState extends State<StudentScreen> {
+class _StudentScreenState extends ConsumerState<StudentScreen> {
   List<Student>? students = [];
   void studentProfile(Student student) async {
     if (student.id != null) {

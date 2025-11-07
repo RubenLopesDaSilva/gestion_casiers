@@ -26,7 +26,7 @@ class _StudentProfileState extends State<StudentProfile> {
   final _titleController = TextEditingController();
   final _yearController = TextEditingController();
 
-  void update(Student student, StudentService repository) {
+  Future<void> update(Student student, StudentService repository) async {
     int? year = int.tryParse(_yearController.text);
     Student update = student.copyWith(
       id: student.id,
@@ -37,10 +37,10 @@ class _StudentProfileState extends State<StudentProfile> {
       title: _titleController.text,
       year: year,
     );
+    await repository.patchStudent(update);
     setState(() {
-      repository.patchStudent(update);
+      context.pop();
     });
-    context.pop();
   }
 
   @override
@@ -177,7 +177,8 @@ class _StudentProfileState extends State<StudentProfile> {
                       ),
                     ),
                     StyledButton(
-                      onPressed: () => update(studentCopy, repository),
+                      onPressed: () async =>
+                          await update(studentCopy, repository),
                       child: StyledHeadline('Save'.hardcoded),
                     ),
                     gapH24,

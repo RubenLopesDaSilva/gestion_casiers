@@ -82,6 +82,8 @@ class StudentService extends Notifier<List<Student>> {
   }
 }
 
-final studentService = NotifierProvider<StudentService, List<Student>>(() {
-  return StudentService();
-});
+final studentService =
+    NotifierProvider.autoDispose<StudentService, List<Student>>(() {
+      return StudentService();
+    });
+
