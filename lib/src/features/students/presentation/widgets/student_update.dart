@@ -23,7 +23,6 @@ class _LockerUpdateState extends ConsumerState<StudentUpdate> {
   final TextEditingController depositControl = TextEditingController();
   final TextEditingController loginControl = TextEditingController();
   final TextEditingController jobControl = TextEditingController();
-  final TextEditingController titleControl = TextEditingController();
 
   int year = 0;
 
@@ -41,7 +40,6 @@ class _LockerUpdateState extends ConsumerState<StudentUpdate> {
     lastNameControl.dispose();
     loginControl.dispose();
     jobControl.dispose();
-    titleControl.dispose();
 
     super.dispose();
   }
@@ -52,7 +50,6 @@ class _LockerUpdateState extends ConsumerState<StudentUpdate> {
     loginControl.text = widget.student.login;
     depositControl.text = widget.student.deposit.toString();
     jobControl.text = widget.student.job;
-    titleControl.text = widget.student.title;
     year = widget.student.year;
   }
 
@@ -146,7 +143,7 @@ class _LockerUpdateState extends ConsumerState<StudentUpdate> {
               width: commonW,
               height: commonH,
               child: StyledTextfield(
-                controller: titleControl,
+                controller: depositControl,
                 textInputType: const TextInputType.numberWithOptions(),
                 prefixIcon: const Icon(Icons.place_outlined),
               ),
