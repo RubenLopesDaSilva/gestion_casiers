@@ -6,18 +6,18 @@ import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/locker_condition.dart';
-import 'package:gestion_casiers/src/features/lockers/widgets/floor_input.dart';
+import 'package:gestion_casiers/src/features/lockers/presentation/widgets/floor_input.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 
-class LockerAdder extends ConsumerStatefulWidget {
-  const LockerAdder({super.key});
+class LockerAdd extends ConsumerStatefulWidget {
+  const LockerAdd({super.key});
 
   @override
-  ConsumerState<LockerAdder> createState() => _LockerAdderState();
+  ConsumerState<LockerAdd> createState() => _LockerAdderState();
 }
 
-class _LockerAdderState extends ConsumerState<LockerAdder> {
+class _LockerAdderState extends ConsumerState<LockerAdd> {
   final TextEditingController lockerController = TextEditingController();
   final TextEditingController lockController = TextEditingController();
   final MenuController floorController = MenuController();

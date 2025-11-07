@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_casiers/src/common_widgets/styled_text.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
-import 'package:gestion_casiers/src/features/lockers/widgets/locker_updater.dart';
+import 'package:gestion_casiers/src/features/lockers/presentation/widgets/locker_update.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 

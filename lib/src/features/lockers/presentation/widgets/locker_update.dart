@@ -5,7 +5,7 @@ import 'package:gestion_casiers/src/common_widgets/input_error.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
-import 'package:gestion_casiers/src/features/lockers/widgets/floor_input.dart';
+import 'package:gestion_casiers/src/features/lockers/presentation/widgets/floor_input.dart';
 import 'package:gestion_casiers/src/features/students/domain/student.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';

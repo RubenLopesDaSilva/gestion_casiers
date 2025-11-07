@@ -12,8 +12,6 @@ Floor? getFloor(String? floor) {
   return null;
 }
 
-//TODO : généraliser ce widget
-
 class FloorInput extends StatelessWidget {
   const FloorInput({this.floor, required this.onChanged, super.key});
 

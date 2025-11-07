@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
-import 'package:gestion_casiers/src/features/lockers/widgets/locker_item.dart';
+import 'package:gestion_casiers/src/features/lockers/presentation/widgets/locker_item.dart';
 
 class LockerSection extends StatelessWidget {
   const LockerSection({
