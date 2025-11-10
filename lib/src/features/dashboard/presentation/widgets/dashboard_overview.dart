@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
+import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/dashboard/presentation/widgets/indicator.dart';
 import 'package:pie_chart/pie_chart.dart';
 
@@ -24,8 +25,7 @@ class DashboardOverview extends StatelessWidget {
                 'Casiers inaccessibles': 0,
               },
               centerWidget: StyledTitle('60'),
-              // chartRadius: 240,
-              // ringStrokeWidth: 48,
+              ringStrokeWidth: 40,
               colorList: [
                 Colors.tealAccent,
                 Colors.pink,
@@ -33,12 +33,11 @@ class DashboardOverview extends StatelessWidget {
               ],
               chartValuesOptions: ChartValuesOptions(
                 showChartValueBackground: false,
-                // chartValueStyle: TextStyle(color: Colors.white),
-                // showChartValuesOutside: true,
                 decimalPlaces: 0,
               ),
             ),
           ),
+          gapH64,
           Indicator(),
         ],
       ),

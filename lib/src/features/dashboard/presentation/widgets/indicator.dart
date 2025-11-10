@@ -12,7 +12,7 @@ class Indicator extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 5,
+        spacing: 10,
         children: [
           Legend(color: Colors.tealAccent, text: 'Casiers libres'.hardcoded),
           Legend(color: Colors.pink, text: 'Casiers occupés'.hardcoded),
