@@ -19,13 +19,13 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
           color: AppColors.primaryColor,
           child: Column(
             children: [
-              const Row(
+              Row(
                 children: [
-                  // Checkbox(value: false, onChanged: (able) {}),
-                  Text('Selectionner tout'),
+                  Checkbox(value: false, onChanged: (able) {}),
+                  const Text('Selectionner tout'),
                 ],
               ),
-              ListView(children: []),
+              Expanded(child: ListView(children: [])),
             ],
           ),
         ),
