@@ -37,8 +37,19 @@ class NavbarButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: actif
-              ? [Icon(iconData), gapW12, StyledHeadline(text.hardcoded)]
-              : [Icon(iconData), gapW12, StyledText(text.hardcoded)],
+              ? [
+                  Icon(iconData, color: AppColors.secondaryColor),
+                  gapW12,
+                  StyledHeadline(
+                    text.hardcoded,
+                    color: AppColors.secondaryColor,
+                  ),
+                ]
+              : [
+                  Icon(iconData, color: AppColors.titleColor),
+                  gapW12,
+                  StyledText(text.hardcoded, color: AppColors.titleColor),
+                ],
         ),
       ),
     );

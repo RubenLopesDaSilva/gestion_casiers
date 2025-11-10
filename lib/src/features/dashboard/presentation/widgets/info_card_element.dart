@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
+import 'package:gestion_casiers/src/theme/theme.dart';
 
 class InfoCardElement extends StatelessWidget {
   const InfoCardElement({
@@ -18,9 +19,9 @@ class InfoCardElement extends StatelessWidget {
     return Container(
       width: 240,
       height: 240,
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 24.0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.primaryAccent,
         borderRadius: BorderRadius.circular(24),
       ),
       child: Column(
@@ -28,9 +29,9 @@ class InfoCardElement extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 24,
         children: [
-          Icon(iconData),
-          StyledText(text, overflow: null),
-          StyledTitle('$number'),
+          Expanded(child: Icon(iconData)),
+          Expanded(child: Center(child: StyledText(text, overflow: null))),
+          Expanded(child: StyledTitle('$number')),
         ],
       ),
     );
