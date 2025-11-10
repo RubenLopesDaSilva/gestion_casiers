@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
-import 'package:gestion_casiers/src/features/dashboard/widgets/info_card_element.dart';
+import 'package:gestion_casiers/src/features/dashboard/presentation/widgets/info_card_element.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 
 class InfoCard extends StatelessWidget {

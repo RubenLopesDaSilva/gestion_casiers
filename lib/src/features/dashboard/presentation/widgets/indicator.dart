@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gestion_casiers/src/features/dashboard/widgets/legend.dart';
+import 'package:gestion_casiers/src/features/dashboard/presentation/widgets/legend.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 
 class Indicator extends StatelessWidget {

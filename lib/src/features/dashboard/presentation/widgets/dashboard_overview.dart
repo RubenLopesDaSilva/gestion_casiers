@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
-import 'package:gestion_casiers/src/features/dashboard/widgets/indicator.dart';
+import 'package:gestion_casiers/src/features/dashboard/presentation/widgets/indicator.dart';
 import 'package:pie_chart/pie_chart.dart';
 
 class DashboardOverview extends StatelessWidget {

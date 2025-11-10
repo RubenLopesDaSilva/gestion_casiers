@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
-import 'package:gestion_casiers/src/features/dashboard/widgets/barchart.dart';
-import 'package:gestion_casiers/src/features/dashboard/widgets/dashboard_overview.dart';
-import 'package:gestion_casiers/src/features/dashboard/widgets/info_card.dart';
-import 'package:gestion_casiers/src/features/dashboard/widgets/piechart_caution.dart';
+import 'package:gestion_casiers/src/features/dashboard/presentation/widgets/barchart.dart';
+import 'package:gestion_casiers/src/features/dashboard/presentation/widgets/dashboard_overview.dart';
+import 'package:gestion_casiers/src/features/dashboard/presentation/widgets/info_card.dart';
+import 'package:gestion_casiers/src/features/dashboard/presentation/widgets/piechart_caution.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
