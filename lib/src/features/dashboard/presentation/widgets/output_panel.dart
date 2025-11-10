@@ -1,20 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
+import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
+import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
+import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
+import 'package:gestion_casiers/src/features/students/domain/student.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/theme/theme.dart';
 
-class OutputPanel extends StatefulWidget {
+class OutputPanel extends ConsumerStatefulWidget {
   const OutputPanel({super.key});
 
   @override
-  State<OutputPanel> createState() => _OutputPanelState();
+  ConsumerState<OutputPanel> createState() => _OutputPanelState();
 }
 
-class _OutputPanelState extends State<OutputPanel> {
+class _OutputPanelState extends ConsumerState<OutputPanel> {
   int index = 1;
   @override
   Widget build(BuildContext context) {
+    final lockerRepository = ref.watch(lockersRepositoryProvider.notifier);
+    final studentRepository = ref.watch(studentsRepositoryProvider.notifier);
+    final List<Widget> children = [];
+
+    if (index > 0 && index < 4) {
+      List<Locker> lockers = [];
+
+      switch (index) {
+        case 1:
+          lockers = lockerRepository
+              .fetchLockersList()
+              .where((locker) => locker.studentId == null)
+              .toList();
+          break;
+        case 2:
+          lockers = lockerRepository
+              .fetchLockersList()
+              .where((locker) => locker.keyCount == 0)
+              .toList();
+          break;
+        case 3:
+          lockers = lockerRepository
+              .fetchLockersList()
+              .where((locker) => locker.lockerCondition.problems != null)
+              .toList();
+          break;
+      }
+
+      for (Locker locker in lockers) {
+        children.add(Row(children: [StyledText('${locker.number}')]));
+      }
+    } else if (index > 3 && index < 5) {
+      List<Student> students = [];
+
+      switch (index) {
+        case 4:
+          students = studentRepository.fetchStudents().where((student) {
+            for (Locker locker in lockerRepository.fetchLockersList()) {
+              if (locker.studentId == student.id) {
+                return true;
+              }
+            }
+            return false;
+          }).toList();
+          break;
+      }
+
+      for (Student student in students) {
+        children.add(
+          Row(
+            children: [StyledText('${student.firstName} ${student.lastName}')],
+          ),
+        );
+      }
+    }
+
     return Container(
       color: AppColors.primaryAccent,
       child: Column(
@@ -92,7 +153,12 @@ class _OutputPanelState extends State<OutputPanel> {
             ],
           ),
           Divider(color: AppColors.titleColor, height: 0),
-          const Expanded(child: Column(children: [Row()])),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView(children: children),
+            ),
+          ),
         ],
       ),
     );
