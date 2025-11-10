@@ -84,7 +84,7 @@ class _NavbarState extends State<Navbar> {
             text: 'Attributions',
           ),
           const Expanded(child: SizedBox()),
-          const Text('Ceff - 2025', style: TextStyle(color: Colors.blue)),
+          Text('Ceff - 2025', style: TextStyle(color: AppColors.securColor)),
         ],
       ),
     );

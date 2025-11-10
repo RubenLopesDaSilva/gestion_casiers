@@ -49,7 +49,12 @@ class _OutputPanelState extends ConsumerState<OutputPanel> {
       }
 
       for (Locker locker in lockers) {
-        children.add(Row(children: [StyledText('${locker.number}')]));
+        children.add(
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12.0),
+            child: Row(children: [gapW24, StyledText('${locker.number}')]),
+          ),
+        );
       }
     } else if (index > 3 && index < 5) {
       List<Student> students = [];
@@ -69,8 +74,14 @@ class _OutputPanelState extends ConsumerState<OutputPanel> {
 
       for (Student student in students) {
         children.add(
-          Row(
-            children: [StyledText('${student.firstName} ${student.lastName}')],
+          Padding(
+            padding: const EdgeInsetsGeometry.symmetric(vertical: 12.0),
+            child: Row(
+              children: [
+                gapW24,
+                StyledText('${student.firstName} ${student.lastName}'),
+              ],
+            ),
           ),
         );
       }
@@ -156,7 +167,7 @@ class _OutputPanelState extends ConsumerState<OutputPanel> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: ListView(children: children),
+              child: SelectionArea(child: ListView(children: children)),
             ),
           ),
         ],
