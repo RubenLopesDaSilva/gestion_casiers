@@ -32,13 +32,12 @@ class _NavbarState extends State<Navbar> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(right: 16.0),
-            child: Placeholder(fallbackHeight: 200),
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Image.asset('ceff.png'),
+            // child: Placeholder(fallbackHeight: 200),
           ),
-          gapH8,
-          const Divider(),
-          gapH8,
+          gapH24,
           NavbarButton(
             onTap: () {
               setState(() {

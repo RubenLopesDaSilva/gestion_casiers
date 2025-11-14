@@ -74,7 +74,7 @@ class _LockerScreenState extends ConsumerState<LockerScreen> {
                   });
                 },
               ),
-              const Divider(indent: 24.0, endIndent: 24.0, height: 40),
+              gapH24,
               const LockerAdd(),
               gapH12,
               ImportPlatformFile((platformFile) {

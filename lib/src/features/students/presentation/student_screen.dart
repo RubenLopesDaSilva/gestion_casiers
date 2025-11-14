@@ -74,7 +74,7 @@ class _StudentScreenState extends ConsumerState<StudentScreen> {
                   });
                 },
               ),
-              const Divider(indent: 24.0, endIndent: 24.0, height: 40),
+              gapH24,
               const StudentAdd(),
               gapH12,
               ImportPlatformFile((platformFile) {

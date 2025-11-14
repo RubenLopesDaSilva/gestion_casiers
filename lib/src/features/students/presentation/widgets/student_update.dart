@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
+import 'package:gestion_casiers/src/common_widgets/styled_text_form_field.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
 import 'package:gestion_casiers/src/features/students/domain/student.dart';
@@ -66,9 +67,30 @@ class _LockerUpdateState extends ConsumerState<StudentUpdate> {
   void save() {
     final studentRef = ref.read(studentsRepositoryProvider.notifier);
 
-    Student update = widget.student.copyWith();
-    studentRef.editStudent(widget.student.id, update);
-    setState(() {});
+    final firstName = firstNameControl.text;
+    final lastName = lastNameControl.text;
+    final login = loginControl.text;
+    final deposit = int.tryParse(depositControl.text);
+    final job = jobControl.text;
+    final newYear = year;
+    if (firstName.isEmpty ||
+        lastName.isEmpty ||
+        login.isEmpty ||
+        deposit == null ||
+        job.isEmpty ||
+        newYear == 0) {
+    } else {
+      Student update = widget.student.copyWith(
+        firstName: firstName,
+        lastName: lastName,
+        login: login,
+        deposit: deposit,
+        job: job,
+        year: newYear,
+      );
+      studentRef.editStudent(widget.student.id, update);
+      setState(() {});
+    }
   }
 
   @override
@@ -84,20 +106,34 @@ class _LockerUpdateState extends ConsumerState<StudentUpdate> {
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: firstNameControl,
                 textInputType: const TextInputType.numberWithOptions(),
                 prefixIcon: const Icon(Icons.lock_outline),
+                autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  if (value?.isEmpty ?? false) {
+                    return 'Le champ doit être remplie'.hardcoded;
+                  }
+                  return null;
+                },
               ),
             ),
             gapW24,
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: lastNameControl,
                 textInputType: const TextInputType.numberWithOptions(),
                 prefixIcon: const Icon(Icons.abc),
+                autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  if (value?.isEmpty ?? false) {
+                    return 'Le champ doit être remplie'.hardcoded;
+                  }
+                  return null;
+                },
               ),
             ),
             gapW24,
@@ -122,30 +158,55 @@ class _LockerUpdateState extends ConsumerState<StudentUpdate> {
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: loginControl,
                 textInputType: const TextInputType.numberWithOptions(),
                 prefixIcon: const Icon(Icons.lock_outline),
+                autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  if (value?.isEmpty ?? false) {
+                    return 'Le champ doit être remplie'.hardcoded;
+                  }
+                  return null;
+                },
               ),
             ),
             gapW24,
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: jobControl,
                 textInputType: const TextInputType.numberWithOptions(),
                 prefixIcon: const Icon(Icons.abc),
+                autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  if (value?.isEmpty ?? false) {
+                    return 'Le champ doit être remplie'.hardcoded;
+                  }
+                  return null;
+                },
               ),
             ),
             gapW24,
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: depositControl,
                 textInputType: const TextInputType.numberWithOptions(),
                 prefixIcon: const Icon(Icons.place_outlined),
+                autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  final number = int.tryParse(value ?? '');
+                  if (number == null) {
+                    return 'Essayez de mettre un nombre'.hardcoded;
+                  } else if (number < 0) {
+                    return 'Seulement les nombres positif sont accepté'
+                        .hardcoded;
+                  }
+                  return null;
+                },
               ),
             ),
           ],

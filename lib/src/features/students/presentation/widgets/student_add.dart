@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
+import 'package:gestion_casiers/src/common_widgets/styled_text_form_field.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/students/data/student_repository.dart';
 import 'package:gestion_casiers/src/features/students/domain/student.dart';
@@ -52,20 +53,32 @@ class _StudentAddState extends ConsumerState<StudentAdd> {
   void add() {
     final studentRef = ref.read(studentsRepositoryProvider.notifier);
 
-    final int deposit = int.tryParse(depositControl.text) ?? 0;
-
-    final student = Student(
-      id: 'oid',
-      firstName: firstNameControl.text,
-      lastName: lastNameControl.text,
-      job: jobControl.text,
-      login: loginControl.text,
-      year: year,
-      title: 'M',
-      deposit: deposit,
-    );
-    studentRef.addStudent(student);
-    setState(() {});
+    final firstName = firstNameControl.text;
+    final lastName = lastNameControl.text;
+    final login = loginControl.text;
+    final deposit = int.tryParse(depositControl.text);
+    final job = jobControl.text;
+    final newYear = year;
+    if (firstName.isEmpty ||
+        lastName.isEmpty ||
+        login.isEmpty ||
+        deposit == null ||
+        job.isEmpty ||
+        newYear == 0) {
+    } else {
+      final student = Student(
+        id: 'oid',
+        firstName: firstName,
+        lastName: lastName,
+        job: job,
+        login: login,
+        year: year,
+        title: 'M',
+        deposit: deposit,
+      );
+      studentRef.addStudent(student);
+      setState(() {});
+    }
   }
 
   @override
@@ -81,10 +94,17 @@ class _StudentAddState extends ConsumerState<StudentAdd> {
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: firstNameControl,
                 color: AppColors.titleColor,
                 prefixIcon: const Icon(Icons.lock_outlined),
+                // autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  if (value?.isEmpty ?? false) {
+                    return 'Le champ doit être remplie'.hardcoded;
+                  }
+                  return null;
+                },
                 child: StyledHeadline('Nom de \'élève'.hardcoded),
               ),
             ),
@@ -92,10 +112,17 @@ class _StudentAddState extends ConsumerState<StudentAdd> {
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: lastNameControl,
                 color: AppColors.titleColor,
                 prefixIcon: const Icon(Icons.key),
+                // autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  if (value?.isEmpty ?? false) {
+                    return 'Le champ doit être remplie'.hardcoded;
+                  }
+                  return null;
+                },
                 child: StyledHeadline('Nom de famille'.hardcoded),
               ),
             ),
@@ -107,10 +134,17 @@ class _StudentAddState extends ConsumerState<StudentAdd> {
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: depositControl,
                 color: AppColors.titleColor,
                 prefixIcon: const Icon(Icons.tag),
+                // autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  if (value?.isEmpty ?? false) {
+                    return 'Le champ doit être remplie'.hardcoded;
+                  }
+                  return null;
+                },
                 child: StyledHeadline('Amont d\'argent'.hardcoded),
               ),
             ),
@@ -118,10 +152,17 @@ class _StudentAddState extends ConsumerState<StudentAdd> {
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: jobControl,
                 color: AppColors.titleColor,
                 prefixIcon: const Icon(Icons.luggage_outlined),
+                // autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  if (value?.isEmpty ?? false) {
+                    return 'Le champ doit être remplie'.hardcoded;
+                  }
+                  return null;
+                },
                 child: StyledHeadline('Metier'.hardcoded),
               ),
             ),
@@ -146,10 +187,17 @@ class _StudentAddState extends ConsumerState<StudentAdd> {
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: loginControl,
                 color: AppColors.titleColor,
                 prefixIcon: const Icon(Icons.layers_sharp),
+                // autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  if (value?.isEmpty ?? false) {
+                    return 'Le champ doit être remplie'.hardcoded;
+                  }
+                  return null;
+                },
                 child: StyledHeadline('Login'.hardcoded),
               ),
             ),
@@ -180,7 +228,6 @@ class _StudentAddState extends ConsumerState<StudentAdd> {
             ),
           ],
         ),
-
         gapH24,
       ],
     );
