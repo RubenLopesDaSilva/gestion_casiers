@@ -5,8 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
-import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_item.dart';
-import 'package:gestion_casiers/src/features/lockers/presentation/simple_locker_item_titles.dart';
+import 'package:gestion_casiers/src/features/lockers/presentation/locker_presentation.dart';
 import 'package:gestion_casiers/src/localization/string_hardcoded.dart';
 import 'package:gestion_casiers/src/routing/app_router.dart';
 import 'package:gestion_casiers/src/features/lockers/data/locker_service.dart';
@@ -72,9 +71,9 @@ class _SimpleScreenState extends State<SimpleScreen> {
       body: SizedBox(
         width: double.infinity,
         child: Consumer(
-          builder: (context, value, child) {
-            final studentProvider = value.watch(studentService.notifier);
-            final lockerProvider = value.watch(lockerService.notifier);
+          builder: (context, ref, child) {
+            final studentProvider = ref.watch(studentService.notifier);
+            final lockerProvider = ref.watch(lockerService.notifier);
             return FutureBuilder<List<Locker>>(
               future: lockerProvider.fetchLockers(),
               builder: (context, asyncSnapshot) {

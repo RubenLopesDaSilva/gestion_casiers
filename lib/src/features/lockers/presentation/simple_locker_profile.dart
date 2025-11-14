@@ -28,7 +28,11 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
   final _keysController = TextEditingController();
   final _lockController = TextEditingController();
 
-  Future<void> update(Locker locker, LockerService repository) async {
+  Future<void> update(
+    Locker locker,
+    LockerService repository,
+    WidgetRef ref,
+  ) async {
     final number = int.tryParse(_numberController.text);
     final keyCount = int.tryParse(_keysController.text);
     final lock = int.tryParse(_lockController.text);
@@ -41,6 +45,9 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
       lockNumber: lock,
     );
     await repository.patchLocker(update);
+
+    ref.invalidate(lockerDetailsProvider);
+
     setState(() {
       context.pop();
     });
@@ -212,7 +219,8 @@ class _SimpleLockerProfileState extends State<SimpleLockerProfile> {
                     ),
                   ),
                   StyledButton(
-                    onPressed: () async => await update(lockerCopy, service),
+                    onPressed: () async =>
+                        await update(lockerCopy, service, ref),
                     child: StyledHeadline('Save'.hardcoded),
                   ),
                   gapH24,
