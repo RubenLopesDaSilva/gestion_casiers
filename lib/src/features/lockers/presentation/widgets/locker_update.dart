@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
+import 'package:gestion_casiers/src/common_widgets/styled_text_form_field.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
@@ -114,32 +115,6 @@ class _LockerUpdateState extends ConsumerState<LockerUpdate> {
     final condition = widget.locker.lockerCondition;
     final problem = detailController.text;
     final String job = jobController.text;
-    // int flag = 0;
-    // if (number == null) {
-    //   flag++;
-    // } else if (number < 0) {
-    //   flag++;
-    // }
-
-    // if (keyCount == null) {
-    //   flag++;
-    // } else if (keyCount < 0) {
-    //   flag++;
-    // }
-
-    // if (lock == null) {
-    //   flag++;
-    // } else if (lock < 0) {
-    //   flag++;
-    // }
-
-    // if (job == '') {
-    //   flag++;
-    // }
-
-    // if (floor == '') {
-    //   flag++;
-    // }
 
     if (number == null ||
         number < 0 ||
@@ -147,7 +122,6 @@ class _LockerUpdateState extends ConsumerState<LockerUpdate> {
         lock == null ||
         job == '' ||
         floor == '') {
-      setControllers();
       setState(() {});
     } else {
       Locker update = widget.locker.copyWith(
@@ -176,20 +150,42 @@ class _LockerUpdateState extends ConsumerState<LockerUpdate> {
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: lockerController,
                 textInputType: const TextInputType.numberWithOptions(),
                 prefixIcon: const Icon(Icons.lock_outline),
+                autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  final number = int.tryParse(value ?? '');
+                  if (number == null) {
+                    return 'Essayez de mettre un nombre'.hardcoded;
+                  } else if (number < 0) {
+                    return 'Seulement les nombres positif sont accepté'
+                        .hardcoded;
+                  }
+                  return null;
+                },
               ),
             ),
             gapW24,
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: lockController,
                 textInputType: const TextInputType.numberWithOptions(),
                 prefixIcon: const Icon(Icons.abc),
+                autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  final number = int.tryParse(value ?? '');
+                  if (number == null) {
+                    return 'Essayez de mettre un nombre'.hardcoded;
+                  } else if (number < 0) {
+                    return 'Seulement les nombres positif sont accepté'
+                        .hardcoded;
+                  }
+                  return null;
+                },
               ),
             ),
             gapW24,
@@ -214,30 +210,50 @@ class _LockerUpdateState extends ConsumerState<LockerUpdate> {
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: keysController,
                 textInputType: const TextInputType.numberWithOptions(),
                 prefixIcon: const Icon(Icons.lock_outline),
+                autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  final number = int.tryParse(value ?? '');
+                  if (number == null) {
+                    return 'Essayez de mettre un nombre'.hardcoded;
+                  } else if (number < 0) {
+                    return 'Seulement les nombres positif sont accepté'
+                        .hardcoded;
+                  }
+                  return null;
+                },
               ),
             ),
             gapW24,
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: jobController,
                 textInputType: const TextInputType.numberWithOptions(),
                 prefixIcon: const Icon(Icons.abc),
+                autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  if (value?.isEmpty ?? false) {
+                    return 'Essayez de mettre un metier'.hardcoded;
+                  }
+                  return null;
+                },
               ),
             ),
             gapW24,
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: detailController,
                 textInputType: const TextInputType.numberWithOptions(),
                 prefixIcon: const Icon(Icons.place_outlined),
+                autovalidateMode: AutovalidateMode.always,
+                validator: (value) => null,
               ),
             ),
           ],

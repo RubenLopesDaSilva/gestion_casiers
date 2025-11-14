@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
+import 'package:gestion_casiers/src/common_widgets/styled_text_form_field.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
@@ -24,11 +25,15 @@ class _LockerAdderState extends ConsumerState<LockerAdd> {
   final TextEditingController jobController = TextEditingController();
   final TextEditingController detailController = TextEditingController();
 
-  final TextEditingController studentnameController = TextEditingController();
-  final TextEditingController studentjobController = TextEditingController();
-  final TextEditingController cautionController = TextEditingController();
-
   String floor = '';
+
+  bool editing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    setControllers();
+  }
 
   @override
   void dispose() {
@@ -37,10 +42,6 @@ class _LockerAdderState extends ConsumerState<LockerAdd> {
     keysController.dispose();
     jobController.dispose();
     detailController.dispose();
-
-    studentnameController.dispose();
-    studentjobController.dispose();
-    cautionController.dispose();
     super.dispose();
   }
 
@@ -49,12 +50,38 @@ class _LockerAdderState extends ConsumerState<LockerAdd> {
     setState(() {});
   }
 
+  void changeMode() {
+    if (lockerController.text == '' &&
+        lockController.text == '' &&
+        keysController.text == '' &&
+        jobController.text == '' &&
+        detailController.text == '' &&
+        floor == '') {
+      if (editing) {
+        setState(() {
+          editing = false;
+        });
+      }
+    } else {
+      if (!editing) {
+        setState(() {
+          editing = true;
+        });
+      }
+    }
+  }
+
   void setControllers() {
     lockerController.text = '';
+    lockerController.addListener(changeMode);
     lockController.text = '';
+    lockController.addListener(changeMode);
     keysController.text = '';
+    keysController.addListener(changeMode);
     jobController.text = '';
+    jobController.addListener(changeMode);
     detailController.text = '';
+    detailController.addListener(changeMode);
     floor = '';
   }
 
@@ -106,10 +133,25 @@ class _LockerAdderState extends ConsumerState<LockerAdd> {
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: lockerController,
                 color: AppColors.titleColor,
                 prefixIcon: const Icon(Icons.lock_outlined),
+                autovalidateMode: editing
+                    ? AutovalidateMode.always
+                    : AutovalidateMode.disabled,
+                validator: (value) {
+                  if (editing) {
+                    final number = int.tryParse(value ?? '');
+                    if (number == null) {
+                      return 'Essayez de mettre un nombre'.hardcoded;
+                    } else if (number < 0) {
+                      return 'Seulement les nombres positif sont accepté'
+                          .hardcoded;
+                    }
+                  }
+                  return null;
+                },
                 child: StyledHeadline('No de Casier'.hardcoded),
               ),
             ),
@@ -117,10 +159,23 @@ class _LockerAdderState extends ConsumerState<LockerAdd> {
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: keysController,
                 color: AppColors.titleColor,
                 prefixIcon: const Icon(Icons.key),
+                autovalidateMode: editing
+                    ? AutovalidateMode.always
+                    : AutovalidateMode.disabled,
+                validator: (value) {
+                  final number = int.tryParse(value ?? '');
+                  if (number == null) {
+                    return 'Essayez de mettre un nombre'.hardcoded;
+                  } else if (number < 0) {
+                    return 'Seulement les nombres positif sont accepté'
+                        .hardcoded;
+                  }
+                  return null;
+                },
                 child: StyledHeadline('Nombre de clé'.hardcoded),
               ),
             ),
@@ -132,10 +187,23 @@ class _LockerAdderState extends ConsumerState<LockerAdd> {
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: lockController,
                 color: AppColors.titleColor,
                 prefixIcon: const Icon(Icons.tag),
+                autovalidateMode: editing
+                    ? AutovalidateMode.always
+                    : AutovalidateMode.disabled,
+                validator: (value) {
+                  final number = int.tryParse(value ?? '');
+                  if (number == null) {
+                    return 'Essayez de mettre un nombre'.hardcoded;
+                  } else if (number < 0) {
+                    return 'Seulement les nombres positif sont accepté'
+                        .hardcoded;
+                  }
+                  return null;
+                },
                 child: StyledHeadline('No de serrure'.hardcoded),
               ),
             ),
@@ -143,10 +211,19 @@ class _LockerAdderState extends ConsumerState<LockerAdd> {
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: jobController,
                 color: AppColors.titleColor,
                 prefixIcon: const Icon(Icons.luggage_outlined),
+                autovalidateMode: editing
+                    ? AutovalidateMode.always
+                    : AutovalidateMode.disabled,
+                validator: (value) {
+                  if (value?.isEmpty ?? false) {
+                    return 'Essayez de mettre un metier'.hardcoded;
+                  }
+                  return null;
+                },
                 child: StyledHeadline('Metier'.hardcoded),
               ),
             ),
@@ -171,10 +248,14 @@ class _LockerAdderState extends ConsumerState<LockerAdd> {
             SizedBox(
               width: commonW,
               height: commonH,
-              child: StyledTextfield(
+              child: StyledTextFormField(
                 controller: detailController,
                 color: AppColors.titleColor,
                 prefixIcon: const Icon(Icons.layers_sharp),
+                autovalidateMode: editing
+                    ? AutovalidateMode.always
+                    : AutovalidateMode.disabled,
+                validator: (value) => null,
                 child: StyledHeadline('Remarque (facultatif)'.hardcoded),
               ),
             ),
