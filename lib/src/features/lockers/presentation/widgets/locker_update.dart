@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gestion_casiers/src/common_widgets/common_widgets.dart';
-import 'package:gestion_casiers/src/common_widgets/input_error.dart';
 import 'package:gestion_casiers/src/constants/app_sizes.dart';
 import 'package:gestion_casiers/src/features/lockers/data/locker_repository.dart';
 import 'package:gestion_casiers/src/features/lockers/domain/locker.dart';
@@ -32,8 +31,6 @@ class _LockerUpdateState extends ConsumerState<LockerUpdate> {
   final TextEditingController studentjobController = TextEditingController();
   final TextEditingController cautionController = TextEditingController();
 
-  final error = InputError<String, String?>();
-
   String floor = '';
 
   bool editing = false;
@@ -62,7 +59,6 @@ class _LockerUpdateState extends ConsumerState<LockerUpdate> {
   }
 
   void setControllers() {
-    error.clear();
     lockerController.text = widget.locker.number.toString();
     lockerController.addListener(changeMode);
     lockController.text = widget.locker.lockNumber.toString();
@@ -109,8 +105,6 @@ class _LockerUpdateState extends ConsumerState<LockerUpdate> {
   }
 
   void save() {
-    error.clear();
-
     final lockerRef = ref.read(lockersRepositoryProvider.notifier);
 
     final int? number = int.tryParse(lockerController.text);
@@ -120,49 +114,40 @@ class _LockerUpdateState extends ConsumerState<LockerUpdate> {
     final condition = widget.locker.lockerCondition;
     final problem = detailController.text;
     final String job = jobController.text;
+    // int flag = 0;
+    // if (number == null) {
+    //   flag++;
+    // } else if (number < 0) {
+    //   flag++;
+    // }
 
-    if (number == null) {
-      error.setEntry(
-        'lockerControl',
-        'le numeros doit être un nombre'.hardcoded,
-      );
-    } else if (number < 0) {
-      error.setEntry(
-        'lockerControl',
-        'le numeros du casier doit être positif'.hardcoded,
-      );
-    }
+    // if (keyCount == null) {
+    //   flag++;
+    // } else if (keyCount < 0) {
+    //   flag++;
+    // }
 
-    if (keyCount == null) {
-      error.setEntry('keysControl', 'le numeros doit être un nombre'.hardcoded);
-    } else if (keyCount < 0) {
-      error.setEntry(
-        'keysControl',
-        'le numeros du casier doit être positif'.hardcoded,
-      );
-    }
+    // if (lock == null) {
+    //   flag++;
+    // } else if (lock < 0) {
+    //   flag++;
+    // }
 
-    if (lock == null) {
-      error.setEntry('lockControl', 'le numeros doit être un nombre'.hardcoded);
-    } else if (lock < 0) {
-      error.setEntry(
-        'lockControl',
-        'le numeros du casier doit être positif'.hardcoded,
-      );
-    }
+    // if (job == '') {
+    //   flag++;
+    // }
 
-    if (job == '') {
-      error.setEntry('jobControl', 'il faut mettre un métier'.hardcoded);
-    }
+    // if (floor == '') {
+    //   flag++;
+    // }
 
-    if (floor == '') {
-      error.setEntry(
-        'floorControl',
-        'l\'étage doit être different de null'.hardcoded,
-      );
-    }
-
-    if (error.error) {
+    if (number == null ||
+        number < 0 ||
+        keyCount == null ||
+        lock == null ||
+        job == '' ||
+        floor == '') {
+      setControllers();
       setState(() {});
     } else {
       Locker update = widget.locker.copyWith(
@@ -195,13 +180,6 @@ class _LockerUpdateState extends ConsumerState<LockerUpdate> {
                 controller: lockerController,
                 textInputType: const TextInputType.numberWithOptions(),
                 prefixIcon: const Icon(Icons.lock_outline),
-                child: error.errorMessage(
-                  inputName: 'lockerControl',
-                  child: (errorMsg) => StyledHeadline(
-                    errorMsg.toString(),
-                    color: AppColors.alertColor,
-                  ),
-                ),
               ),
             ),
             gapW24,
@@ -212,13 +190,6 @@ class _LockerUpdateState extends ConsumerState<LockerUpdate> {
                 controller: lockController,
                 textInputType: const TextInputType.numberWithOptions(),
                 prefixIcon: const Icon(Icons.abc),
-                child: error.errorMessage(
-                  inputName: 'lockControl',
-                  child: (errorMsg) => StyledHeadline(
-                    errorMsg.toString(),
-                    color: AppColors.alertColor,
-                  ),
-                ),
               ),
             ),
             gapW24,
@@ -247,13 +218,6 @@ class _LockerUpdateState extends ConsumerState<LockerUpdate> {
                 controller: keysController,
                 textInputType: const TextInputType.numberWithOptions(),
                 prefixIcon: const Icon(Icons.lock_outline),
-                child: error.errorMessage(
-                  inputName: 'keysControl',
-                  child: (errorMsg) => StyledHeadline(
-                    errorMsg.toString(),
-                    color: AppColors.alertColor,
-                  ),
-                ),
               ),
             ),
             gapW24,
@@ -264,13 +228,6 @@ class _LockerUpdateState extends ConsumerState<LockerUpdate> {
                 controller: jobController,
                 textInputType: const TextInputType.numberWithOptions(),
                 prefixIcon: const Icon(Icons.abc),
-                child: error.errorMessage(
-                  inputName: 'jobControl',
-                  child: (errorMsg) => StyledHeadline(
-                    errorMsg.toString(),
-                    color: AppColors.alertColor,
-                  ),
-                ),
               ),
             ),
             gapW24,
@@ -281,13 +238,6 @@ class _LockerUpdateState extends ConsumerState<LockerUpdate> {
                 controller: detailController,
                 textInputType: const TextInputType.numberWithOptions(),
                 prefixIcon: const Icon(Icons.place_outlined),
-                child: error.errorMessage(
-                  inputName: 'detailControl',
-                  child: (errorMsg) => StyledHeadline(
-                    errorMsg.toString(),
-                    color: AppColors.alertColor,
-                  ),
-                ),
               ),
             ),
           ],
